@@ -30,19 +30,48 @@
                     <!-- New Form -->
                     <form action="{{ url('personal') }}" method="POST" class="form-horizontal">
                         {{ csrf_field() }}
-                    <div class="dropdown">
-                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      <div class="form-group">
+                        <select name="service" class="custom-select custom-select-lg mb-3">
+                          <option selected>Select service</option>
+                          <option value="Steam">Steam</option>
+                          <option value="Origin">Origin</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <select name="game" class="custom-select custom-select-lg mb-3">
+                          <option selected>Select game</option>
+                          @foreach ($allGames as $gameTitle)
+                          <option value="{{$gameTitle->id}}">{{$gameTitle->title}}</a></li>
+                          @endforeach
+                        </select>
+                      </div>
+                      <div class="form-group">
+                           <label for="player_id" class="col-sm-3 control-label">Steam ID</label>
+                       
+                           <div class="col-sm-6">
+                               <input type="text" name="player_id" id="player_id" class="form-control">
+                           </div>
+                       </div>
+                      <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-6">
+                          <button type="submit" class="btn btn-default">
+                          <i class="fa fa-btn fa-plus"></i>Add ID
+                          </button>
+                        </div>
+                      </div>
+                    <!-- <div class="dropdown">
+                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Select game
                         <span class="caret"></span>
                       </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                         @foreach ($allGames as $gameTitle)
-                        <li><a href="#">{{$gameTitle->title}}</a></li>
+                        <li><a href="#" >{{$gameTitle->title}}</a></li>
                         @endforeach
                         <li role="separator" class="divider"></li>
                         <li><a href="#">Separated link</a></li>
                       </ul>
-                    </div>
+                    </div> -->
                        <!--  <div class="form-group">
                            <label for="player_id" class="col-sm-3 control-label">Steam ID</label>
                        

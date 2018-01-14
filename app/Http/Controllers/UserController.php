@@ -29,12 +29,18 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $playerID = $request->input('player_id');
+        $service = $request->input('service');
+        $game = $request->input('game');
 
-        $request->user()->services()->create([
+        $request->user()->services()->updateOrCreate(
+            ['title' => $service,
+            'games_id' => $game,
+            ],
+            [
             'player_id' => $playerID,
-            'title' => 'asasa',
-            'games_id' => 1,
-        	]);
+            ]
+            );
+        //$request->user()->services()->save();
 
         return redirect('/personal');
     }
