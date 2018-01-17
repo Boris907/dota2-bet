@@ -54,9 +54,9 @@ class SteamAuthController extends Controller
             $info = $this->steam->getUserInfo();
 
             if ( ! is_null($info)) {
-                $request->user()->update(
+                 $request->user()->services()->update(
                     [
-                        'game_id' => $info->steamID64
+                        'player_id' => $info->steamID64
                     ]
                 );
 
