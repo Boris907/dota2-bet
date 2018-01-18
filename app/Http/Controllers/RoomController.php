@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Auth;
 
 class RoomController extends Controller
 {
@@ -17,7 +14,8 @@ class RoomController extends Controller
 
   public function index()
     {
-        return view('rooms.index', ['uId'=>Auth::user()->game_id]);
+        $player_id = request()->user()->services()->value('player_id');
+        return view('rooms.index', compact('player_id'));
     }
 
 }

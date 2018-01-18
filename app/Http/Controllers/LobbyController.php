@@ -20,14 +20,15 @@ class LobbyController extends Controller
 
     public function index()
     {
+        $player_id = request()->user()->services()->value('player_id');
         /*
             Ищем свободный файл, если не находим
             создаём новый 
         */
         if (Lobby::checkDir() == null) {
-            Storage::append(Lobby::newFile(), Auth::user()->game_id . ' ');
+            Storage::append(Lobby::newFile(), $player_id . ' ');
 
-            return view('lobby.index', ['uId' => Auth::user()->game_id]);
+            return view('lobby.index', compact('player_id'));
         }
         /*
             Если файл существует и в нём меньше 10 ид
@@ -42,21 +43,21 @@ class LobbyController extends Controller
                     'public\\' . Lobby::checkDir(),
                     'public\\c' . Lobby::checkDir()
                 );
-                Storage::append(Lobby::newFile(), Auth::user()->game_id . ' ');
+                Storage::append(Lobby::newFile(), $player_id . ' ');
 
-                return view('lobby.index', ['uId' => Auth::user()->game_id]);
+                return view('lobby.index', compact('player_id'));
             }
             /*
                 Проверяем нет ли в файле ид пользователя
             */
-            if ( ! (in_array(strval(Auth::user()->game_id), $arrID))) {
+            if ( ! (in_array(strval($player_id), $arrID))) {
                 Storage::append(
-                    'public\\' . Lobby::checkDir(), Auth::user()->game_id . ' '
+                    'public\\' . Lobby::checkDir(), $player_id . ' '
                 );
             }
         }
 
-        return view('lobby.index', ['uId' => Auth::user()->game_id]);
+        return view('lobby.index', compact('player_id'));
     }
 
 }

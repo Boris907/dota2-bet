@@ -8,40 +8,47 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Auth;
 use App\Game;
+use App\Steam;
 
 class UserController extends Controller
 {
-		 public function __construct()
-   {
-    	$this->middleware('auth');
+    public function __construct()
+    {
+        $this->middleware('auth');
 
-   }
+    }
 
-     public function index(Request $request)
+    public function index(Request $request)
     {
 
-        $playerID = $request->user()->services()->value('player_id');
-        $allGames = Game::get();
+        $playerID   = $request->user()->services()->value('player_id');
+        $allGames   = Game::get();
 
-        return view('personal.index', ['uInfo'=>Auth::user(),'playerID'=>$playerID,'allGames'=>$allGames]);
+        return view(
+            'personal.index', ['uInfo'    => Auth::user(),
+                               'playerID' => $playerID, 'allGames' => $allGames]
+        );
     }
 
     public function update(Request $request)
     {
         $playerID = $request->input('player_id');
-        $service = $request->input('service');
-        $game = $request->input('game');
+        $service  = $request->input('service');
+        $game     = $request->input('game');
 
         $request->user()->services()->updateOrCreate(
-            ['title' => $service,
-            'games_id' => $game,
+            ['title'    => $service,
+             'games_id' => $game,
             ],
             [
-            'player_id' => $playerID,
+                'player_id' => $playerID,
             ]
-            );
-        //$request->user()->services()->save();
-
+        );
+        $playerID32 = Steam::toSteamID($playerID);
+        $steam_data = file_get_contents(
+            'https://api.opendota.com/api/players/' . $playerID32
+        );
+        dd($steam_data);
         return redirect('/personal');
     }
 }

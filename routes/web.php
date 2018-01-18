@@ -29,8 +29,8 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::get('/personal', 'UserController@index');
     Route::post('/personal', 'UserController@update');
-		
-	Route::get('/rooms', 'RoomController@index');
+
+    Route::get('/rooms', 'RoomController@index');
     Auth::routes();
 
     Route::get('auth/steam', 'SteamAuthController@redirectToSteam')->name('auth.steam');
