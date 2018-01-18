@@ -40,7 +40,7 @@ class UserController extends Controller
             'player_id' => $playerID,
             ]
             );
-        //$request->user()->services()->save();
+//        $request->user()->services()->save();
 
         return redirect('/personal');
     }
