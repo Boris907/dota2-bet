@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Auth;
-use App\Game;
 
 class UserController extends Controller
 {
@@ -19,28 +18,16 @@ class UserController extends Controller
 
      public function index(Request $request)
     {
-
-        $playerID = $request->user()->services()->value('player_id');
-        $allGames = Game::get();
-
-        return view('personal.index', ['uInfo'=>Auth::user(),'playerID'=>$playerID,'allGames'=>$allGames]);
+        return view('personal.index', ['uInfo'=>Auth::user()]);
     }
 
     public function update(Request $request)
     {
         $playerID = $request->input('player_id');
-        $service = $request->input('service');
-        $game = $request->input('game');
 
-        $request->user()->services()->updateOrCreate(
-            ['title' => $service,
-            'games_id' => $game,
-            ],
-            [
+        $request->user()->update([
             'player_id' => $playerID,
-            ]
-            );
-//        $request->user()->services()->save();
+            ]);
 
         return redirect('/personal');
     }

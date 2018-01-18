@@ -11,8 +11,8 @@
                     Hi {{$uInfo->name}}. It's your profile page. 
                     <br>Your id {{$uInfo->id}}.
                     <br>Your e-mail {{$uInfo->email}}.
-                    @if($playerID != 0)
-                    <br>Your game ID {{$playerID}}
+                    @if($uInfo->player_id != 0)
+                    <br>Your game ID {{$uInfo->player_id}}
                     @endif
                 </div>
             </div>
@@ -40,9 +40,7 @@
                       <div class="form-group">
                         <select name="game" class="custom-select custom-select-lg mb-3">
                           <option selected>Select game</option>
-                          @foreach ($allGames as $gameTitle)
-                                <option value="{{$gameTitle->id}}">{{$gameTitle->title}}</option>
-                          @endforeach
+                         
                         </select>
                       </div>
                       <div class="form-group">
@@ -59,35 +57,6 @@
                           </button>
                         </div>
                       </div>
-                    <!-- <div class="dropdown">
-                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Select game
-                        <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        @foreach ($allGames as $gameTitle)
-                        <li><a href="#" >{{$gameTitle->title}}</a></li>
-                        @endforeach
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                      </ul>
-                    </div> -->
-                       <!--  <div class="form-group">
-                           <label for="player_id" class="col-sm-3 control-label">Steam ID</label>
-                       
-                           <div class="col-sm-6">
-                               <input type="text" name="player_id" id="player_id" class="form-control">
-                           </div>
-                       </div>
-                       
-                       Add Button
-                       <div class="form-group">
-                           <div class="col-sm-offset-3 col-sm-6">
-                               <button type="submit" class="btn btn-default">
-                                   <i class="fa fa-btn fa-plus"></i>Add ID
-                               </button>
-                           </div>
-                       </div> -->
                     </form>
 
                      <form action="{{ url('auth/steam') }}" method="get" class="form-horizontal">

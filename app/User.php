@@ -14,23 +14,11 @@ class User extends Authenticatable {
 		'name',
 		'email',
 		'password',
+		'player_id',
 	];
-	/**
-	 * The attributes excluded from the model's JSON form.
-	 *
-	 * @var array
-	 */
-	protected $hidden = [
+
+	protected $guarded = [
 		'password',
 	];
-  	 public function games()
-  {
-    return $this->hasMany(Game::class);
-  }
-	 public function services()
-  {
-    return $this->hasMany(Service::class);
-  }
-
 
 }
