@@ -12,7 +12,7 @@ class RoomController extends Controller
     	$this->middleware('auth');
    }
 
-  public function index()
+    public function index()
     {
         $player_id = request()->user()->services()->value('player_id');
         return view('rooms.index', compact('player_id'));

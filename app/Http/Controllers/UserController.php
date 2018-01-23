@@ -21,7 +21,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-        $playerID   = $request->user()->services()->value('player_id');
+        $playerID   = $request->user()->value('player_id');
         $allGames   = Game::get();
 
         return view(
@@ -41,14 +41,14 @@ class UserController extends Controller
              'games_id' => $game,
             ],
             [
-                'player_id' => $playerID,
+            'player_id' => $playerID,
             ]
         );
         $playerID32 = Steam::toSteamID($playerID);
         $steam_data = file_get_contents(
             'https://api.opendota.com/api/players/' . $playerID32
         );
-        dd($steam_data);
+//        dd($steam_data);
         return redirect('/personal');
     }
 }

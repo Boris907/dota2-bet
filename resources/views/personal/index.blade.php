@@ -41,7 +41,7 @@
                         <select name="game" class="custom-select custom-select-lg mb-3">
                           <option selected>Select game</option>
                           @foreach ($allGames as $gameTitle)
-                          <option value="{{$gameTitle->id}}">{{$gameTitle->title}}</a></li>
+                                <option value="{{$gameTitle->id}}">{{$gameTitle->title}}</option>
                           @endforeach
                         </select>
                       </div>

@@ -14,6 +14,7 @@ class User extends Authenticatable {
 		'name',
 		'email',
 		'password',
+        'player_id'
 	];
 	/**
 	 * The attributes excluded from the model's JSON form.
