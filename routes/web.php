@@ -39,6 +39,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 	
 	Route::get('/lobby', 'LobbyController@index');
+	Route::get('/lobby/start', 'LobbyController@get');
 	Route::get('/lobby/{id}', 'LobbyController@index')->where('id', '[0-9]+');
 });
 
