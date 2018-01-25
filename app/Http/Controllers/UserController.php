@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Game;
+use App\Service;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -18,7 +20,10 @@ class UserController extends Controller
 
      public function index(Request $request)
     {
-        return view('personal.index', ['uInfo'=>Auth::user()]);
+        $user_info = Auth::user();
+        $services = Service::all();
+        $games = Game::all()->where('service_id', 1);
+        return view('personal.index', compact('user_info', 'services', 'games'));
     }
 
     public function update(Request $request)

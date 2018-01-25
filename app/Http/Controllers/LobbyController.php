@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use App\Lobby;
@@ -24,11 +25,12 @@ class LobbyController extends Controller
             Ищем свободный файл, если не находим
             создаём новый 
         */
-           
-        if (Lobby::checkDir() == null) {
-            Storage::append(Lobby::newFile(), Auth::user()->player_id. ' ');
+           $id_player = Auth::user()->player_id;
 
-            return view('lobby.index', ['uId' => Auth::user()->player_id]);
+        if (Lobby::checkDir() == null) {
+            Storage::append(Lobby::newFile(), $id_player. ' ');
+
+            return view('lobby.index', compact('id_player'));
         }
         /*
             Если файл существует и в нём меньше 10 ид
@@ -38,6 +40,7 @@ class LobbyController extends Controller
         */
         if (file_exists(Lobby::$fullPath)) {
             $arrID = Lobby::allID();
+
             if (count($arrID) - 1 == 3) {
             array_pop($arrID);
                 Storage::append('public\\players.js', 'var id = [');
@@ -50,20 +53,20 @@ class LobbyController extends Controller
                     'public\\' . Lobby::checkDir(),
                     'public\\c' . Lobby::checkDir()
                 );
-                Storage::append(Lobby::newFile(),Auth::user()->player_id.' ');
+                Storage::append(Lobby::newFile(), $id_player.' ');
 
-                return view('lobby.index', ['uId' => Auth::user()->player_id]);
+                return view('lobby.index', compact('id_player'));
             }
             /*
                 Проверяем нет ли в файле ид пользователя
             */
-            if ( ! (in_array(strval(Auth::user()->player_id), $arrID))) {
+            if ( ! (in_array(strval($id_player), $arrID))) {
                 Storage::append(
-                    'public\\' . Lobby::checkDir(), Auth::user()->player_id.' ');
+                    'public\\' . Lobby::checkDir(), $id_player.' ');
             }
         }
 
-        return view('lobby.index', ['uId' => Auth::user()->player_id]);
+        return view('lobby.index', compact('id_player'));
     }
 
 }

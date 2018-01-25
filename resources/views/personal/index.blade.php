@@ -8,11 +8,11 @@
                 <div class="panel-heading">Your profile</div>
 
                 <div class="panel-body">
-                    Hi {{$uInfo->name}}. It's your profile page. 
-                    <br>Your id {{$uInfo->id}}.
-                    <br>Your e-mail {{$uInfo->email}}.
-                    @if($uInfo->player_id != 0)
-                    <br>Your game ID {{$uInfo->player_id}}
+                    Hi {{$user_info->name}}. It's your profile page.
+                    <br>Your id {{$user_info->id}}.
+                    <br>Your e-mail {{$user_info->email}}.
+                    @if($user_info->player_id != 0)
+                    <br>Your game ID {{$user_info->player_id}}
                     @endif
                 </div>
             </div>
@@ -33,14 +33,17 @@
                       <div class="form-group">
                         <select name="service" class="custom-select custom-select-lg mb-3">
                           <option selected>Select service</option>
-                          <option value="Steam">Steam</option>
-                          <option value="Origin">Origin</option>
+                            @foreach($services as $item)
+                                <option value="{{$item['title']}}">{{$item['title']}}</option>
+                            @endforeach
                         </select>
                       </div>
                       <div class="form-group">
                         <select name="game" class="custom-select custom-select-lg mb-3">
                           <option selected>Select game</option>
-                         
+                            @foreach($games as $item)
+                            <option value="{{$item['title']}}">{{$item['title']}}</option>
+                            @endforeach
                         </select>
                       </div>
                       <div class="form-group">
