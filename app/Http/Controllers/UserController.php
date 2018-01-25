@@ -20,19 +20,16 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        $user_info =  Auth::user();
+        $player_id   = $request->user()->services()->value('player_id');
+        $all_games   = Game::get();
 
-        $playerID   = $request->user()->value('player_id');
-        $allGames   = Game::get();
-
-        return view(
-            'personal.index', ['uInfo'    => Auth::user(),
-                               'playerID' => $playerID, 'allGames' => $allGames]
-        );
+        return view('personal.index', compact('user_info', 'player_id', 'all_games'));
     }
 
     public function update(Request $request)
     {
-        $playerID = $request->input('player_id');
+        $player_id = $request->input('player_id');
         $service  = $request->input('service');
         $game     = $request->input('game');
 
@@ -41,12 +38,12 @@ class UserController extends Controller
              'games_id' => $game,
             ],
             [
-            'player_id' => $playerID,
+            'player_id' => $player_id,
             ]
         );
-        $playerID32 = Steam::toSteamID($playerID);
+        $player_id32 = Steam::toSteamID($player_id);
         $steam_data = file_get_contents(
-            'https://api.opendota.com/api/players/' . $playerID32
+            'https://api.opendota.com/api/players/' . $player_id32
         );
 //        dd($steam_data);
         return redirect('/personal');

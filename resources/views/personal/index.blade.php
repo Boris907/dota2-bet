@@ -8,11 +8,11 @@
                 <div class="panel-heading">Your profile</div>
 
                 <div class="panel-body">
-                    Hi {{$uInfo->name}}. It's your profile page. 
-                    <br>Your id {{$uInfo->id}}.
-                    <br>Your e-mail {{$uInfo->email}}.
-                    @if($playerID != 0)
-                    <br>Your game ID {{$playerID}}
+                    Hi {{$user_info->name}}. It's your profile page.
+                    <br>Your id {{$user_info->id}}.
+                    <br>Your e-mail {{$user_info->email}}.
+                    @if($player_id != 0)
+                    <br>Your game ID {{$player_id}}
                     @endif
                 </div>
             </div>

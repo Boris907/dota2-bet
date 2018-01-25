@@ -18,4 +18,11 @@ class RoomController extends Controller
         return view('rooms.index', compact('player_id'));
     }
 
+    public function get()
+    {
+        $path = 'cd ~/Code/Game/dota2-roulette/public/js/node-dota2/examples';
+        exec ("cd " . dirname($path) . " && node example2.js 2>&1", $out, $err);
+        echo "good";
+    }
+
 }

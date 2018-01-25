@@ -92,6 +92,7 @@
                 {{--</form>--}}
                 <div id="demo"></div>
                 <button type="button" onclick="loadDoc()">go</button>
+                <a href="{{ url('/lobby/1') }}">Test</a>
             </div>
         </div>
     </div>
