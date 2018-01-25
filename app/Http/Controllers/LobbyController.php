@@ -24,10 +24,11 @@ class LobbyController extends Controller
             Ищем свободный файл, если не находим
             создаём новый 
         */
+           
         if (Lobby::checkDir() == null) {
-            Storage::append(Lobby::newFile(), Auth::user()->game_id . ' ');
+            Storage::append(Lobby::newFile(), Auth::user()->player_id. ' ');
 
-            return view('lobby.index', ['uId' => Auth::user()->game_id]);
+            return view('lobby.index', ['uId' => Auth::user()->player_id]);
         }
         /*
             Если файл существует и в нём меньше 10 ид
@@ -37,26 +38,32 @@ class LobbyController extends Controller
         */
         if (file_exists(Lobby::$fullPath)) {
             $arrID = Lobby::allID();
-            if (count($arrID) - 1 == 10) {
+            if (count($arrID) - 1 == 3) {
+            array_pop($arrID);
+                Storage::append('public\\players.js', 'var id = [');
+                foreach ($arrID as $value) {
+                    $content = '[\''. $value .'\',\'D\'],';
+                    Storage::append('public\\players.js', $content);
+                }
+                Storage::append('public\\players.js', '];module.exports.id = id;');
                 Storage::move(
                     'public\\' . Lobby::checkDir(),
                     'public\\c' . Lobby::checkDir()
                 );
-                Storage::append(Lobby::newFile(), Auth::user()->game_id . ' ');
+                Storage::append(Lobby::newFile(),Auth::user()->player_id.' ');
 
-                return view('lobby.index', ['uId' => Auth::user()->game_id]);
+                return view('lobby.index', ['uId' => Auth::user()->player_id]);
             }
             /*
                 Проверяем нет ли в файле ид пользователя
             */
-            if ( ! (in_array(strval(Auth::user()->game_id), $arrID))) {
+            if ( ! (in_array(strval(Auth::user()->player_id), $arrID))) {
                 Storage::append(
-                    'public\\' . Lobby::checkDir(), Auth::user()->game_id . ' '
-                );
+                    'public\\' . Lobby::checkDir(), Auth::user()->player_id.' ');
             }
         }
 
-        return view('lobby.index', ['uId' => Auth::user()->game_id]);
+        return view('lobby.index', ['uId' => Auth::user()->player_id]);
     }
 
 }

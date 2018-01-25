@@ -11,15 +11,12 @@ class Game extends Model
 	public $timestamps = false;
 	protected $fillable = [
 	'title',
+	'service_id',
 	];
 
-	 public function services()
+	 public function stats()
   {
     return $this->hasOne(Service::class);
   }
 
-	public function user()
-  {
-    return $this->belongsTo(User::class);
-  }
 }

@@ -15,18 +15,15 @@ class Service extends Model
 	 */
 		public $timestamps = false;
 	protected $fillable = [
-	'player_id',
-	'user_id',
 	'title',
-	'games_id',
 	];
 
     public function user()
   {
-    return $this->belongsTo(User::class);
+    return $this->hasMany(User::class);
   }    
   public function games()
   {
-    return $this->hasMany(Game::class);
+    return $this->belongsTo(Game::class);
   }
 }
