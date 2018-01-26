@@ -12,16 +12,20 @@ class GameTableSeeder extends Seeder
     public function run()
     {
         DB::table('games')->insert([
-            'title' => 'Dota 2'
+            'title' => 'Dota 2',
+            'service_id' => '1'
         ]);
         DB::table('games')->insert([
-            'title' => 'CS:GO'
+            'title' => 'CS:GO',
+            'service_id' => '1'
         ]);
         DB::table('games')->insert([
-            'title' => 'Warframe'
+            'title' => 'Warframe',
+            'service_id' => '2'
         ]);
         DB::table('games')->insert([
-            'title' => 'Team Fortress 2'
+            'title' => 'Team Fortress 2',
+            'service_id' => '3'
         ]);
     }
 }
