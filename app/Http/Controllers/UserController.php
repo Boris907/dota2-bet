@@ -4,35 +4,64 @@ namespace App\Http\Controllers;
 
 use App\Game;
 use App\Service;
-use Illuminate\Http\Request;
+use App\Steam;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\User;
 use Auth;
 
 class UserController extends Controller
 {
-		 public function __construct()
-   {
-    	$this->middleware('auth');
-
-   }
-
-     public function index(Request $request)
+    public function __construct()
     {
-        $user_info = Auth::user();
-        $services = Service::all();
-        $games = Game::all()->where('service_id', 1);
-        return view('personal.index', compact('user_info', 'services', 'games'));
+        $this->middleware('auth');
+
     }
 
-    public function update(Request $request)
+    public function index()
     {
-        $playerID = $request->input('player_id');
+        $user_info = Auth::user();
+        $services  = Service::all();
+        $games     = Game::all()->where('service_id', 1);
 
-        $request->user()->update([
-            'player_id' => $playerID,
-            ]);
+        return view(
+            'personal.index', compact('user_info', 'services', 'games')
+        );
+    }
+
+    public function update()
+    {
+        $player_id = request()->input('player_id');
+
+        request()->user()->update(
+            [
+                'player_id' => $player_id,
+            ]
+        );
+
+        return redirect('/personal');
+    }
+
+    public function rate()
+    {
+        $player_id   = Auth::user()->player_id;
+        $player_id32 = Steam::toSteamID($player_id);
+
+        $steam_data = file_get_contents(
+            'https://api.opendota.com/api/players/' . $player_id32
+        );
+        $arr = json_decode($steam_data, 1);
+
+        if (empty($arr['solo_competitive_rank'])){
+            $arr['solo_competitive_rank'] = 0;
+        }
+
+        request()->user()->update(
+            [
+                'rate' => $arr['solo_competitive_rank'],
+            ]
+        );
 
         return redirect('/personal');
     }

@@ -29,7 +29,8 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::get('/personal', 'UserController@index');
     Route::post('/personal', 'UserController@update');
-		
+    Route::get('/personal/rate', 'UserController@rate');
+
 	Route::get('/rooms', 'RoomController@index');
     Auth::routes();
 
