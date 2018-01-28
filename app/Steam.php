@@ -19,4 +19,11 @@ class Steam extends Model
 
         return $z;
     }
+
+    public static function win($id)
+    {
+        $last_match = file_get_contents('https://api.opendota.com/api/matches/'.$id);
+
+        return $last_match;
+    }
 }

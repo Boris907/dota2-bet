@@ -23,4 +23,8 @@ class User extends Authenticatable {
 		'password',
 	];
 
+	public function stats()
+    {
+        return $this->belongsTo(Stat::class);
+    }
 }

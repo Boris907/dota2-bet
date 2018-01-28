@@ -45,6 +45,9 @@
                 <a class="navbar-brand" href="{{ url('personal') }}">
                     Personal info
                 </a>
+                <a class="navbar-brand" href="{{ url('stats') }}">
+                    Stats
+                </a>
                  <a class="navbar-brand" href="{{ url('rooms') }}">
                     Choose room
                 </a>

@@ -16,7 +16,7 @@
                         <br>Your Steam ID: {{$user_info->player_id}}
                     @endif
                     @if(!empty($user_info->rate))
-                        <br>Your MMR in Dota2: {{$user_info->rate}}
+                        <br>Your average MMR in Dota2: {{$user_info->rate}}
                     @endif
                 </div>
             </div>
