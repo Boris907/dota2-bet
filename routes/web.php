@@ -29,7 +29,8 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::get('/personal', 'UserController@index');
     Route::post('/personal', 'UserController@update');
-		
+    Route::get('/personal/rate', 'UserController@rate');
+
 	Route::get('/rooms', 'RoomController@index');
     Auth::routes();
 
@@ -39,7 +40,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 	
 	Route::get('/lobby', 'LobbyController@index');
-	Route::get('/lobby/{id}', 'LobbyController@index')->where('id', '[0-9]+');
+	Route::get('/lobby/start', 'LobbyController@get');
+//	Route::get('/lobby/{id}', 'LobbyController@index')->where('id', '[0-9]+');
+
+    Route::get('/stats', 'StatsController@index');
 });
 
 /*Route::get('user/{id}', function ($id) {

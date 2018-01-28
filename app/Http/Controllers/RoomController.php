@@ -17,7 +17,9 @@ class RoomController extends Controller
 
   public function index()
     {
-        return view('rooms.index', ['uId'=>Auth::user()->player_id]);
+        $id_player = Auth::user()->player_id;
+
+        return view('rooms.index', compact('id_player'));
     }
 
 }

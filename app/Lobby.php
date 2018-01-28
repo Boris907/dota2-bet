@@ -12,8 +12,8 @@ class Lobby
         Ищем свободный файл
     */
 	static public function checkDir() 
-	{        
-		$files = scandir(self::$dir);
+	{ 
+		$files = scandir(self::$dir);     
 		foreach ($files as $file) 
 		{
 			$check = preg_match('/^[0-9]+o/', $file);

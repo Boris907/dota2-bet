@@ -15,10 +15,16 @@ class User extends Authenticatable {
 		'email',
 		'password',
 		'player_id',
+        'coins',
+        'rate'
 	];
 
 	protected $guarded = [
 		'password',
 	];
 
+	public function stats()
+    {
+        return $this->belongsTo(Stat::class);
+    }
 }
