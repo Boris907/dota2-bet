@@ -21,17 +21,22 @@ class LobbyController extends Controller
     }
 
     public function index()
-    {
+    {   
         /*
             Ищем свободный файл, если не находим
             создаём новый 
         */
+            //Lobby::places();
            $id_player = Auth::user()->player_id;
 
         if (Lobby::checkDir() == null) {
             Storage::append(Lobby::newFile(), $id_player. ' ');
 
-            return view('lobby.index', compact('id_player'));
+            $arrIDs = Lobby::places();
+             $dire = $arrIDs['D'];
+              $radiant = $arrIDs['R'];
+            //var_dump($arr);
+            return view('lobby.index', compact(['dire','radiant']));
         }
         /*
             Если файл существует и в нём меньше 10 ид
@@ -41,8 +46,12 @@ class LobbyController extends Controller
         */
         if (file_exists(Lobby::$fullPath)) {
             $arrID = Lobby::allID();
+            $arrIDs = Lobby::places();
 
-            if (count($arrID) - 1 == 3) {
+            $dire = $arrIDs['D'];
+            $radiant = $arrIDs['R'];
+
+            if (count($arrID) - 1 == 12) {
             array_pop($arrID);
                 $content = 'var id = [';
                 foreach ($arrID as $value) {
@@ -56,7 +65,8 @@ class LobbyController extends Controller
                     'public\\c' . Lobby::checkDir()
                 );
                 Storage::append(Lobby::newFile(), $id_player.' ');
-                return view('lobby.index', compact('id_player'));
+                //var_dump($arrID);
+                return view('lobby.index', compact(['dire','radiant']));
             }
             /*
                 Проверяем нет ли в файле ид пользователя
@@ -66,8 +76,8 @@ class LobbyController extends Controller
                     'public\\' . Lobby::checkDir(), $id_player.' ');
             }
         }
-
-        return view('lobby.index', compact('id_player'));
+        //Svar_dump($arrID);
+        return view('lobby.index', compact(['dire','radiant']));
     }
 
     public function get()
@@ -79,6 +89,11 @@ class LobbyController extends Controller
         exec($bot_path, $out, $err);
 
         return view('lobby.start', compact('id_player'));
+    }
+
+    public function team()
+    {
+
     }
 
 }

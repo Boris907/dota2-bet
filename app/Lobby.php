@@ -39,8 +39,30 @@ class Lobby
 	*/
 	static public function allID()
 	{
-		$str = file_get_contents(Lobby::$fullPath);
-        $arr = explode(' ', $str);
-        return $arr;
+				if(self::checkDir() != null)
+					{
+						$str = file_get_contents(self::$fullPath);
+        		$arr = explode(' ', $str);
+	        	return $arr;
+					}
+				else ($arr = 0);
+	}
+
+	static public function places(){
+		if(self::checkDir() != null)
+					{
+						$str = file_get_contents(self::$fullPath);
+						$str = str_replace("\n", "", $str);
+        		$arr = explode(' ', $str);
+        		array_pop($arr);
+        		for ($i = count($arr); $i >= 0; $i-=2) {
+        			//if($i < 0)$i=1;
+        			if($i == 0)break;
+        			//if($i == 20)$i
+        			$playersID[$arr[$i-1]][] = $arr[$i-2];
+        		}
+	        	return $playersID;
+					}
+				else ($arr = 0);
 	}
 }
