@@ -5,7 +5,7 @@ namespace App;
 class Lobby
 {
      // объявление свойства
-	private static $dir = '/home/vagrant/code/auth/storage/app/public/';
+	private static $dir = '/home/vagrant/dota2roulette/storage/app/public/';
 	public static $fullPath;
 
     /*
@@ -55,14 +55,14 @@ class Lobby
 						$str = str_replace("\n", "", $str);
         		$arr = explode(' ', $str);
         		array_pop($arr);
-        		for ($i = count($arr); $i >= 0; $i-=2) {
-        			//if($i < 0)$i=1;
-        			if($i == 0)break;
-        			//if($i == 20)$i
-        			$playersID[$arr[$i-1]][] = $arr[$i-2];
+        		for ($i=0; $i < 20; $i+=2) { 
+        			$playersID[$arr[$i+1]] = $arr[$i];
         		}
+        		/*var_dump($playersID);
+        		die();*/
 	        	return $playersID;
 					}
 				else ($arr = 0);
 	}
 }
+	

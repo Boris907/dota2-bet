@@ -19,8 +19,12 @@
     Radiant
   </div>
   <ul class="list-group list-group-flush">
-    @foreach($radiant as $id)
+    @foreach($radiant as $key => $id)
+    @if($id == 0)
+    <li class="list-group-item"><a href="/lobby/team/{{$key}}">Take place</a> </li>
+    @else
     <li class="list-group-item">{{$id}}</li>
+    @endif
     @endforeach
   </ul>
 </div>
@@ -29,8 +33,12 @@
     Dire
   </div>
   <ul class="list-group list-group-flush">
-        @foreach($dire as $id)
+        @foreach($dire as $key => $id)
+    @if($id == 0)
+    <li class="list-group-item"><a href="/lobby/team/{{$key}}">Take place</a> </li>
+    @else
     <li class="list-group-item">{{$id}}</li>
+    @endif
     @endforeach
   </ul>
 </div>
