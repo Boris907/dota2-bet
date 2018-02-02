@@ -26,7 +26,6 @@ class LobbyController extends Controller
             Ищем свободный файл, если не находим
             создаём новый 
         */
-            //Lobby::places();
            $id_player = Auth::user()->player_id;
 
         if (Lobby::checkDir() == null) {
@@ -96,11 +95,23 @@ class LobbyController extends Controller
     {
         $id_player = Auth::user()->player_id;
 
+        $content = 'var id = [';
+        $arrIDs = Lobby::places();
+        for ($i=1; $i < 6 ; $i++) {
+                $content .= "['$arrIDs[$i]'".','."'R'],";
+            }
+        for ($i=6; $i < 11 ; $i++) { 
+                $content .= "['$arrIDs[$i]'".','."'D'],";
+            }
+        $content .= '];module.exports.id = id;';
+        Storage::append('public\\players.js', $content);
+ 
         //Выводит логи в /dev/null,
         $bot_path = "cd " . "~/Code/Game/dota2-roulette/public/js/node-dota2/examples ". "&& node example2.js >> /tmp/dota2.log &";
         exec($bot_path, $out, $err);
 
         return view('lobby.start', compact('id_player'));
+        //return back(); 
     }
 
     public function team($id)
@@ -117,10 +128,9 @@ class LobbyController extends Controller
         foreach ($arrIDs as $key => $value) {
             $str .= $value.' '.$key.' ';
         }
-        $f = fopen('/home/vagrant/dota2roulette/storage/app/public/'.Lobby::checkDir(), 'w+');
+        $f = fopen('/home/vagrant/code/auth/storage/app/public/'.Lobby::checkDir(), 'w+');
         $f = fwrite($f, $str);
-        // Storage::append($f, $str);
-        // var_dump(Lobby::checkDir());
+
         return back(); 
     }
 

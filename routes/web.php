@@ -41,7 +41,6 @@ Route::group(['middleware' => ['web']], function () {
 	
 	Route::get('/lobby', 'LobbyController@index');
     Route::get('/lobby/start', 'LobbyController@get');
-	//Route::get('/lobby/team', 'LobbyController@team');
 	Route::get('/lobby/team/{id}', 'LobbyController@team');
 
     Route::get('/stats', 'StatsController@index');
