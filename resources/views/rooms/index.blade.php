@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1 text-center">
             <h1>Game ID: {{$id_player}}</h1>
-            <h2>Money: {{$coins}}$</h1>
+            <h2>Money: {{$coins}}$</h2>
             <h2>Choose the room where you want to play</h2>
         </div>
     </div>

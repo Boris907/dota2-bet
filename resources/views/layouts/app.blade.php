@@ -79,13 +79,37 @@
             </div>
         </div>
     </nav>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel">Change your bet</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action=""></form>
+                    <div class="input-group col-md-4 col-md-offset-4">
+                        <span class="input-group-addon">$</span>
+                        <input id="bet" class="form-control" name="bet" type="text" value="{{session()->get('bet')}}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="bet_submit" type="button" class="btn btn-primary">Submit bet</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     @yield('content')
 
     <!-- JavaScripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script src="/public/js/main.js"></script>
+<script src="/js/main.js"></script>
 {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 </body>
 </html>
