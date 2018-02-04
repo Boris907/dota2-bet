@@ -37,16 +37,16 @@ class Lobby
 	/*
 		Все ид из файла
 	*/
-	static public function allID()
-	{
-				if(self::checkDir() != null)
-					{
-						$str = file_get_contents(self::$fullPath);
-        		$arr = explode(' ', $str);
-	        	return $arr;
-					}
-				else ($arr = 0);
-	}
+	// static public function allID()
+	// {
+	// 			if(self::checkDir() != null)
+	// 				{
+	// 					$str = file_get_contents(self::$fullPath);
+ //        		$arr = explode(' ', $str);
+	//         	return $arr;
+	// 				}
+	// 			else ($arr = 0);
+	// }
 
 	static public function places(){
 		if(self::checkDir() != null)

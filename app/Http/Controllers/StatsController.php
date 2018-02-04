@@ -27,7 +27,7 @@ class StatsController extends Controller
         $recent_games = file_get_contents("https://api.opendota.com/api/players/$player_id32/recentMatches");
         $games = json_decode($recent_games, 1);
 
-        dd(Steam::win($games[0]['match_id']));
+        // dd(Steam::win($games[0]['match_id']));
 
         return view('personal.stats', compact('user_info','user_stats', 'games'));
     }

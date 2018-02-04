@@ -20,76 +20,39 @@ class LobbyController extends Controller
 
     }
 
-    public function index()
+    public function update($min_bet)
     {   
-        /*
-            Ищем свободный файл, если не находим
-            создаём новый 
-        */
-           $id_player = Auth::user()->player_id;
-
-        if (Lobby::checkDir() == null) {
-            Storage::append(Lobby::newFile(), $id_player. ' ');
-
-            $arrIDs = Lobby::places();
-             for ($i=1; $i < 6 ; $i++) { 
-                # code...
-                $radiant[$i] = $arrIDs[$i];
-            }
-            for ($i=6; $i < 11 ; $i++) { 
-                # code...
-                $dire[$i] = $arrIDs[$i];
-            }
-
-            return view('lobby.index', compact(['dire','radiant']));
-        }
-        /*
-            Если файл существует и в нём меньше 10 ид
-            добавлеям ид.
-            Иначе закрываем старый файл и создаём новый
-            с добавлением ид.
-        */
-        if (file_exists(Lobby::$fullPath)) {
-            $arrID = Lobby::allID();
-            $arrIDs = Lobby::places();
+        $coins = Auth::user()->coins;
+        var_dump($bet);
+         $arrIDs = Lobby::places();
 
             for ($i=1; $i < 6 ; $i++) { 
-                # code...
                 $radiant[$i] = $arrIDs[$i];
             }
-            for ($i=6; $i < 11 ; $i++) { 
-                # code...
+            for ($i=6; $i < 11 ; $i++) {
                 $dire[$i] = $arrIDs[$i];
             }
-            
-            if (count($arrID) - 1 == 12) {
-            array_pop($arrID);
-                $content = 'var id = [';
-                foreach ($arrID as $value) {
-                    $content .= "['$value','D'],";                
-                }
-                $content .= '];module.exports.id = id;';
-                $content = str_replace("\n", "", $content);
-                Storage::append('public\\players.js', $content);
-                Storage::move(
-                    'public\\' . Lobby::checkDir(),
-                    'public\\c' . Lobby::checkDir()
-                );
-                Storage::append(Lobby::newFile(), $id_player.' ');
-                //var_dump($arrID);
-                return view('lobby.index', compact(['dire','radiant']));
-            }
-            /*
-                Проверяем нет ли в файле ид пользователя
-            */
-            if ( ! (in_array(strval($id_player), $arrID))) {
-                Storage::append(
-                    'public\\' . Lobby::checkDir(), $id_player.' ');
-            }
-        }
-        //Svar_dump($arrID);
-        return view('lobby.index', compact(['dire','radiant']));
+        return redirect()->action('LobbyController@index');
     }
+
+        public function index($min_bet)
+    {   
+        //$coins = Auth::user()->coins-$min_bet;
+        $coins = Auth::user()->coins;
+        request()->user()->update(['coins' => $coins]);
+        $bet = $min_bet;
+        $arrIDs = Lobby::places();
+
+            for ($i=1; $i < 6 ; $i++) { 
+                $radiant[$i] = $arrIDs[$i];
+            }
+            for ($i=6; $i < 11 ; $i++) {
+                $dire[$i] = $arrIDs[$i];
+            }
+        return view('lobby.index', compact(['dire','radiant','coins','bet']));
+         //return redirect()->action('LobbyController@update')->with('bet',$min_bet);;
+    }
+
 
     public function get()
     {
@@ -105,13 +68,22 @@ class LobbyController extends Controller
             }
         $content .= '];module.exports.id = id;';
         Storage::append('public\\players.js', $content);
- 
+        Storage::move(
+                    'public\\' . Lobby::checkDir(),
+                    'public\\c' . Lobby::checkDir()
+                );
+        $str = '';
+        for ($i=1; $i <=10 ; $i++) { 
+            $str .= "0 $i ";
+        }
+        Storage::append(Lobby::newFile(),$str);
+ /*
         //Выводит логи в /dev/null,
         $bot_path = "cd " . "~/Code/Game/dota2-roulette/public/js/node-dota2/examples ". "&& node example2.js >> /tmp/dota2.log &";
         exec($bot_path, $out, $err);
 
-        return view('lobby.start', compact('id_player'));
-        //return back(); 
+        return view('lobby.start', compact('id_player'));*/
+        return back(); 
     }
 
     public function team($id)

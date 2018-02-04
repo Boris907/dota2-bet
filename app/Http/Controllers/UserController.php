@@ -34,11 +34,7 @@ class UserController extends Controller
     {
         $player_id = request()->input('player_id');
 
-        request()->user()->update(
-            [
-                'player_id' => $player_id,
-            ]
-        );
+        request()->user()->update(['player_id' => $player_id,]);
 
         return redirect('/personal');
     }
