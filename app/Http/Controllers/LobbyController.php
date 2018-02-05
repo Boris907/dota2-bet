@@ -18,23 +18,10 @@ class LobbyController extends Controller
         $this->middleware('auth');
 
     }
-    public function update()
-    {
-        //Подтверждение ставки
-        $coins = \request()->session()->get('coins');
-        request()->user()->update(['coins' => $coins]);
-
-        Session::flash('flash_message', 'Your bet submited successfully');
-
-        return back();
-    }
 
     public function index($min_bet)
     {
-        $coins = Auth::user()->coins;
-        $coins = $coins - intval($min_bet);
-        session(['coins' => $coins, 'bet' => $min_bet]);
-
+        session(['min_bet' => $min_bet]);
         $arrIDs = Lobby::places();
         //Генерим новый файл, если их нет и записываем ид
         if (empty($arrIDs)) {
@@ -51,12 +38,9 @@ class LobbyController extends Controller
             $dire[$i] = $arrIDs[$i];
         }
 
-
-
         return view(
             'lobby.index', compact(['dire', 'radiant', 'coins'])
         );
-        //return redirect()->action('LobbyController@update')->with('bet',$min_bet);;
     }
 
 
@@ -65,7 +49,7 @@ class LobbyController extends Controller
 //        $id_player = Auth::user()->player_id;
 
         $content = 'var id = [';
-        $arrIDs  = Lobby::places();
+        $arrIDs = Lobby::places();
         for ($i = 1; $i < 6; $i++) {
             $content .= "['$arrIDs[$i]'" . ',' . "'R'],";
         }
@@ -97,23 +81,23 @@ class LobbyController extends Controller
     public function team($id)
     {
         $steam_id = Auth::user()->player_id;
-        $arrIDs   = Lobby::places();
+        $arrIDs = Lobby::places();
         if (in_array(
             $steam_id, $arrIDs
         )
         )// если есть такой ид на его место записываем 0
         {
-            $key          = array_search($steam_id, $arrIDs);
+            $key = array_search($steam_id, $arrIDs);
             $arrIDs[$key] = 0;
         }
         $arrIDs[$id]
-             = $steam_id; // просто добавляем ид, проверка выше исключчает повторы
+            = $steam_id; // просто добавляем ид, проверка выше исключчает повторы
         $str = '';
         foreach ($arrIDs as $key => $value) {
             $str .= $value . ' ' . $key . ' ';
         }
         $f = fopen(
-            '/home/vagrant/code/auth/dota2-roulette/storage/app/public/'
+            '/home/vagrant/Code/Game/dota2-roulette/storage/app/public/'
             . Lobby::checkDir(), 'w+'
         );
         $f = fwrite($f, $str);

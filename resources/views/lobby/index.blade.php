@@ -5,10 +5,11 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 text-center">
                 <h2>You are in lobby</h2>
-                <h2>Money: {{Auth::user()->coins}}$</h2>
-                <h2>Your bet: {{Session::get('bet')}}$</h2>
-                <button id="change" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Change bet</button>
-                <a id="bet" class="btn btn-primary" href="{{'/lobby/{min_bet}/set'}}">Submit bet</a>
+                <h2 id="money">Money: {{Auth::user()->coins}}$</h2>
+                @if(session()->get('bet'))
+                    <h2 id="res_bet">Your bet:{{session()->get('bet')}}$</h2>
+                @endif
+                <button id="change" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit your bet</button>
             </div>
         </div>
     </div>

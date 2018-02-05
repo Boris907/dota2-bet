@@ -40,11 +40,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 	
     Route::get('/lobby/{min_bet}', 'LobbyController@index');
-//    Route::get('/lobby/{min_bet}', 'LobbyController@index');
-    Route::get('/lobby/{min_bet}/set', 'LobbyController@update');
-	Route::get('/lobby', 'LobbyController@update');
     Route::get('/lobby/start', 'LobbyController@get');
-	Route::get('/lobby/team/{id}', 'LobbyController@team');
+    Route::get('/lobby/team/{id}', 'LobbyController@team');
+    Route::post('/lobby/{min_bet}/set', 'BetsController@set');
 
     Route::get('/stats', 'StatsController@index');
 });

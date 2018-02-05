@@ -90,11 +90,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action=""></form>
+                    <form action="#" method="post">
+                    <meta name="csrf-token" content="{{ csrf_token() }}">
                     <div class="input-group col-md-4 col-md-offset-4">
                         <span class="input-group-addon">$</span>
-                        <input id="bet" class="form-control" name="bet" type="text" value="{{session()->get('bet')}}">
+                        <input id="bet" class="form-control" name="bet" type="text" value="{{session()->get('min_bet')}}">
                     </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
