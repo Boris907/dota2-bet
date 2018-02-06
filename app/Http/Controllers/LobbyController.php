@@ -97,7 +97,7 @@ class LobbyController extends Controller
             $str .= $value . ' ' . $key . ' ';
         }
         $f = fopen(
-            '/home/vagrant/Code/Game/dota2-roulette/storage/app/public/'
+            Lobby::$dir
             . Lobby::checkDir(), 'w+'
         );
         $f = fwrite($f, $str);

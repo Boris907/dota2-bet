@@ -6,10 +6,13 @@
             <div class="col-md-10 col-md-offset-1 text-center">
                 <h2>You are in lobby</h2>
                 <h2 id="money">Money: {{Auth::user()->coins}}$</h2>
+
                 @if(session()->get('bet'))
                     <h2 id="res_bet">Your bet:{{session()->get('bet')}}$</h2>
+                @else
+                <h2 id="res_bet">Your current bet:{{session()->get('min_bet')}}$</h2>
                 @endif
-                <button id="change" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit your bet</button>
+                <button id="change" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Increase your bet</button>
             </div>
         </div>
     </div>
@@ -54,8 +57,8 @@
                 @if(Session::has('flash_message'))
                     <div id="bet_success" class="alert alert-success">{{Session::get('flash_message')}}
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                @endif
                     </div>
+                @endif
             </div>
         </div>
     </div>
