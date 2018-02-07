@@ -19,10 +19,8 @@ class BetsController extends Controller
         $coins = Auth::user()->coins;
         $min_bet = request()->session()->get('min_bet');
         $old_bet = request()->session()->get('bet');
-//        dd($bet);
         if(!isset($old_bet)) {
             $old_bet = $min_bet;
-//            session(['bet' => $old_bet]);
             $coins -= $min_bet;
         }
 
@@ -46,12 +44,13 @@ class BetsController extends Controller
         return redirect('/lobby/'.request()->session()->get('min_bet'));
     }
 
-    public function reset($min_bet)
+    public function reset()
     {
-        $coins = Auth::user()->coins;
         $old_bet = request()->session()->get('bet');
-        dd($old_bet);
-        $old_bet = $min_bet;
+        $bet = request()->session()->get('min_bet');
+        $coins = Auth::user()->coins + $old_bet - $bet;
+        request()->user()->update(['coins' => $coins]);
+        session(['bet' => $bet]);
 
 
         return back();
