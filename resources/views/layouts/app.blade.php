@@ -99,10 +99,10 @@
                     <meta name="csrf-token" content="{{ csrf_token() }}">
                     <div class="input-group col-md-12">
                         <label style="padding:12px ">Increase bet for: </label>
-                        <button type="button" class="btn btn-primary bet_submit" value="1">1$</button>
-                        <button type="button" class="btn btn-primary bet_submit" value="2">2$</button>
-                        <button type="button" class="btn btn-primary bet_submit" value="5">5$</button>
-                        <button type="button" class="btn btn-primary bet_submit" value="10">10$</button>
+                        <button type="button" style="margin:5px" class="btn btn-primary bet_submit" value="1">1$</button>
+                        <button type="button" style="margin:5px" class="btn btn-primary bet_submit" value="2">2$</button>
+                        <button type="button" style="margin:5px" class="btn btn-primary bet_submit" value="5">5$</button>
+                        <button type="button" style="margin:5px" class="btn btn-primary bet_submit" value="10">10$</button>
                     </div>
                     </form>
                 </div>
