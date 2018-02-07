@@ -23,7 +23,6 @@ class BetsController extends Controller
             $old_bet = $min_bet;
             $coins -= $min_bet;
         }
-
         $coins -= $bet;
         $bet = $old_bet + $bet;
         /*

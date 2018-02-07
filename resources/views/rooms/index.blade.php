@@ -14,7 +14,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Newbie (Min bet 2$)</div>
                 <div class="panel-body">
-                  <a href="lobby/2">Enter</a>
+                  <a href="lobby/newbie">Enter</a>
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Ordinary (Min bet 4$)</div>
                 <div class="panel-body">
-                  <a href="lobby/4">Enter</a>
+                  <a href="lobby/ordinary">Enter</a>
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Expert (Min bet 10$)</div>
                 <div class="panel-body">
-                  <a href="lobby/10">Enter</a>
+                  <a href="lobby/expert">Enter</a>
                 </div>
             </div>
         </div>

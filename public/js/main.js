@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    $('#bet_submit').click(function (e) {
+    $('.bet_submit').click(function (e) {
         e.preventDefault();
-        var bet = $('.increase:checked').val();
+        var bet = $(this).attr("value");
         $('.increase').prop('checked', false);
         $('#exampleModal').modal('hide');
 

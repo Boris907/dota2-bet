@@ -98,21 +98,13 @@
                     <form action="#" method="post">
                     <meta name="csrf-token" content="{{ csrf_token() }}">
                     <div class="input-group col-md-12">
-                        <input type="radio" class="increase" name="1" id="1" value="1">Increase bet for 1$
-                        <input type="radio" class="increase" name="2" id="2" value="2">Increase bet for 2$
-                        @if(session()->get('bet'))
-                            <input type="radio" class="increase" name="x2" id="3" value="{{session()->get('bet')}}">Increase bet for x2
-                            <input type="radio" class="increase" name="50%" id="4" value="<?php echo $bet = session()->get('bet') * 0.5; ?>">Increase bet for 50%
-                        @else
-                            <input type="radio" class="increase" name="x2" id="3" value="{{session()->get('min_bet')}}">Increase bet for x2
-                            <input type="radio" class="increase" name="50%" id="4" value="<?php echo $bet = session()->get('min_bet') * 0.5; ?>">Increase bet for 50%
-                        @endif
+                        <label style="padding:12px ">Increase bet for: </label>
+                        <button type="button" class="btn btn-primary bet_submit" value="1">1$</button>
+                        <button type="button" class="btn btn-primary bet_submit" value="2">2$</button>
+                        <button type="button" class="btn btn-primary bet_submit" value="5">5$</button>
+                        <button type="button" class="btn btn-primary bet_submit" value="10">10$</button>
                     </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button id="bet_submit" type="button" class="btn btn-primary">Submit bet</button>
                 </div>
             </div>
         </div>
