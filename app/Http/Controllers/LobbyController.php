@@ -46,8 +46,6 @@ class LobbyController extends Controller
 
     public function get()
     {
-//        $id_player = Auth::user()->player_id;
-
         $content = 'var id = [';
         $arrIDs = Lobby::places();
         for ($i = 1; $i < 6; $i++) {
@@ -68,12 +66,12 @@ class LobbyController extends Controller
         }
         Storage::append(Lobby::newFile(), $str);
 
-        /*
-               //Выводит логи в /dev/null,
-               $bot_path = "cd " . "~/Code/Game/dota2-roulette/public/js/node-dota2/examples ". "&& node example2.js >> /tmp/dota2.log &";
-               exec($bot_path, $out, $err);
 
-               return view('lobby.start', compact('id_player'));*/
+       //Выводит логи в /dev/null,
+       $bot_path = "cd " . "~/Code/Game/dota2-roulette/public/js/node-dota2/examples ". "&& node example2.js >> /tmp/dota2.log &";
+       exec($bot_path, $out, $err);
+
+//               return view('lobby.start', compact('id_player'));
 
         return back();
     }

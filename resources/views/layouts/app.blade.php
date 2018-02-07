@@ -84,17 +84,29 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="exampleModalLabel">Change your bet</h5>
+                    <h5 class="modal-title text-center" id="exampleModalLabel">Increase your bet</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    @if(session()->get('bet'))
+                    <h4 class="min text-center">Your current bet: {{session()->get('bet')}}$</h4>
+                        @else
+                    <h4 class="min text-center">Your current bet:{{session()->get('min_bet')}}$</h4>
+                        @endif
                 </div>
                 <div class="modal-body">
                     <form action="#" method="post">
                     <meta name="csrf-token" content="{{ csrf_token() }}">
-                    <div class="input-group col-md-4 col-md-offset-4">
-                        <span class="input-group-addon">$</span>
-                        <input id="bet" class="form-control" name="bet" type="text" value="{{session()->get('min_bet')}}">
+                    <div class="input-group col-md-12">
+                        <input type="radio" class="increase" name="1" id="1" value="1">Increase bet for 1$
+                        <input type="radio" class="increase" name="2" id="2" value="2">Increase bet for 2$
+                        @if(session()->get('bet'))
+                            <input type="radio" class="increase" name="x2" id="3" value="{{session()->get('bet')}}">Increase bet for x2
+                            <input type="radio" class="increase" name="50%" id="4" value="<?php echo $bet = session()->get('bet') * 0.5; ?>">Increase bet for 50%
+                        @else
+                            <input type="radio" class="increase" name="x2" id="3" value="{{session()->get('min_bet')}}">Increase bet for x2
+                            <input type="radio" class="increase" name="50%" id="4" value="<?php echo $bet = session()->get('min_bet') * 0.5; ?>">Increase bet for 50%
+                        @endif
                     </div>
                     </form>
                 </div>

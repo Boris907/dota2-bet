@@ -5,7 +5,7 @@ namespace App;
 class Lobby
 {
     // объявление свойства
-    public static $dir = '/home/vagrant/code/auth/storage/app/public/';
+    public static $dir = '/home/vagrant/code/auth/dota2-roulette/storage/app/public/';
     public static $fullPath;
 
     /*

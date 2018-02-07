@@ -19,12 +19,15 @@ class BetsController extends Controller
         $coins = Auth::user()->coins;
         $min_bet = request()->session()->get('min_bet');
         $old_bet = request()->session()->get('bet');
+//        dd($bet);
         if(!isset($old_bet)) {
             $old_bet = $min_bet;
+//            session(['bet' => $old_bet]);
             $coins -= $min_bet;
         }
+
         $coins -= $bet;
-        $bet = $old_bet +$bet;
+        $bet = $old_bet + $bet;
         /*
             Форма Change your bet:
                 - Поменять на Increase your bet
@@ -40,6 +43,17 @@ class BetsController extends Controller
         session(['coins' => $coins, 'bet' => $bet]);
         Session::flash('flash_message', 'Your bet submited successfully');
 
-        return redirect('/lobby/{min_bet}');
+        return redirect('/lobby/'.request()->session()->get('min_bet'));
+    }
+
+    public function reset($min_bet)
+    {
+        $coins = Auth::user()->coins;
+        $old_bet = request()->session()->get('bet');
+        dd($old_bet);
+        $old_bet = $min_bet;
+
+
+        return back();
     }
 }

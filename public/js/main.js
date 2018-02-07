@@ -1,7 +1,8 @@
 $(document).ready(function () {
     $('#bet_submit').click(function (e) {
         e.preventDefault();
-        var bet = $('#bet').val();
+        var bet = $('.increase:checked').val();
+        $('.increase').prop('checked', false);
         $('#exampleModal').modal('hide');
 
         $.ajax({
@@ -18,6 +19,8 @@ $(document).ready(function () {
                 $('#money').html($res);
                 $res_bet = $(response).find('#res_bet');
                 $('#res_bet').html($res_bet);
+                $min = $(response).find('.min');
+                $('.min').html($min);
             }
         });
     });

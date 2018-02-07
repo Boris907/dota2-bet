@@ -13,6 +13,7 @@
                 <h2 id="res_bet">Your current bet:{{session()->get('min_bet')}}$</h2>
                 @endif
                 <button id="change" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Increase your bet</button>
+                <a href="{{url('/lobby/'.request()->session()->get('min_bet').'/reset')}}" id="reset" class="btn btn-primary">Reset</a>
             </div>
         </div>
     </div>

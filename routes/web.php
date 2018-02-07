@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Session;
 /*
 |--------------------------------------------------------------------------
 | Routes File
@@ -38,11 +38,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('auth/steam/handle', 'SteamAuthController@handle')->name('auth.steam.handle');
 
     Route::get('logout', 'Auth\LoginController@logout')->name('logout');
-	
+
     Route::get('/lobby/{min_bet}', 'LobbyController@index');
     Route::get('/lobby/start', 'LobbyController@get');
     Route::get('/lobby/team/{id}', 'LobbyController@team');
-    Route::post('/lobby/{min_bet}/set', 'BetsController@set');
+    Route::post('/lobby/{bet}/set', 'BetsController@set');
+    Route::get('/lobby/{min_bet}/reset', 'BetsController@reset');
 
     Route::get('/stats', 'StatsController@index');
 });
