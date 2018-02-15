@@ -45,6 +45,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/lobby/{bet}/set', 'BetsController@set');
     Route::get('/lobby/{min_bet}/reset', 'BetsController@reset');
 
+    Route::get('/checkout/stripe', 'CheckoutController@getStripe');
+    Route::post('/checkout/stripe', 'CheckoutController@postStripe');
+
     Route::get('/stats', 'StatsController@index');
 });
 

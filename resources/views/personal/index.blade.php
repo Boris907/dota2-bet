@@ -11,7 +11,6 @@
                     Hi {{$user_info->name}}. It's your profile page.
                         <br>Your id: {{$user_info->id}}.
                         <br>Your e-mail: {{$user_info->email}}.
-                        <br>Your money: ${{$user_info->coins}}
                     @if(!empty($user_info->player_id))
                         <br>Your Steam ID: {{$user_info->player_id}}
                     @endif
