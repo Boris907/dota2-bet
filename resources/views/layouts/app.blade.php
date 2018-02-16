@@ -122,6 +122,7 @@
                 </div>
                 <div class="modal-body">
                     <a href="{{ url('/checkout/stripe') }}" class="btn btn-primary">Stripe</a>
+                    <a href="{{ url('/checkout/g2a') }}" class="btn btn-primary">G2A</a>
                 </div>
             </div>
         </div>

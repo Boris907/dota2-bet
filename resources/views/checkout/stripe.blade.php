@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4 col-sm-offset-3">
             <h1 class="text-center">Stripe checkout</h1>
-            {{--<img class="img-circle" src="https://stripe.com/img/documentation/checkout/marketplace.png">--}}
+            <img class="img-responsive col-xs-offset-4" src="{{'/images.png'}}" width="150px">
             <div class="panel panel-default credit-card-box">
                 <div class="panel-heading display-table">
                     <h3 class="panel-title display-td text-center">Payment Details</h3>
@@ -13,7 +13,7 @@
                     <div class="display-td">
                         <br>
                         <div class="panel-body">
-                            <form action="{{ url('checkout/stripe') }}" method="post" id="checkout-form">
+                            <form action="{{ url('checkout/stripe') }}" method="post" id="stripe-checkout-form">
                                 <div class="row">
                                     <div class="col-xs-5 col-xs-offset-1">
                                         <div class="form-group">

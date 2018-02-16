@@ -1,6 +1,6 @@
 Stripe.setPublishableKey('pk_test_SZriWuom01SyHNO1rtSx9jia');
 
-var $form = $('#checkout-form');
+var $form = $('#stripe-checkout-form');
 
 $form.submit(function(event) {
     $('#charge-error').addClass('hidden');
