@@ -71,6 +71,7 @@ class BetsController extends Controller
             $coins += $cash / 5;
             DB::table('users')->where('player_id', $id)->update(['coins' => $coins]);
         }
+        DB::table('bets')->where('room_rank', session()->get('rank'))->update(['bet' => 0]);
 
         return back();
     }
