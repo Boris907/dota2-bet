@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 
@@ -18,6 +19,8 @@ class BetsController extends Controller
     {
         $coins = Auth::user()->coins;
         $min_bet = request()->session()->get('min_bet');
+        $url = parse_url($_SERVER['HTTP_REFERER']);
+        $rank = explode('/', $url['path']);
         $old_bet = request()->session()->get('bet');
         if(!isset($old_bet)) {
             $old_bet = $min_bet;
@@ -37,7 +40,8 @@ class BetsController extends Controller
                                         будет значение с величинной всей ставки)
         */
         request()->user()->update(['coins' => $coins]);
-        session(['coins' => $coins, 'bet' => $bet]);
+        session(['coins' => $coins, 'bet' => $bet, 'rank' => $rank[2]]);
+        DB::table('bets')->where('room_rank', $rank[2])->update(['bet' => $bet]);
         Session::flash('flash_message', 'Your bet submited successfully');
 
         return redirect('/lobby/'.request()->session()->get('min_bet'));
@@ -51,6 +55,22 @@ class BetsController extends Controller
         request()->user()->update(['coins' => $coins]);
         session(['bet' => $bet]);
 
+
+        return back();
+    }
+
+    public function calculate($array_ids)
+    {
+        $room_cash = DB::table('bets')->select('bet')->where('room_rank', session()->get('rank'))->first();
+        $cash = $room_cash->bet;
+        $cash = $cash * 0.95;
+        $commision = ($room_cash->bet - $room_cash->bet * 0.95);
+
+        foreach ($array_ids as $id){
+            $coins = request()->user()->where('player_id', $id)->value('coins');
+            $coins += $cash / 5;
+            DB::table('users')->where('player_id', $id)->update(['coins' => $coins]);
+        }
 
         return back();
     }

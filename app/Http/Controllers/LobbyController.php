@@ -48,7 +48,7 @@ class LobbyController extends Controller
         for ($i = 6; $i < 11; $i++) {
             $dire[$i] = $arrIDs[$i];
         }
-
+//        dd(\session());
         return view(
             'lobby.index', compact(['dire', 'radiant', 'coins'])
         );
