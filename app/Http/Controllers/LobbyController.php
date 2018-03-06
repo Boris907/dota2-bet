@@ -22,16 +22,25 @@ class LobbyController extends Controller
     public function index($min_bet)
     {
         switch ($min_bet) {
-    case 'newbie':
-        $min_bet = 2;
-        break;
-    case 'ordinary':
-        $min_bet = 4;
-        break;
-    case 'expert':
-        $min_bet = 10;
-        break;
-}
+            case 'newbie':
+                $min_bet = 2;
+                break;
+            case 'ordinary':
+                $min_bet = 4;
+                break;
+            case 'expert':
+                $min_bet = 10;
+                break;
+        }
+
+        if (auth()->user()->coins < $min_bet
+            || auth()->user()->player_id == 0
+        ) {
+            return redirect('/personal')->withErrors(
+                'Not enough money or you haven`t game id'
+            );
+        }
+
         session(['min_bet' => $min_bet]);
         $arrIDs = Lobby::places();
         //Генерим новый файл, если их нет и записываем ид
@@ -58,7 +67,7 @@ class LobbyController extends Controller
     public function get()
     {
         $content = 'var id = [';
-        $arrIDs = Lobby::places();
+        $arrIDs  = Lobby::places();
         for ($i = 1; $i < 6; $i++) {
             $content .= "['$arrIDs[$i]'" . ',' . "'R'],";
         }
@@ -78,9 +87,11 @@ class LobbyController extends Controller
         Storage::append(Lobby::newFile(), $str);
 
 
-       //Выводит логи в /dev/null,
-       $bot_path = "cd " . "~/Code/Game/dota2-roulette/public/js/node-dota2/examples ". "&& node example2.js >> /tmp/dota2.log &";
-       exec($bot_path, $out, $err);
+        //Выводит логи в /dev/null,
+        $bot_path = "cd "
+            . "~/Code/Game/dota2-roulette/public/js/node-dota2/examples "
+            . "&& node example2.js >> /tmp/dota2.log &";
+        exec($bot_path, $out, $err);
 
 //               return view('lobby.start', compact('id_player'));
 
@@ -90,17 +101,17 @@ class LobbyController extends Controller
     public function team($id)
     {
         $steam_id = Auth::user()->player_id;
-        $arrIDs = Lobby::places();
+        $arrIDs   = Lobby::places();
         if (in_array(
             $steam_id, $arrIDs
         )
         )// если есть такой ид на его место записываем 0
         {
-            $key = array_search($steam_id, $arrIDs);
+            $key          = array_search($steam_id, $arrIDs);
             $arrIDs[$key] = 0;
         }
         $arrIDs[$id]
-            = $steam_id; // просто добавляем ид, проверка выше исключчает повторы
+             = $steam_id; // просто добавляем ид, проверка выше исключчает повторы
         $str = '';
         foreach ($arrIDs as $key => $value) {
             $str .= $value . ' ' . $key . ' ';
