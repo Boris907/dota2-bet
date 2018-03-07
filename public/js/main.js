@@ -1,15 +1,14 @@
-$('#wm-submit').click(function (e) {
-    e.preventDefault();
-
-    $('#wm-submit').hide();
-    var web_money = $('#web_money').val();
-    var s = document.createElement("script");
-    s.type = "text/javascript";
-    s.src = "//merchant.webmoney.ru/conf/lib/wm-simple-x20.min.js?wmid=396850847264&purse=R251053037627&key=398146463&amount=" + web_money + "&desc=Покупка валюты";
-    var container = document.getElementById('wm-form');
-    container.appendChild(s);
-});
-
+// $('#wm-submit').click(function (e) {
+//     e.preventDefault();
+//
+//     $('#wm-submit').hide();
+//     var web_money = $('#web_money').val();
+//     var s = document.createElement("script");
+//     s.type = "text/javascript";
+//     s.src = "//merchant.webmoney.ru/conf/lib/wm-simple-x20.min.js?wmid=396850847264&purse=R251053037627&key=398146463&amount=" + web_money + "&desc=Покупка валюты";
+//     var container = document.getElementById('wm-form');
+//     container.appendChild(s);
+// });
 $(document).ready(function () {
     $('.bet_submit').click(function (e) {
         e.preventDefault();

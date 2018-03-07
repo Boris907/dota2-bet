@@ -13,12 +13,15 @@ class BetsTableSeeder extends Seeder
     {
         DB::table('bets')->insert([
             'room_rank' => 'newbie',
+            'max_bet' => '50',
         ]);
         DB::table('bets')->insert([
             'room_rank' => 'ordinary',
+            'max_bet' => '100',
         ]);
         DB::table('bets')->insert([
             'room_rank' => 'expert',
+            'max_bet' => '500',
         ]);
     }
 }

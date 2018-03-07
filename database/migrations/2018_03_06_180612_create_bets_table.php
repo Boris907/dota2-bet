@@ -16,7 +16,8 @@ class CreateBetsTable extends Migration
         Schema::create('bets', function (Blueprint $table) {
             $table->increments('id');
             $table->string('room_rank');
-            $table->integer('bet')->default(0);
+            $table->double('bet')->default(0);
+            $table->double('max_bet');
             $table->timestamps();
         });
     }

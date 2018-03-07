@@ -19,8 +19,8 @@ class CreateStatsTable extends Migration
             $table->integer('total_games');
             $table->integer('win_games');
             $table->integer('lose_games');
-            $table->integer('bet_lose');
-            $table->integer('bet_win');
+            $table->double('bet_lose');
+            $table->double('bet_win');
 
             $table->primary(['user_id', 'game_id']);
             $table->foreign('user_id')->references('id')->on('users');

@@ -8,6 +8,7 @@ class Bet extends Model
 {
     protected $fillable = [
       'room_rank',
-      'bet'
+      'bet',
+      'max_bet'
     ];
 }

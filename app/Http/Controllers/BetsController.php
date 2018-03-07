@@ -21,6 +21,8 @@ class BetsController extends Controller
         $min_bet = request()->session()->get('min_bet');
         $url = parse_url($_SERVER['HTTP_REFERER']);
         $rank = explode('/', $url['path']);
+        $max = DB::table('bets')->select('max_bet')->where('room_rank', $rank[2])->first();
+
         $old_bet = request()->session()->get('bet');
         if(!isset($old_bet)) {
             $old_bet = $min_bet;
@@ -28,6 +30,10 @@ class BetsController extends Controller
         }
         $coins -= $bet;
         $bet = $old_bet + $bet;
+        if($bet > $max->max_bet){
+//            return back()->withErrors('You can`t set bet in this room more than ' . $max->max_bet);
+            return
+        }
         /*
             Форма Change your bet:
                 - Поменять на Increase your bet

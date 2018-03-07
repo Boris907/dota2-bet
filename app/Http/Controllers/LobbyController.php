@@ -67,7 +67,7 @@ class LobbyController extends Controller
     public function get()
     {
         $content = 'var id = [';
-        $arrIDs  = Lobby::places();
+        $arrIDs = Lobby::places();
         for ($i = 1; $i < 6; $i++) {
             $content .= "['$arrIDs[$i]'" . ',' . "'R'],";
         }
@@ -101,17 +101,17 @@ class LobbyController extends Controller
     public function team($id)
     {
         $steam_id = Auth::user()->player_id;
-        $arrIDs   = Lobby::places();
+        $arrIDs = Lobby::places();
         if (in_array(
             $steam_id, $arrIDs
         )
         )// если есть такой ид на его место записываем 0
         {
-            $key          = array_search($steam_id, $arrIDs);
+            $key = array_search($steam_id, $arrIDs);
             $arrIDs[$key] = 0;
         }
         $arrIDs[$id]
-             = $steam_id; // просто добавляем ид, проверка выше исключчает повторы
+            = $steam_id; // просто добавляем ид, проверка выше исключчает повторы
         $str = '';
         foreach ($arrIDs as $key => $value) {
             $str .= $value . ' ' . $key . ' ';

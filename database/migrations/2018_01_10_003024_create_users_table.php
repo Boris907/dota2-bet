@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('player_id', 100)->default(0);
-            $table->bigInteger('coins')->default(0);
+            $table->double('coins')->default(0);
             $table->string('rate')->default(0);
             $table->rememberToken();
             $table->timestamps();
