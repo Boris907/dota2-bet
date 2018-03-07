@@ -7,7 +7,9 @@
             <img class="img-responsive col-xs-offset-4" src="{{'/images.png'}}" width="150px">
             <div class="panel panel-default credit-card-box">
                 <div class="panel-heading display-table">
-                    <h3 class="panel-title display-td text-center">Payment Details</h3>
+                    <div class="row display-tr">
+                        <h4 class="panel-title display-td text-center">Payment Details</h4>
+                    </div>
                 </div>
                 <div class="row display-tr">
                     <div class="display-td">

@@ -9,6 +9,7 @@ $('#wm-submit').click(function (e) {
     var container = document.getElementById('wm-form');
     container.appendChild(s);
 });
+
 $(document).ready(function () {
     $('.bet_submit').click(function (e) {
         e.preventDefault();
