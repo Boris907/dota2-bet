@@ -13,7 +13,7 @@ $(document).ready(function () {
     $('.bet_submit').click(function (e) {
         e.preventDefault();
         var bet = $(this).attr("value");
-        $('.increase').prop('checked', false);
+        //$('.increase').prop('checked', false);
 
         $('#exampleModal').modal('hide');
         $.ajax({
@@ -26,15 +26,15 @@ $(document).ready(function () {
                 bet: bet
             },
             success: function (response) {
-                alert(response);
+/*                alert(response);*/
                 var res = $(response).find('#money');
                 $('#money').html(res);
                 var res_bet = $(response).find('#res_bet');
                 $('#res_bet').html(res_bet);
                 var min = $(response).find('.min');
                 $('.min').html(min);
-                // var t = $(response).find('.alert-success');
-                // $('.alert-success').html(t);
+/*                 var t = $(response).find('.alert-success');
+                 $('.alert-success').html(t);*/
             }
         });
     });

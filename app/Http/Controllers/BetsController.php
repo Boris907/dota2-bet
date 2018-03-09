@@ -69,7 +69,6 @@ class BetsController extends Controller
         request()->user()->update(['coins' => $coins]);
         session(['bet' => $bet]);
 
-
         return back();
     }
 

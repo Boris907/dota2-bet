@@ -89,11 +89,9 @@ class LobbyController extends Controller
 
         //Выводит логи в /dev/null,
         $bot_path = "cd "
-            . "~/Code/Game/dota2-roulette/public/js/node-dota2/examples "
-            . "&& node example2.js >> /tmp/dota2.log &";
+            . "js/node-dota2/examples"
+            . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
         exec($bot_path, $out, $err);
-
-//               return view('lobby.start', compact('id_player'));
 
         return back();
     }
