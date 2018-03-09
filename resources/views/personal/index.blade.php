@@ -17,6 +17,9 @@
                     @if(!empty($user_info->rate))
                         <br>Your average MMR in Dota2: {{$user_info->rate}}
                     @endif
+                    @if(!empty($user_info->rate))
+                        <br>Current time in the Dota2: {{$user_info->steam_time}} hours
+                    @endif
                 </div>
             </div>
         </div>

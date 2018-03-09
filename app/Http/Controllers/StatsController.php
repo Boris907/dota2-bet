@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use phpQuery;
 use App\Stat;
-use App\User;
 use App\Steam;
 
 use Illuminate\Http\Request;
@@ -43,19 +42,27 @@ class StatsController extends Controller
         $player_id = Auth::user()->player_id;
 
         $steam_time_request = file_get_contents(
-            'http://steamcommunity.com/profiles/' . $player_id
+            'http://steamcommunity.com/profiles/' . $player_id .'/games/?tab=all'
         );
-        $pq  = phpQuery::newDocument($steam_time_request);
-        $res = preg_match('#(Dota 2)#', pq('.game_name > a')->text());
+        $steam_time_request = trim(preg_replace('/\s+/', ' ', $steam_time_request));
+        $t = preg_match('#(570)#', $steam_time_request, $matches);
 
-        if ($res != 0) {
-            $steam_time = $pq->find('.game_name:first')->prev()->text();
-            $steam_time = trim(preg_replace('/\s+/', ' ', $steam_time));
-            $steam_time = explode(' ', $steam_time);
+        if ($t != 0) {
+            $steam_time = preg_match('/hours_forever":"\d+\,\d+/', $steam_time_request, $matches);
+            $steam_time = implode('', $matches);
+            $steam_time = explode('"', $steam_time);
 
             DB::table('users')->where('player_id', $player_id)->update(
-                ['steam_time' => $steam_time[0]]
+                ['steam_time' => $steam_time[2]]
             );
+        }else{
+            echo "Whoops, something get`s wrong!";
         }
+    }
+
+    public static function getMatchStats($match_id)
+    {
+        $steam_match_details = file_get_contents('https://api.opendota.com/api/matches/'. $match_id);
+
     }
 }

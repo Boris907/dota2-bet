@@ -73,7 +73,7 @@ class BetsController extends Controller
         return back();
     }
 
-    public function calculate($array_ids)
+    public function calculate($array_ids, $match_id)
     {
         $room_cash = DB::table('bets')->select('bet')->where(
             'room_rank', session()->get('rank')
@@ -92,6 +92,8 @@ class BetsController extends Controller
         DB::table('bets')->where('room_rank', session()->get('rank'))->update(
             ['bet' => 0]
         );
+
+        StatsController::getMatchStats($match_id);
 
         return back();
     }
