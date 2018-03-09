@@ -41,22 +41,26 @@ class UserController extends Controller
 
     public function rate()
     {
-        $player_id   = Auth::user()->player_id;
+        $player_id = Auth::user()->player_id;
         $player_id32 = Steam::toSteamID($player_id);
+
+        $obj = new StatsController;
+        $obj->getSteamTime();
 
         $steam_data = file_get_contents(
             'https://api.opendota.com/api/players/' . $player_id32
         );
-        $arr = json_decode($steam_data, 1);
-        if (empty($arr['solo_competitive_rank'])){
+        $arr        = json_decode($steam_data, 1);
+        if (empty($arr['solo_competitive_rank'])) {
             request()->user()->update(
-            ['rate' => $arr['mmr_estimate']['estimate']]
-        );
-        }else{
-        request()->user()->update(
-            ['rate' => $arr['solo_competitive_rank']]
-        );
+                ['rate' => $arr['mmr_estimate']['estimate']]
+            );
+        } else {
+            request()->user()->update(
+                ['rate' => $arr['solo_competitive_rank']]
+            );
         }
+
         return redirect('/personal');
     }
 }

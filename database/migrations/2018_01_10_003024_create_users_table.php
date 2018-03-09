@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('player_id', 100)->default(0);
             $table->double('coins')->default(0);
             $table->string('rate')->default(0);
+            $table->string('steam_time')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

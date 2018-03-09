@@ -149,6 +149,5 @@
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript" src="{{ url('/js/checkout.js') }}"></script>
 
-{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 </body>
 </html>

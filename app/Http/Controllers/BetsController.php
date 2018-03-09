@@ -17,47 +17,55 @@ class BetsController extends Controller
 
     public function set($bet)
     {
-        $coins = Auth::user()->coins;
+        $coins   = Auth::user()->coins;
         $min_bet = request()->session()->get('min_bet');
-        $url = parse_url($_SERVER['HTTP_REFERER']);
-        $rank = explode('/', $url['path']);
-        $max = DB::table('bets')->select('max_bet')->where('room_rank', $rank[2])->first();
-
+        $url     = parse_url($_SERVER['HTTP_REFERER']);
+        $rank    = explode('/', $url['path']);
+        $max     = DB::table('bets')->select('max_bet')->where(
+            'room_rank', $rank[2]
+        )->first();
         $old_bet = request()->session()->get('bet');
-        if(!isset($old_bet)) {
+
+        if ( ! isset($old_bet)) {
             $old_bet = $min_bet;
-            $coins -= $min_bet;
+            $coins   -= $min_bet;
         }
         $coins -= $bet;
-        $bet = $old_bet + $bet;
-        if($bet > $max->max_bet){
-//            return back()->withErrors('You can`t set bet in this room more than ' . $max->max_bet);
-            return
-        }
-        /*
-            Форма Change your bet:
-                - Поменять на Increase your bet
-                - Вместо поля ввода сделать label (типа 10 (первая мин ставка, после второго увеличения отображать текущую ставку) 
-                                                    и рядом с ним +1$, +2$, Удвоить(увеличить в 2 раза), +50% (от текущей ставки) и 
-                                                    принять текущюю ставку) - величина ставок чото типа такого, если что потом поменяем
-                - По нажатию Submit -> 1)минусуем полученную ставку от кошелька, обновляем запись БД
-                                    -> 2)устанавливаем переключатель типа bool == true
-                                        (если переключатель == true, показываем форму где вместо 10 (ну или другой мин ставки)
-                                        будет значение с величинной всей ставки)
-        */
-        request()->user()->update(['coins' => $coins]);
-        session(['coins' => $coins, 'bet' => $bet, 'rank' => $rank[2]]);
-        DB::table('bets')->where('room_rank', $rank[2])->update(['bet' => $bet]);
-        Session::flash('flash_message', 'Your bet submited successfully');
+        $bet   = $old_bet + $bet;
 
-        return redirect('/lobby/'.request()->session()->get('min_bet'));
+        if (doubleval($bet) > $max->max_bet) {
+            session()->put('error', 'You can`t set bet in this room more than ' . $max->max_bet);
+            return back();
+        } else {
+            /*
+                Форма Change your bet:
+                    - Поменять на Increase your bet
+                    - Вместо поля ввода сделать label (типа 10 (первая мин ставка, после второго увеличения отображать текущую ставку)
+                                                        и рядом с ним +1$, +2$, Удвоить(увеличить в 2 раза), +50% (от текущей ставки) и
+                                                        принять текущюю ставку) - величина ставок чото типа такого, если что потом поменяем
+                    - По нажатию Submit -> 1)минусуем полученную ставку от кошелька, обновляем запись БД
+                                        -> 2)устанавливаем переключатель типа bool == true
+                                            (если переключатель == true, показываем форму где вместо 10 (ну или другой мин ставки)
+                                            будет значение с величинной всей ставки)
+            */
+            request()->user()->update(['coins' => $coins]);
+            session(['coins' => $coins, 'bet' => $bet, 'rank' => $rank[2]]);
+            DB::table('bets')->where('room_rank', $rank[2])->update(
+                ['bet' => $bet]
+            );
+
+            session()->put('message', 'Your bet increased successfully');
+            return redirect(
+                '/lobby/' . request()->session()->get('min_bet')
+            );
+        }
     }
 
     public function reset()
     {
         $old_bet = request()->session()->get('bet');
-        $bet = request()->session()->get('min_bet');
-        $coins = Auth::user()->coins + $old_bet - $bet;
+        $bet     = request()->session()->get('min_bet');
+        $coins   = Auth::user()->coins + $old_bet - $bet;
         request()->user()->update(['coins' => $coins]);
         session(['bet' => $bet]);
 
@@ -67,17 +75,23 @@ class BetsController extends Controller
 
     public function calculate($array_ids)
     {
-        $room_cash = DB::table('bets')->select('bet')->where('room_rank', session()->get('rank'))->first();
-        $cash = $room_cash->bet;
-        $cash = $cash * 0.95;
+        $room_cash = DB::table('bets')->select('bet')->where(
+            'room_rank', session()->get('rank')
+        )->first();
+        $cash      = $room_cash->bet;
+        $cash      = $cash * 0.95;
         $commision = ($room_cash->bet - $room_cash->bet * 0.95);
 
-        foreach ($array_ids as $id){
+        foreach ($array_ids as $id) {
             $coins = request()->user()->where('player_id', $id)->value('coins');
             $coins += $cash / 5;
-            DB::table('users')->where('player_id', $id)->update(['coins' => $coins]);
+            DB::table('users')->where('player_id', $id)->update(
+                ['coins' => $coins]
+            );
         }
-        DB::table('bets')->where('room_rank', session()->get('rank'))->update(['bet' => 0]);
+        DB::table('bets')->where('room_rank', session()->get('rank'))->update(
+            ['bet' => 0]
+        );
 
         return back();
     }

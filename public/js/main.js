@@ -26,12 +26,15 @@ $(document).ready(function () {
                 bet: bet
             },
             success: function (response) {
-                $res = $(response).find('#money');
-                $('#money').html($res);
-                $res_bet = $(response).find('#res_bet');
-                $('#res_bet').html($res_bet);
-                $min = $(response).find('.min');
-                $('.min').html($min);
+                alert(response);
+                var res = $(response).find('#money');
+                $('#money').html(res);
+                var res_bet = $(response).find('#res_bet');
+                $('#res_bet').html(res_bet);
+                var min = $(response).find('.min');
+                $('.min').html(min);
+                // var t = $(response).find('.alert-success');
+                // $('.alert-success').html(t);
             }
         });
     });

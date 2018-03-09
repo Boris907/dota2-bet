@@ -52,16 +52,26 @@
         </div>
         <a class="btn btn-success" href="{{url('/lobby/start')}}">Start game</a>
     </div>
+    @if(session()->has('message'))
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-push-8">
-                @if(Session::has('flash_message'))
-                    <div id="bet_success" class="alert alert-success">{{Session::get('flash_message')}}
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    </div>
-                @endif
+                <div id="SuccessMsg" style="display: none" class="alert alert-success">{{session()->get('message')}}
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                </div>
             </div>
         </div>
     </div>
-
+        @elseif(session()->has('error'))
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-md-push-8">
+                    <div class="alert alert-danger">{{session()->get('error')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+        <div class="go"></div>
 @endsection
