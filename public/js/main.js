@@ -33,8 +33,8 @@ $(document).ready(function () {
                 $('#res_bet').html(res_bet);
                 var min = $(response).find('.min');
                 $('.min').html(min);
-/*                 var t = $(response).find('.alert-success');
-                 $('.alert-success').html(t);*/
+                // var t = $(response).find('.alert-success');
+                //  $('.alert-success').html(t);
             }
         });
     });

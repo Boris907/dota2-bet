@@ -47,9 +47,6 @@ class Lobby
                 $playersID[$arr[$i + 1]] = $arr[$i];
             }
 
-            /*var_dump($playersID);
-            die();*/
-
             return $playersID;
         } else {
             ($arr = 0);

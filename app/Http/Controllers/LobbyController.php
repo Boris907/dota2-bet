@@ -43,6 +43,7 @@ class LobbyController extends Controller
 
         session(['min_bet' => $min_bet]);
         $arrIDs = Lobby::places();
+
         //Генерим новый файл, если их нет и записываем ид
         if (empty($arrIDs)) {
             $str = '';
@@ -90,7 +91,8 @@ class LobbyController extends Controller
         //Выводит логи в /dev/null,
         $bot_path = "cd "
             . "js/node-dota2/examples"
-            . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
+            . "&& node start.js >> /home/vagrant/code/auth/dota2-roulette/storage/app/public/log/dota2.log &";
+//        ."&& node start.js >> /tmp/dota2.log &";
         exec($bot_path, $out, $err);
 
         return back();
