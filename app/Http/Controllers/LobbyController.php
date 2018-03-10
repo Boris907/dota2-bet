@@ -86,14 +86,21 @@ class LobbyController extends Controller
         }
         Storage::append(Lobby::newFile(), $str);
 
+        for ($i = 1; $i < 6; $i++) {
+            $radiant[$i] = $arrIDs[$i];
+        }
+        for ($i = 6; $i < 11; $i++) {
+            $dire[$i] = $arrIDs[$i];
+        }
 
-        //Выводит логи в /dev/null,
+        //Выводит логи,
         $bot_path = "cd "
-            . "js/node-dota2/examples"
-            . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
+            . "js/node-dota2/examples "
+            . "&& node start.js >> /home/vagrant/dota2roulette/storage/app/public/log/dota2.log &";
         exec($bot_path, $out, $err);
 
-        return back();
+        //return back(); 
+        return view('lobby.start', compact(['dire', 'radiant']));
     }
 
     public function team($id)
@@ -121,6 +128,12 @@ class LobbyController extends Controller
         $f = fwrite($f, $str);
 
         return back();
+    }
+
+    public function res()
+    {
+        $fh = fopen("/home/vagrant/dota2roulette/storage/app/public/log/dota2.log", 'r+');
+        dd($fh);
     }
 
 }
