@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
@@ -67,6 +69,10 @@ class LobbyController extends Controller
 
     public function get()
     {
+        $room_cash = DB::table('bets')->select('bet')->where(
+            'room_rank', session()->get('rank')
+        )->first();
+
         $content = 'var id = [';
         $arrIDs = Lobby::places();
         for ($i = 1; $i < 6; $i++) {
@@ -97,13 +103,13 @@ class LobbyController extends Controller
         //Выводит логи,
         $bot_path = "cd "
             . "js/node-dota2/examples"
-            . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
-//        ."&& node start.js >> /tmp/dota2.log &";
+//            . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
+            . "&& node start.js >> /home/vagrant/code/auth/dota2-roulette/storage/app/public/log/dota2.log &";
 
-       // exec($bot_path, $out, $err);
+        exec($bot_path, $out, $err);
 
         //return back(); 
-        return view('lobby.start', compact(['dire', 'radiant']));
+        return view('lobby.start', compact('dire', 'radiant', 'room_cash'));
     }
 
     public function team($id)
@@ -135,7 +141,8 @@ class LobbyController extends Controller
 
     public function res()
     {
-        $lines = file('/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595590304912');
+//        $lines = file('/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595590304912');
+        $lines = file('/home/vagrant/code/auth/dota2-roulette/public/js/node-dota2/examples/match2.end');
         //$fs = fopen("/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595586138574", 'r+');
         dd($lines);
     }

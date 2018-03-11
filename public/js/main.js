@@ -34,7 +34,7 @@ $(document).ready(function () {
                 var min = $(response).find('.min');
                 $('.min').html(min);
                 // var t = $(response).find('.alert-success');
-                //  $('.alert-success').html(t);
+                 // $('.alert-success').html(t);
             }
         });
     });

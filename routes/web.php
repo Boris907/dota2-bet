@@ -39,14 +39,12 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-    Route::get('/lobby/start', 'LobbyController@get');
-
-    Route::get('lobby/test', 'BetsController@calculate');
-
-    Route::get('/lobby/results', 'LobbyController@res');
-
+    Route::get('/lobby/{bet}/start', 'LobbyController@get');
+    Route::get('/lobby/{min_bet}/results', 'LobbyController@res');
     Route::get('/lobby/{min_bet}', 'LobbyController@index');
     Route::get('/lobby/team/{id}', 'LobbyController@team');
+
+    Route::post('lobby/test', 'BetsController@calculate');
     Route::post('/lobby/{bet}/set', 'BetsController@set');
     Route::get('/lobby/{min_bet}/reset', 'BetsController@reset');
 
@@ -58,12 +56,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/checkout/webmoney', 'CheckoutController@getWebMoney');
 
-
     Route::get('/stats', 'StatsController@index');
 });
-
-/*Route::get('user/{id}', function ($id) {
-    //
-})->where('id', '[0-9]+');*/
 
 

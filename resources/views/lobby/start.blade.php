@@ -5,6 +5,7 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 text-center">
                 <h2>You have been invited in the game, good luck!</h2>
+                <h3>Current bank in this game = {{$room_cash->bet}}$</h3>
         </div>
     </div>
      <div class="container">
