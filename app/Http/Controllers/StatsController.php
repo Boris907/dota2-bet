@@ -60,9 +60,9 @@ class StatsController extends Controller
         }
     }
 
-    public static function getMatchStats($match_id)
-    {
-        $steam_match_details = file_get_contents('https://api.opendota.com/api/matches/'. $match_id);
-
-    }
+//    public static function getMatchStats($match_id)
+//    {
+//        $steam_match_details = file_get_contents('https://api.opendota.com/api/matches/'. $match_id);
+//
+//    }
 }

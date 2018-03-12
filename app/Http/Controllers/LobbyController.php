@@ -23,6 +23,7 @@ class LobbyController extends Controller
 
     public function index($min_bet)
     {
+//        dd(session());
         switch ($min_bet) {
             case 'newbie':
                 $min_bet = 2;
@@ -44,6 +45,11 @@ class LobbyController extends Controller
         }
 
         session(['min_bet' => $min_bet]);
+
+        request()->user()->update([
+           'coins' => auth()->user()->coins - $min_bet
+        ]);
+
         $arrIDs = Lobby::places();
 
         //Генерим новый файл, если их нет и записываем ид

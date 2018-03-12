@@ -50,7 +50,7 @@
                 @endforeach
             </ul>
         </div>
-        <a class="btn btn-success" href="{{url('/lobby/'.session()->get('rank').'/start')}}">Start game</a>
+        <a class="btn btn-success" href="{{url('/lobby/'.md5(session()->get('min_bet')).'/start')}}">Start game</a>
     </div>
     @if(session()->has('message'))
     <div class="container">
@@ -62,7 +62,7 @@
             </div>
         </div>
     </div>
-        @elseif(session()->has('message'))
+        @elseif(session()->has('error'))
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-md-push-8">
