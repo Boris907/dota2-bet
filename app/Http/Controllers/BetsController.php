@@ -19,9 +19,11 @@ class BetsController extends Controller
     public function set($bet)
     {
         $steam_id = Auth::user()->player_id;
+
         if(!in_array($steam_id, Lobby::places())){
             return redirect('/personal')->withErrors('Errors');
         }
+
         $coins   = Auth::user()->coins;
         $min_bet = request()->session()->get('min_bet');
         $url     = parse_url($_SERVER['HTTP_REFERER']);
@@ -40,7 +42,7 @@ class BetsController extends Controller
 
         if (doubleval($bet) > $max->max_bet) {
             session()->put('error', 'You can`t set bet in this room more than ' . $max->max_bet);
-            return back();
+            abort(301);
         } else {
             /*
                 Форма Change your bet:
@@ -60,6 +62,7 @@ class BetsController extends Controller
             );
 
             session()->put('message', 'Your bet increased successfully');
+
             return redirect(
                 '/lobby/' . request()->session()->get('min_bet')
             );

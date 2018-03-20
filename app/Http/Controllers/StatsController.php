@@ -31,7 +31,6 @@ class StatsController extends Controller
         );
         $games        = json_decode($recent_games, 1);
 
-
         return view(
             'personal.stats', compact('user_info', 'user_stats', 'games')
         );

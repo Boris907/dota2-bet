@@ -74,4 +74,28 @@
         </div>
     @endif
         <div class="go"></div>
+
+    <script language="JavaScript" type="text/javascript">
+        refresh = function () {
+            var beforeUnloadTimeout = 0 ;
+            $(window).bind('beforeunload', function() {
+                beforeUnloadTimeout = setTimeout(function() {
+                    console.log('settimeout function');
+                },500);
+                return 'Are you sure?';
+            });
+            $(window).bind('unload', function() {
+                console.log('unload');
+                if(typeof beforeUnloadTimeout !=='undefined' && beforeUnloadTimeout != 0)
+                    clearTimeout(beforeUnloadTimeout);
+                $.ajax({
+                   type:"GET",
+                   url: '/lobby/out',
+                    success: function (data) {
+                        alert(data);
+                    }
+                });
+            });
+        }
+    </script>
 @endsection

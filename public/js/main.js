@@ -26,15 +26,14 @@ $(document).ready(function () {
                 bet: bet
             },
             success: function (response) {
-/*                alert(response);*/
                 var res = $(response).find('#money');
                 $('#money').html(res);
+                var cash = $(response).find('#cash_val');
+                $('#cash').html(cash);
                 var res_bet = $(response).find('#res_bet');
                 $('#res_bet').html(res_bet);
                 var min = $(response).find('.min');
                 $('.min').html(min);
-                // var t = $(response).find('.alert-success');
-                 // $('.alert-success').html(t);
             }
         });
     });

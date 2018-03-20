@@ -13,8 +13,6 @@ use App\Lobby;
 
 class LobbyController extends Controller
 {
-    private $arr = array();
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -23,7 +21,6 @@ class LobbyController extends Controller
 
     public function index($min_bet)
     {
-//        dd(session());
         switch ($min_bet) {
             case 'newbie':
                 $min_bet = 2;
@@ -45,10 +42,6 @@ class LobbyController extends Controller
         }
 
         session(['min_bet' => $min_bet]);
-
-        request()->user()->update([
-           'coins' => auth()->user()->coins - $min_bet
-        ]);
 
         $arrIDs = Lobby::places();
 
@@ -114,7 +107,6 @@ class LobbyController extends Controller
 
         exec($bot_path, $out, $err);
 
-        //return back(); 
         return view('lobby.start', compact('dire', 'radiant', 'room_cash'));
     }
 
@@ -151,6 +143,21 @@ class LobbyController extends Controller
         $lines = file('/home/vagrant/code/auth/dota2-roulette/public/js/node-dota2/examples/match2.end');
         //$fs = fopen("/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595586138574", 'r+');
         dd($lines);
+    }
+
+    public function out()
+    {
+        $min_bet = request()->session()->get('min_bet');
+        $arr_ids = Lobby::places();
+        $key = array_search(auth()->user()->player_id, $arr_ids);
+
+        if($key) {
+            $f = file(Lobby::$dir.Lobby::checkDir());
+            $f[$key] = 0;
+            request()->user()->update([
+                'coins' => auth()->user()->coins - $min_bet
+            ]);
+        }
     }
 
 }
