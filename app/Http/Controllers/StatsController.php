@@ -19,11 +19,11 @@ class StatsController extends Controller
 
     public function index()
     {
-        $player_id   = Auth::user()->player_id;
+        $player_id   = auth()->user()->player_id;
         $player_id32 = Steam::toSteamID($player_id);
 
-        $user_info  = Auth::user();
-        $user_stats = Stat::all()->where('user_id', Auth::user()->id)->toArray(
+        $user_info  = auth()->user();
+        $user_stats = Stat::all()->where('user_id', auth()->user()->id)->toArray(
         );
 
         $recent_games = file_get_contents(

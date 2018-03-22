@@ -18,13 +18,13 @@ class BetsController extends Controller
 
     public function set($bet)
     {
-        $steam_id = Auth::user()->player_id;
+        $steam_id = auth()->user()->player_id;
 
         if(!in_array($steam_id, Lobby::places())){
             return redirect('/personal')->withErrors('Errors');
         }
 
-        $coins   = Auth::user()->coins;
+        $coins   = auth()->user()->coins;
         $min_bet = request()->session()->get('min_bet');
         $url     = parse_url($_SERVER['HTTP_REFERER']);
         $rank    = explode('/', $url['path']);
@@ -32,6 +32,9 @@ class BetsController extends Controller
             'room_rank', $rank[2]
         )->first();
         $old_bet = request()->session()->get('bet');
+        $bank = DB::table('bets')->select('bet')->where(
+            'room_rank', $rank[2]
+        )->first();
 
         if ( ! isset($old_bet)) {
             $old_bet = $min_bet;
@@ -57,8 +60,9 @@ class BetsController extends Controller
             */
             request()->user()->update(['coins' => $coins]);
             session(['coins' => $coins, 'bet' => $bet, 'rank' => $rank[2]]);
+
             DB::table('bets')->where('room_rank', $rank[2])->update(
-                ['bet' => $bet]
+                ['bet' => $bank + $bet]
             );
 
             session()->put('message', 'Your bet increased successfully');

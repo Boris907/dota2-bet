@@ -115,24 +115,19 @@ class LobbyController extends Controller
     {
         $steam_id = auth()->user()->player_id;
         $arrIDs = Lobby::places();
-        if (in_array(
-            $steam_id, $arrIDs
-        )
-        )// если есть такой ид на его место записываем 0
-        {
+        // если есть такой ид на его место записываем 0
+        if (in_array($steam_id, $arrIDs)) {
             $key = array_search($steam_id, $arrIDs);
             $arrIDs[$key] = 0;
         }
-        $arrIDs[$id]
-            = $steam_id; // просто добавляем ид, проверка выше исключчает повторы
+        // просто добавляем ид, проверка выше исключчает повторы
+        $arrIDs[$id] = $steam_id;
         $str = '';
         foreach ($arrIDs as $key => $value) {
             $str .= $value . ' ' . $key . ' ';
         }
-        $f = fopen(
-            Lobby::$dir
-            . Lobby::checkDir(), 'w+'
-        );
+
+        $f = fopen(Lobby::$dir . Lobby::checkDir(), 'w+');
         $f = fwrite($f, $str);
 
         return back();

@@ -52,14 +52,16 @@ class UserController extends Controller
             'https://api.opendota.com/api/players/' . $player_id32
         );
         $arr        = json_decode($steam_data, 1);
-        if (empty($arr['solo_competitive_rank'])) {
+        if ($arr['solo_competitive_rank'] !== null) {
+            request()->user()->update(
+                ['rate' => $arr['solo_competitive_rank']]
+            );
+        } elseif(!empty($arr['mmr_estimate']['estimate'])) {
             request()->user()->update(
                 ['rate' => $arr['mmr_estimate']['estimate']]
             );
         } else {
-            request()->user()->update(
-                ['rate' => $arr['solo_competitive_rank']]
-            );
+            return redirect('/personal');
         }
 
         return redirect('/personal');
