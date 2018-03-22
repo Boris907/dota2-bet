@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Bet;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -112,7 +113,7 @@ class LobbyController extends Controller
 
     public function team($id)
     {
-        $steam_id = Auth::user()->player_id;
+        $steam_id = auth()->user()->player_id;
         $arrIDs = Lobby::places();
         if (in_array(
             $steam_id, $arrIDs
@@ -147,16 +148,22 @@ class LobbyController extends Controller
 
     public function out()
     {
-        $min_bet = request()->session()->get('min_bet');
+        $steam_id = auth()->user()->player_id;
         $arr_ids = Lobby::places();
-        $key = array_search(auth()->user()->player_id, $arr_ids);
+        $search = in_array($steam_id, $arr_ids);
 
-        if($key) {
-            $f = file(Lobby::$dir.Lobby::checkDir());
-            $f[$key] = 0;
-            request()->user()->update([
-                'coins' => auth()->user()->coins - $min_bet
-            ]);
+        if ($search == true) {
+            $key = array_search($steam_id, $arr_ids);
+            $arr_ids[$key] = 0;
+            $str = '';
+            foreach ($arr_ids as $key => $value) {
+                $str .= $value . ' ' . $key . ' ';
+            }
+
+            $f = fopen(Lobby::$dir . Lobby::checkDir(), 'w+');
+            $f = fwrite($f, $str);
+
+            Bet::unsetBet();
         }
     }
 

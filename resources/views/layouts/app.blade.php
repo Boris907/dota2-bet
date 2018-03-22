@@ -75,7 +75,7 @@
                         </a>
 
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                            <li><a href="{{ url('/logout') }}" onclick="refresh()"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                         </ul>
                     </li>
                 @endif
@@ -131,9 +131,9 @@
             </div>
             <div class="modal-body">
                 <div class="col-md-offset-2">
-                    <a href="{{ url('/checkout/stripe') }}"><img src="{{'/images.png'}}" width="120px;" alt=""></a>
-                    <a href="{{ url('/checkout/g2a') }}"><img src="{{'/2303.png'}}" width="120px;" alt=""></a>
-                    <a href="{{ url('/checkout/webmoney') }}"><img src="{{'/04.jpg'}}" width="120px;" alt=""></a>
+                    <a href="{{ url('/checkout/stripe') }}" onclick="refresh()"><img src="{{'/images.png'}}" width="120px;" alt=""></a>
+                    <a href="{{ url('/checkout/g2a') }}" onclick="refresh()"><img src="{{'/2303.png'}}" width="120px;" alt=""></a>
+                    <a href="{{ url('/checkout/webmoney') }}" onclick="refresh()"><img src="{{'/04.jpg'}}" width="120px;" alt=""></a>
                 </div>
             </div>
         </div>

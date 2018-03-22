@@ -43,6 +43,7 @@ class UserController extends Controller
     {
         $player_id = Auth::user()->player_id;
         $player_id32 = Steam::toSteamID($player_id);
+//        dd($player_id32);
 
         $obj = new StatsController;
         $obj->getSteamTime();

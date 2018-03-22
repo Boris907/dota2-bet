@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 text-center">
                 <h2>You are in lobby</h2>
-                <h2 id="money">Money: {{Auth::user()->coins}}$</h2>
+                <h2 id="money">Money: {{auth()->user()->coins}}$</h2>
 
                 @if(session()->get('bet'))
                     <h2 id="res_bet">Your bet:{{session()->get('bet')}}$</h2>

@@ -38,7 +38,7 @@ class StatsController extends Controller
 
     public function getSteamTime()
     {
-        $player_id = Auth::user()->player_id;
+        $player_id = auth()->user()->player_id;
 
         $steam_time_request = file_get_contents(
             'http://steamcommunity.com/profiles/' . $player_id .'/games/?tab=all'
@@ -47,9 +47,8 @@ class StatsController extends Controller
         $t = preg_match('#(570)#', $steam_time_request, $matches);
 
         if ($t != 0) {
-            $steam_time = preg_match('/hours_forever":"\d+\,\d+/', $steam_time_request, $matches);
-            $steam_time = implode('', $matches);
-            $steam_time = explode('"', $steam_time);
+            $steam_time = preg_match('/hours_forever":"(\d+\,\d+|\d+)/', $steam_time_request, $matches);
+            $steam_time = explode('"', $matches[0]);
 
             DB::table('users')->where('player_id', $player_id)->update(
                 ['steam_time' => $steam_time[2]]
