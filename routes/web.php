@@ -38,7 +38,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('auth/steam/handle', 'SteamAuthController@handle')->name('auth.steam.handle');
 
     Route::get('logout', 'Auth\LoginController@logout')->name('logout');
-
+    /*Фиксануть маршруты лобби*/
     Route::get('/lobby/out', 'LobbyController@out');
     Route::get('/lobby/{min_bet}/start', 'LobbyController@get');
     Route::get('/lobby/{min_bet}/results', 'LobbyController@res');

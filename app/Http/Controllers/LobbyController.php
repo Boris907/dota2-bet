@@ -103,10 +103,11 @@ class LobbyController extends Controller
         //Выводит логи,
         $bot_path = "cd "
             . "js/node-dota2/examples"
-//            . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
-            . "&& node start.js >> /home/vagrant/code/auth/dota2-roulette/storage/app/public/log/dota2.log &";
-
+            . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
+//            . "&& node start.js >> /home/vagrant/code/auth/dota2-roulette/storage/app/public/log/dota2.log &";
+       // $bot_path = "ps -ef | grep node";
         exec($bot_path, $out, $err);
+      //  dd($out);
 
         return view('lobby.start', compact('dire', 'radiant', 'room_cash'));
     }
@@ -136,7 +137,7 @@ class LobbyController extends Controller
     public function res()
     {
 //        $lines = file('/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595590304912');
-        $lines = file('/home/vagrant/code/auth/dota2-roulette/public/js/node-dota2/examples/match2.end');
+        $lines = file('/home/vagrant/code/auth/public/js/node-dota2/examples/match1.end');
         //$fs = fopen("/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595586138574", 'r+');
         dd($lines);
     }
