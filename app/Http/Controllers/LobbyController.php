@@ -20,8 +20,28 @@ class LobbyController extends Controller
 
     }
 
+/*
+    Индексный метод - будет как метод создания лобби
+        без проверок (ну или назову его креате)
+
+    Все проверки вынести в отдельный метод шоув
+        (ну или индекс если индекс будет креате)
+
+    Если чувак создаёт лобби он выбирает колво игроков (100% кратное 2)
+    Ставки хз
+
+    Режимы кастомные
+    5х5, 1x1 я думаю этого хватит
+
+    Все лобби пробуем в БД вместо файликов
+        -лобби ид
+         или даер и радиант - я думаю лучше
+         или 10 чуваков - тоже норм
+         статус лобби - идёт игра/набор/конец
+*/
     public function index($min_bet)
     {
+        $players = session('players')? session('players') : 10;
         switch ($min_bet) {
             case 'newbie':
                 $min_bet = 2;
@@ -49,15 +69,15 @@ class LobbyController extends Controller
         //Генерим новый файл, если их нет и записываем ид
         if (empty($arrIDs)) {
             $str = '';
-            for ($i = 1; $i < 11; $i++) {
+            for ($i = 1; $i <= $players; $i++) {
                 $str .= '0 ' . $i . ' ';
             }
-            Storage::append(Lobby::newFile(), $str);
+        Storage::append(Lobby::newFile(), $str);
         }
-        for ($i = 1; $i < 6; $i++) {
+        for ($i = 1; $i <= $players/2; $i++) {
             $radiant[$i] = $arrIDs[$i];
         }
-        for ($i = 6; $i < 11; $i++) {
+        for ($i = count($radiant)+1; $i <= $players; $i++) {
             $dire[$i] = $arrIDs[$i];
         }
 

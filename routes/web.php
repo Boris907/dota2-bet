@@ -31,7 +31,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/personal', 'UserController@update');
     Route::get('/personal/rate', 'UserController@rate');
 
-	Route::get('/rooms', 'RoomController@index');
     Auth::routes();
 
     Route::get('auth/steam', 'SteamAuthController@redirectToSteam')->name('auth.steam');
@@ -39,11 +38,14 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('logout', 'Auth\LoginController@logout')->name('logout');
     /*Фиксануть маршруты лобби*/
+	Route::get('/rooms', 'RoomController@index');
+    Route::get('/new_room', 'RoomController@create');
+    Route::get('/new_room/set/{players}', 'RoomController@set');
     Route::get('/lobby/out', 'LobbyController@out');
     Route::get('/lobby/{min_bet}/start', 'LobbyController@get');
     Route::get('/lobby/{min_bet}/results', 'LobbyController@res');
-    Route::get('/lobby/{min_bet}', 'LobbyController@index');
     Route::get('/lobby/team/{id}', 'LobbyController@team');
+    Route::get('/lobby/{min_bet}/{players?}', 'LobbyController@index');
 
     Route::post('lobby/test', 'BetsController@calculate');
     Route::post('/lobby/{bet}/set', 'BetsController@set');

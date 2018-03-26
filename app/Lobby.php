@@ -43,7 +43,7 @@ class Lobby
             $str = str_replace("\n", "", $str);
             $arr = explode(' ', $str);
             array_pop($arr);
-            for ($i = 0; $i < 20; $i += 2) {
+            for ($i = 0; $i < count($arr); $i += 2) {
                 $playersID[$arr[$i + 1]] = $arr[$i];
             }
 

@@ -23,4 +23,14 @@ class RoomController extends Controller
         return view('rooms.index', compact(['id_player','coins']));
     }
 
+  public function create()
+    {
+        return view('rooms.create', compact(['id_player']));
+    }
+
+      public function set($players)
+    {
+        return redirect()->action('LobbyController@index', ['min_bet'=>0])->with('players', $players);
+    }
+
 }
