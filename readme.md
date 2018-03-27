@@ -1,7 +1,7 @@
 ![Laravel](https://laravel.com/assets/img/components/logo-laravel.svg)
 
 
-![Laravel](https://travis-ci.org/laravel/framework alt="Build Status")
+![Laravel](https://travis-ci.org/laravel/framework.svg alt="Build Status")
 ![Laravel](https://poser.pugx.org/laravel/framework/d/total.svg alt="Total Downloads")
 ![Laravel](https://poser.pugx.org/laravel/framework/v/stable.svg alt="Latest Stable Version")
 ![Laravel](https://poser.pugx.org/laravel/framework/license.svg alt="License")
