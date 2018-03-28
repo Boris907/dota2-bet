@@ -41,19 +41,19 @@
             </button>
 
             <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ url('/') }}" onclick="refresh()">
+            <a class="navbar-brand" href="{{ url('/') }}">
                 Home
             </a>
-            <a class="navbar-brand" href="{{ url('personal') }}" onclick="refresh()">
+            <a class="navbar-brand" href="{{ url('personal') }}">
                 Personal info
             </a>
-            <a class="navbar-brand" href="{{ url('stats') }}" onclick="refresh()">
+            <a class="navbar-brand" href="{{ url('stats') }}">
                 Stats
             </a>
-            <a class="navbar-brand" href="{{ url('rooms') }}" onclick="refresh()">
+            <a class="navbar-brand" href="{{ url('rooms') }}">
                 Choose room
             </a>
-            <a class="navbar-brand" href="/new_room" onclick="refresh()">
+            <a class="navbar-brand" href="{{ url('new_room') }}">
                 Create Lobby
             </a>
         </div>
@@ -78,7 +78,8 @@
                         </a>
 
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{ url('/logout') }}" onclick="refresh()"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                            <li><a href="{{ url('/logout') }}" onclick="refresh()"><i class="fa fa-btn fa-sign-out"></i>Logout</a>
+                            </li>
                         </ul>
                     </li>
                 @endif
@@ -134,9 +135,12 @@
             </div>
             <div class="modal-body">
                 <div class="col-md-offset-2">
-                    <a href="{{ url('/checkout/stripe') }}" onclick="refresh()"><img src="{{'/images.png'}}" width="120px;" alt=""></a>
-                    <a href="{{ url('/checkout/g2a') }}" onclick="refresh()"><img src="{{'/2303.png'}}" width="120px;" alt=""></a>
-                    <a href="{{ url('/checkout/webmoney') }}" onclick="refresh()"><img src="{{'/04.jpg'}}" width="120px;" alt=""></a>
+                    <a href="{{ url('/checkout/stripe') }}" onclick="refresh()"><img src="{{'/images.png'}}"
+                                                                                     width="120px;" alt=""></a>
+                    <a href="{{ url('/checkout/g2a') }}" onclick="refresh()"><img src="{{'/2303.png'}}" width="120px;"
+                                                                                  alt=""></a>
+                    <a href="{{ url('/checkout/webmoney') }}" onclick="refresh()"><img src="{{'/04.jpg'}}"
+                                                                                       width="120px;" alt=""></a>
                 </div>
             </div>
         </div>

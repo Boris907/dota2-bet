@@ -62,7 +62,7 @@ class BetsController extends Controller
             session(['coins' => $coins, 'bet' => $bet, 'rank' => $rank[2]]);
 
             DB::table('bets')->where('room_rank', $rank[2])->update(
-                ['bet' => $bank + $bet]
+                ['bet' => $bank->bet + $bet]
             );
 
             session()->put('message', 'Your bet increased successfully');
