@@ -18,12 +18,6 @@ class BetsController extends Controller
 
     public function set($bet)
     {
-        $steam_id = auth()->user()->player_id;
-
-        if(!in_array($steam_id, Lobby::places())){
-            return redirect('/personal')->withErrors('Errors');
-        }
-
         $coins   = auth()->user()->coins;
         $min_bet = request()->session()->get('min_bet');
         $url     = parse_url($_SERVER['HTTP_REFERER']);

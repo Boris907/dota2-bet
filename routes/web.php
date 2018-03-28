@@ -58,10 +58,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/lobby/{min_bet}/results', 'LobbyController@res');
     Route::get('/lobby/{min_bet}', 'LobbyController@index');
 
-    Route::post('lobby/test', 'BetsController@calculate');
-    Route::post('/lobby/{bet}/set', 'BetsController@set');
-    Route::get('/lobby/{min_bet}/reset', 'BetsController@reset');
-
+    Route::group(['middleware' => ['place']], function (){
+        Route::post('lobby/test', 'BetsController@calculate');
+        Route::post('/lobby/{bet}/set', 'BetsController@set');
+        Route::get('/lobby/{min_bet}/reset', 'BetsController@reset');
+    });
 });
 
 
