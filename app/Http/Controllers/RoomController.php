@@ -14,8 +14,8 @@ class RoomController extends Controller
 {
     public function index()
     {
-        $id_player = Auth::user()->player_id;
-        $coins     = Auth::user()->coins;
+        $id_player = auth()->user()->player_id;
+        $coins     = auth()->user()->coins;
 
         return view('rooms.index', compact('id_player', 'coins'));
     }

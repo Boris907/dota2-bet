@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Bet;
+use App\Room;
 use App\Lobby;
 use Closure;
 
@@ -32,7 +32,7 @@ class LobbyMiddleware
             $f = fopen(Lobby::$dir . Lobby::checkDir(), 'w+');
             $f = fwrite($f, $str);
 
-            Bet::unsetBet();
+            Room::unsetBet();
         }
 
         return $next($request);

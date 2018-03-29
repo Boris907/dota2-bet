@@ -15,7 +15,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $user_info = Auth::user();
+        $user_info = auth()->user();
         $services  = Service::all();
         $games     = Game::all()->where('service_id', 1);
 
@@ -35,7 +35,7 @@ class UserController extends Controller
 
     public function rate()
     {
-        $player_id = Auth::user()->player_id;
+        $player_id = auth()->user()->player_id;
         $player_id32 = Steam::toSteamID($player_id);
 
         $obj = new StatsController;

@@ -22,6 +22,7 @@ class BetsController extends Controller
         $min_bet = request()->session()->get('min_bet');
         $url = parse_url($_SERVER['HTTP_REFERER']);
         $room = Room::all()->where('url', $url['path'])->toArray();
+
         foreach ($room as $item){
             $this->max = $item['max_bet'];
             $this->rank = $item['room_rank'];
@@ -82,12 +83,8 @@ class BetsController extends Controller
 
     public function calculate($array_ids)
     {
-        $room_cash = DB::table('rooms')->select('bet')->where(
-            'url', session()->get('url')
-        )->first();
-        $cash      = $room_cash->bet;
-        $cash      = $cash * 0.95;
-        $commision = ($room_cash->bet - $room_cash->bet * 0.95);
+        $cash      = $this->bank * 0.95;
+        $commision = ($this->bank - $cash);
 
         foreach ($array_ids as $id) {
             $coins = request()->user()->where('player_id', $id)->value('coins');
