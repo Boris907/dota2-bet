@@ -14,12 +14,6 @@ use App\Lobby;
 
 class LobbyController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-
-    }
-
 /*
     Индексный метод - будет как метод создания лобби
         без проверок (ну или назову его креате)
@@ -89,7 +83,7 @@ class LobbyController extends Controller
 
     public function get()
     {
-        $room_cash = DB::table('bets')->select('bet')->where(
+        $room_cash = DB::table('rooms')->select('bet')->where(
             'room_rank', session()->get('rank')
         )->first();
 

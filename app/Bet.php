@@ -2,12 +2,11 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Bet extends Model
 {
-    protected $fillable = ['room_rank', 'bet', 'max_bet'];
-
     public static function unsetBet()
     {
         $min_bet = request()->session()->get('min_bet');

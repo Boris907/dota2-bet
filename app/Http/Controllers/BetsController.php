@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Lobby;
+use App\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,24 +12,22 @@ use Illuminate\Support\Facades\View;
 
 class BetsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    public $max;
+    public $rank;
+    public $bank;
 
     public function set($bet)
     {
-        $coins   = auth()->user()->coins;
+        $coins = auth()->user()->coins;
         $min_bet = request()->session()->get('min_bet');
-        $url     = parse_url($_SERVER['HTTP_REFERER']);
-        $rank    = explode('/', $url['path']);
-        $max     = DB::table('bets')->select('max_bet')->where(
-            'room_rank', $rank[2]
-        )->first();
+        $url = parse_url($_SERVER['HTTP_REFERER']);
+        $room = Room::all()->where('url', $url['path'])->toArray();
+        foreach ($room as $item){
+            $this->max = $item['max_bet'];
+            $this->rank = $item['room_rank'];
+            $this->bank = $item['bet'];
+        }
         $old_bet = request()->session()->get('bet');
-        $bank = DB::table('bets')->select('bet')->where(
-            'room_rank', $rank[2]
-        )->first();
 
         if ( ! isset($old_bet)) {
             $old_bet = $min_bet;
@@ -37,8 +36,11 @@ class BetsController extends Controller
         $coins -= $bet;
         $bet   = $old_bet + $bet;
 
-        if (doubleval($bet) > $max->max_bet) {
-            session()->put('error', 'You can`t set bet in this room more than ' . $max->max_bet);
+        if (doubleval($bet) > $this->max) {
+            session()->put(
+                'error',
+                'You can`t set bet in this room more than ' . $this->max
+            );
             abort(301);
         } else {
             /*
@@ -53,10 +55,10 @@ class BetsController extends Controller
                                             будет значение с величинной всей ставки)
             */
             request()->user()->update(['coins' => $coins]);
-            session(['coins' => $coins, 'bet' => $bet, 'rank' => $rank[2]]);
+            session(['coins' => $coins, 'bet' => $bet, 'rank' => $this->rank, 'url' => $url['path']]);
 
-            DB::table('bets')->where('room_rank', $rank[2])->update(
-                ['bet' => $bank->bet + $bet]
+            DB::table('rooms')->where('url', $url['path'])->update(
+                ['bet' => $this->bank + $bet]
             );
 
             session()->put('message', 'Your bet increased successfully');
@@ -80,8 +82,8 @@ class BetsController extends Controller
 
     public function calculate($array_ids)
     {
-        $room_cash = DB::table('bets')->select('bet')->where(
-            'room_rank', session()->get('rank')
+        $room_cash = DB::table('rooms')->select('bet')->where(
+            'url', session()->get('url')
         )->first();
         $cash      = $room_cash->bet;
         $cash      = $cash * 0.95;
@@ -94,7 +96,7 @@ class BetsController extends Controller
                 ['coins' => $coins]
             );
         }
-        DB::table('bets')->where('room_rank', session()->get('rank'))->update(
+        DB::table('rooms')->where('url', session()->get('url'))->update(
             ['bet' => 0]
         );
 

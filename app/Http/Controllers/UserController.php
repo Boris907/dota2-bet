@@ -13,12 +13,6 @@ use Auth;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-
-    }
-
     public function index()
     {
         $user_info = Auth::user();
@@ -43,7 +37,6 @@ class UserController extends Controller
     {
         $player_id = Auth::user()->player_id;
         $player_id32 = Steam::toSteamID($player_id);
-//        dd($player_id32);
 
         $obj = new StatsController;
         $obj->getSteamTime();

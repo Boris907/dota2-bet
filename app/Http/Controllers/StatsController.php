@@ -12,11 +12,6 @@ use Auth;
 
 class StatsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         $player_id   = auth()->user()->player_id;
