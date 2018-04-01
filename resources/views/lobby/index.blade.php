@@ -4,14 +4,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-md-offset-1 text-center">
-                <h2>You are in lobby</h2>
-                <h2 id="money">Money: {{auth()->user()->coins}}$</h2>
-
+                <h3>You are in lobby</h3>
                 @if(session()->get('bet'))
-                    <h2 id="res_bet">Your bet:{{session()->get('bet')}}$</h2>
+                <h3 id="bet">Your current bet:{{session()->get('bet')}}$</h3>
                 @else
-                    <h2 id="res_bet">Your current bet:{{session()->get('min_bet')}}$</h2>
+                    <h3 id="bet">Your current bet:{{session()->get('min_bet')}}$</h3>
                 @endif
+                <h3 id="max">Max bet in this room:{{session()->get('max_bet')}}$</h3>
+                <h3 id="bank">Current bank in this room:{{session()->get('bank')}}$</h3>
                 <button id="change" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Increase
                     your bet
                 </button>

@@ -14,10 +14,7 @@ class RoomController extends Controller
 {
     public function index()
     {
-        $id_player = auth()->user()->player_id;
-        $coins     = auth()->user()->coins;
-
-        return view('rooms.index', compact('id_player', 'coins'));
+        return view('rooms.index');
     }
 
     public function create()

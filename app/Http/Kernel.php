@@ -60,5 +60,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'lobby' => \App\Http\Middleware\LobbyMiddleware::class,
         'place' => \App\Http\Middleware\LobbyPlace::class,
+        'bet' => \App\Http\Middleware\LobbyBetMiddleware::class
     ];
 }

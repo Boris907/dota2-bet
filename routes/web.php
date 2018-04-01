@@ -30,15 +30,18 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/stats', 'StatsController@index');
     });
 
-    Route::get('/lobby/team/{id}', 'LobbyController@team');
-    Route::get('/lobby/{min_bet}/start', 'LobbyController@get');
-    Route::get('/lobby/{min_bet}/results', 'LobbyController@res');
-    Route::get('/lobby/{min_bet}', 'LobbyController@index');
+
+        Route::get('/lobby/team/{id}', 'LobbyController@team');
+        Route::get('/lobby/{rank}/start', 'LobbyController@get');
+        Route::get('/lobby/{rank}/results', 'LobbyController@res');
+    Route::group(['middleware' => ['bet']], function () {
+        Route::get('/lobby/{rank}', 'LobbyController@index');
+    });
 
     Route::group(['middleware' => ['place']], function () {
-        Route::post('lobby/test', 'BetsController@calculate');
+//        Route::post('lobby/test', 'BetsController@calculate');
         Route::post('/lobby/{bet}/set', 'BetsController@set');
-        Route::get('/lobby/{min_bet}/reset', 'BetsController@reset');
+        Route::get('/lobby/{rank}/reset', 'BetsController@reset');
     });
 });
 

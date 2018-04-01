@@ -19,9 +19,7 @@ class UserController extends Controller
         $services  = Service::all();
         $games     = Game::all()->where('service_id', 1);
 
-        return view(
-            'personal.index', compact('user_info', 'services', 'games')
-        );
+        return view('personal.index', compact('user_info', 'services', 'games'));
     }
 
     public function update()

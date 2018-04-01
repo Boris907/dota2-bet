@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bet;
+use App\Room;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -14,49 +15,45 @@ use App\Lobby;
 
 class LobbyController extends Controller
 {
-/*
-    Индексный метод - будет как метод создания лобби
-        без проверок (ну или назову его креате)
 
-    Все проверки вынести в отдельный метод шоув
-        (ну или индекс если индекс будет креате)
+    public $max;
+    public $min_bet;
+    public $rank;
+    public $bank;
+    /*
+        Индексный метод - будет как метод создания лобби
+            без проверок (ну или назову его креате)
 
-    Если чувак создаёт лобби он выбирает колво игроков (100% кратное 2)
-    Ставки хз
+        Все проверки вынести в отдельный метод шоув
+            (ну или индекс если индекс будет креате)
 
-    Режимы кастомные
-    5х5, 1x1 я думаю этого хватит
+        Если чувак создаёт лобби он выбирает колво игроков (100% кратное 2)
+        Ставки хз
 
-    Все лобби пробуем в БД вместо файликов
-        -лобби ид
-         или даер и радиант - я думаю лучше
-         или 10 чуваков - тоже норм
-         статус лобби - идёт игра/набор/конец
-*/
-    public function index($min_bet)
+        Режимы кастомные
+        5х5, 1x1 я думаю этого хватит
+
+        Все лобби пробуем в БД вместо файликов
+            -лобби ид
+             или даер и радиант - я думаю лучше
+             или 10 чуваков - тоже норм
+             статус лобби - идёт игра/набор/конец
+    */
+
+    public function index()
     {
+        $room = Room::all()->where('url', request()->getPathInfo())->toArray();
+
+        foreach ($room as $item){
+            $this->max = $item['max_bet'];
+            $this->rank = $item['room_rank'];
+            $this->bank = $item['bet'];
+            $this->min_bet = $item['min_bet'];
+        }
+
         $players = session('players')? session('players') : 10;
-        switch ($min_bet) {
-            case 'newbie':
-                $min_bet = 2;
-                break;
-            case 'ordinary':
-                $min_bet = 4;
-                break;
-            case 'expert':
-                $min_bet = 10;
-                break;
-        }
 
-        if (auth()->user()->coins < $min_bet
-            || auth()->user()->player_id == 0
-        ) {
-            return redirect('/personal')->withErrors(
-                'Not enough money or you haven`t game id'
-            );
-        }
-
-        session(['min_bet' => $min_bet]);
+        session(['min_bet' => $this->min_bet, 'max_bet' => $this->max, 'bank' => $this->bank]);
 
         $arrIDs = Lobby::places();
 
@@ -75,18 +72,11 @@ class LobbyController extends Controller
             $dire[$i] = $arrIDs[$i];
         }
 
-        return view(
-            'lobby.index', compact(['dire', 'radiant', 'coins'])
-        );
+        return view('lobby.index', compact(['dire', 'radiant']));
     }
-
 
     public function get()
     {
-        $room_cash = DB::table('rooms')->select('bet')->where(
-            'room_rank', session()->get('rank')
-        )->first();
-
         $content = 'var id = [';
         $arrIDs = Lobby::places();
         for ($i = 1; $i < 6; $i++) {
