@@ -55,50 +55,6 @@
         </div>
         <a class="btn btn-success" href="{{url('/lobby/'.md5(session()->get('min_bet')).'/start')}}">Start game</a>
     </div>
-    @if(session()->has('message'))
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-md-push-8">
-                    <div id="SuccessMsg" style="display: none" class="alert alert-success">{{session()->get('message')}}
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @elseif(session()->has('error'))
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-md-push-8">
-                    <div class="alert alert-danger">{{session()->get('error')}}
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
     <div class="go"></div>
 
-    {{--<script language="JavaScript" type="text/javascript">--}}
-    {{--refresh = function () {--}}
-    {{--var beforeUnloadTimeout = 0 ;--}}
-    {{--$(window).bind('beforeunload', function() {--}}
-    {{--beforeUnloadTimeout = setTimeout(function() {--}}
-    {{--console.log('settimeout function');--}}
-    {{--},500);--}}
-    {{--return 'Are you sure?';--}}
-    {{--});--}}
-    {{--$(window).bind('unload', function() {--}}
-    {{--console.log('unload');--}}
-    {{--if(typeof beforeUnloadTimeout !=='undefined' && beforeUnloadTimeout != 0)--}}
-    {{--clearTimeout(beforeUnloadTimeout);--}}
-    {{--$.ajax({--}}
-    {{--type:"GET",--}}
-    {{--url: '/lobby/out',--}}
-    {{--success: function (data) {--}}
-    {{--alert(data);--}}
-    {{--}--}}
-    {{--});--}}
-    {{--});--}}
-    {{--}--}}
-    {{--</script>--}}
 @endsection

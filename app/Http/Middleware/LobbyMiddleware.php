@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Room;
-use App\Lobby;
 use Closure;
 
 class LobbyMiddleware
@@ -18,7 +17,7 @@ class LobbyMiddleware
     public function handle($request, Closure $next)
     {
         $steam_id = auth()->user()->player_id;
-        $arr_ids = Lobby::places();
+        $arr_ids = Room::show('20180401225909_o');
         $search = in_array($steam_id, $arr_ids);
 
         if ($search == true) {
@@ -29,10 +28,9 @@ class LobbyMiddleware
                 $str .= $value . ' ' . $key . ' ';
             }
 
-            $f = fopen(Lobby::$dir . Lobby::checkDir(), 'w+');
+/*            $f = fopen(Lobby::$dir . Lobby::checkDir(), 'w+');
             $f = fwrite($f, $str);
-
-            Room::unsetBet();
+*/
         }
 
         return $next($request);

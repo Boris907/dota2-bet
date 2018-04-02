@@ -11,11 +11,11 @@ class Lobby
     /*
         Ищем свободный файл
     */
-    static public function checkDir()
+  static public function checkDir()
     {
         $files = scandir(self::$dir);
         foreach ($files as $file) {
-            $check = preg_match('/^[0-9]+o/', $file);
+            $check = preg_match('/^game_[0-9]+.mo/', $file);
             if ($check == 1) {
                 $fileName       = $file;
                 self::$fullPath = self::$dir . $fileName;
@@ -30,10 +30,11 @@ class Lobby
     */
     static public function newFile()
     {
-        $num      = random_int(1000, 9999);
-        $fileName = $num . 'o.txt';
+        $today = date("Ymdgia");
+        $gameName = "game_".$today;
+        $fileName = $gameName. 'o.txt';
 
-        return 'public\\' . $fileName;
+        return "/public/".$fileName;
     }
 
     static public function places()

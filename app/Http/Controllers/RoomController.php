@@ -14,7 +14,7 @@ class RoomController extends Controller
 {
     public function index()
     {
-        return view('rooms.index');
+        return view('rooms.index2');
     }
 
     public function create()
@@ -26,6 +26,25 @@ class RoomController extends Controller
     {
         return redirect()->action('LobbyController@index', ['min_bet' => 0])
             ->with('players', $players);
+    }
+
+    public function all()
+    {
+        $allRooms = Room::checkDir();
+        return view('rooms.all', ['allRooms' => $allRooms]);
+    }
+
+    public function get($id)
+    {
+        $players = Room::show($id);
+         for ($i = 1; $i <= 5; $i++) {
+            $radiant[$i] = $players[$i];
+        }
+        for ($i = 6; $i <= 10; $i++) {
+            $dire[$i] = $players[$i];
+        }
+
+        return view('rooms.get', compact(['dire', 'radiant','id']));
     }
 
 }

@@ -7,6 +7,8 @@ Route::group(['middleware' => ['web']], function () {
     })->middleware('guest');
 
     Auth::routes();
+        Route::get('/new_room', 'RoomController@create');
+        Route::get('/new_room/set/{players}', 'RoomController@set');
     Route::group(['middleware' => ['lobby', 'auth']], function () {
         Route::get('/personal', 'UserController@index');
         Route::post('/personal', 'UserController@update');
@@ -17,9 +19,6 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-        Route::get('/rooms', 'RoomController@index');
-        Route::get('/new_room', 'RoomController@create');
-        Route::get('/new_room/set/{players}', 'RoomController@set');
 
         Route::get('/checkout/stripe', 'CheckoutController@getStripe');
         Route::post('/checkout/stripe', 'CheckoutController@postStripe');
@@ -28,8 +27,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/checkout/webmoney', 'CheckoutController@getWebMoney');
 
         Route::get('/stats', 'StatsController@index');
+       
     });
-
+        Route::get('/rooms', 'RoomController@index');
+        Route::get('/rooms/list/{type}', 'RoomController@all');
+        Route::get('/rooms/lobbi/{id}', 'RoomController@get');
 
         Route::get('/lobby/team/{id}', 'LobbyController@team');
         Route::get('/lobby/{rank}/start', 'LobbyController@get');
