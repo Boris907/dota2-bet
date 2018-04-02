@@ -16,22 +16,25 @@ class LobbyMiddleware
      */
     public function handle($request, Closure $next)
     {
+        $id = $request->route()->parameter('id');
+        $place = $request->route()->parameter('place');
         $steam_id = auth()->user()->player_id;
-        $arr_ids = Room::show('20180401225909_o');
-        $search = in_array($steam_id, $arr_ids);
-
-        if ($search == true) {
-            $key = array_search($steam_id, $arr_ids);
-            $arr_ids[$key] = 0;
-            $str = '';
+        $arr_ids = Room::show($id);
+           // если есть такой ид на его место записываем 0
+        if (array_search($steam_id, $arr_ids)) {
+            $place = array_search($steam_id, $arr_ids);
+            $arr_ids[$place] = 0;
+        }
+        // просто добавляем ид, проверка выше исключчает повторы
+        $arr_ids[$place] = $steam_id;
+        $str = '';
             foreach ($arr_ids as $key => $value) {
                 $str .= $value . ' ' . $key . ' ';
             }
 
-/*            $f = fopen(Lobby::$dir . Lobby::checkDir(), 'w+');
-            $f = fwrite($f, $str);
-*/
-        }
+        $f = fopen(Room::$dir . $id, 'w+');
+        $f = fwrite($f, $str);
+
 
         return $next($request);
     }

@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class RoomController extends Controller
 {
@@ -36,6 +37,10 @@ class RoomController extends Controller
 
     public function get($id)
     {
+        Cache::forever('key',$id);
+        $value = cache('key');
+
+        dd($value);
         $players = Room::show($id);
          for ($i = 1; $i <= 5; $i++) {
             $radiant[$i] = $players[$i];
@@ -43,7 +48,6 @@ class RoomController extends Controller
         for ($i = 6; $i <= 10; $i++) {
             $dire[$i] = $players[$i];
         }
-
         return view('rooms.get', compact(['dire', 'radiant','id']));
     }
 

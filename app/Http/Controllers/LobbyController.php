@@ -119,7 +119,7 @@ class LobbyController extends Controller
     public function team($id)
     {
         $steam_id = auth()->user()->player_id;
-        $arrIDs = Lobby::places();
+        $arrIDs = Room::places();
         // если есть такой ид на его место записываем 0
         if (in_array($steam_id, $arrIDs)) {
             $key = array_search($steam_id, $arrIDs);

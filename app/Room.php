@@ -79,7 +79,7 @@ class Room extends Model
             $playersID[$arr[$i + 1]] = $arr[$i];
         }
 
-        return $playersID;
+        return $arr;
     }
 
 }
