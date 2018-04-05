@@ -35,20 +35,56 @@ class RoomController extends Controller
         return view('rooms.all', ['allRooms' => $allRooms]);
     }
 
-    public function get($id)
+    /*
+        Получаемвсех игроков в комнате.
+        Если никого нет, создаём лобби.
+    */
+    public function get($game_id)
     {
-        Cache::forever('key',$id);
-        $value = cache('key');
 
-        dd($value);
-        $players = Room::show($id);
+        $players = cache($game_id) ?: Room::newLobby();
          for ($i = 1; $i <= 5; $i++) {
             $radiant[$i] = $players[$i];
         }
         for ($i = 6; $i <= 10; $i++) {
             $dire[$i] = $players[$i];
         }
-        return view('rooms.get', compact(['dire', 'radiant','id']));
+
+        return view('rooms.get', compact(['dire', 'radiant','game_id']));
     }
 
+    /*
+        Смена места игрока в лобби
+    */
+    public function put($game_id,$place_id)
+    {
+        $players = cache($game_id) ?: Room::newLobby();
+        $steam_id = auth()->user()->player_id;
+        if (in_array($steam_id, $players)) {
+            $key = array_search($steam_id, $players);
+            $players[$key] = 0;
+        }
+        $players[$place_id] = $steam_id;
+
+        Cache::forever($game_id,$players);
+
+        return redirect()->action('RoomController@get',['game_id' => $game_id]);
+    }
+
+    public function start($game_id)
+    {
+        $content = 'var id = [';
+        $players = cache($game_id);
+        for ($i = 1; $i < 6; $i++) {
+            $content .= "['$players[$i]'" . ',' . "'R'],";
+        }
+        for ($i = 6; $i < 11; $i++) {
+            $content .= "['$players[$i]'" . ',' . "'D'],";
+        }
+        $content .= '];module.exports.id = id;';
+        dd($content);
+
+       //return redirect()->action('RoomController@get',['game_id' => $game_id]);
+    }
+        
 }

@@ -36,7 +36,7 @@ class Room extends Model
             'coins' =>$coins
         ]);
     }*/
-    public static $dir = '../storage/app/public/';
+    public static $dir = 'C:\OSPanel\domains\auth\/'.'storage/app/public/';
     public static $fullPath;
     /*
         Ищем открытые комнаты
@@ -51,9 +51,9 @@ class Room extends Model
     }
 
     /*
-        Создание комнаты/игры
+        Создание игры
     */
-    static public function newFile()
+    static public function newLobby()
     {
         /*
             Исключить повторения
@@ -62,24 +62,28 @@ class Room extends Model
         $fileName = $today. '_o';
         $str = '';
         for ($i = 1; $i <= 10; $i++) {
-             $str .= '0 ' . $i . ' ';
+            $players[$i] = 0;
         }
-
-        Storage::append('/public/'.$fileName, $str);
+        //Storage::append('/public/'.$fileName, $str);
+        return $players;
 
     }
 
         static public function show($game)
     {
-        $str = file_get_contents(self::$dir.$game);
-        $str = str_replace("\n", "", $str);
-        $arr = explode(' ', $str);
-        array_pop($arr);
-        for ($i = 0; $i < count($arr); $i += 2) {
-            $playersID[$arr[$i + 1]] = $arr[$i];
-        }
+       if (self::checkDir() != null) {
+            $str = file_get_contents(self::$dir.$game);
+            $str = str_replace("\n", "", $str);
+            $arr = explode(' ', $str);
+            array_pop($arr);
+            for ($i = 0; $i < count($arr); $i += 2) {
+                $playersID[$arr[$i + 1]] = $arr[$i];
+            }
 
-        return $arr;
+            return $arr;
+        } else {
+            ($arr = 0);
+        }
     }
 
 }

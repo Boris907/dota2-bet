@@ -29,9 +29,10 @@ Route::group(['middleware' => ['web']], function () {
     
         Route::get('/rooms', 'RoomController@index');
         Route::get('/rooms/list/{type}', 'RoomController@all');
+        Route::get('/rooms/lobbi/{game_id}', 'RoomController@get');
+        Route::get('/rooms/lobbi/{game_id}/place/{place_id}', 'RoomController@put');
+        Route::get('/rooms/lobbi/{game_id}/start', 'RoomController@start');
     Route::group(['middleware' => ['lobby']], function () { 
-        Route::get('/rooms/lobbi/{id}', 'RoomController@get');
-        Route::get('/rooms/lobbi/{id}/{place}', 'RoomController@get');
     });
     
     });
