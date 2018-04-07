@@ -13,8 +13,9 @@
                 <div class="panel-heading">List</div>
                 <div class="panel-body">
                 <ul>
-                @foreach($allRooms as $key => $room)
-                    <li>Game №{{$key+1}} <a href="../lobbi/{{$room}}">Enter</a></li>
+                @foreach($lobbies as $room)
+                <li>Game №{{$room->id}} || Min Bet {{$room->min_bet}}|| 
+                    Max Bet {{$room->max_bet}} || Players {{$room->total}}|| <a href="../lobbi/{{$room->id}}">Enter</a></li>
                 @endforeach
                 </ul>
                 </div>

@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class Room extends Model
 {
@@ -36,8 +38,9 @@ class Room extends Model
             'coins' =>$coins
         ]);
     }*/
-    public static $dir = 'C:\OSPanel\domains\auth\/'.'storage/app/public/';
+    public static $dir ='../storage/app/public/';
     public static $fullPath;
+    protected $fillable = ['id','rank', 'bank', 'min_bet', 'max_bet', 'total'];
     /*
         Ищем открытые комнаты
     */
@@ -53,20 +56,46 @@ class Room extends Model
     /*
         Создание игры
     */
-    static public function newLobby()
+    static public function lobbyPlayers()
     {
         /*
             Исключить повторения
         */
-        $today = date("YmdGis");   
-        $fileName = $today. '_o';
-        $str = '';
         for ($i = 1; $i <= 10; $i++) {
-            $players[$i] = 0;
+            $players[$i] = ['uid' => 0, 'bet' => 0, 'mmr' => 0, 'rank' => 0];
         }
-        //Storage::append('/public/'.$fileName, $str);
-        return $players;
 
+        /*Storage::append('/public/'.$fileName, $str);*/
+        return $players;
+    }
+
+    /*
+        Получаем все свободные лобби по rank,
+        из кэша, если их там нет берём из БД
+        и записываем в кэш
+    */
+      static public function lobbyList($rank)
+    {
+/*        $today = date("YmdGis");   
+        //$fileName = $today. '_o';
+        for ($i = 1; $i <= 10; $i++) {
+            $lobbies[$today+$i] = ['rank' => $rank, 'bank' => 0, 'min_bet' => 0, 'max_bet' => 0, 'total' => 0];
+        DB::table('rooms')->insert(
+            ['id' =>$today+$i,
+            'rank' =>$lobbies[$today+$i]['rank'],
+            'bank' =>$lobbies[$today+$i]['bank'],
+            'min_bet' =>$lobbies[$today+$i]['min_bet'],
+            'max_bet' =>$lobbies[$today+$i]['max_bet'],
+            'total' =>$lobbies[$today+$i]['total'],
+        ]);
+        }*/
+        /*$lobbies = cache($rank) ?: Взять из БД и записать в кэш
+        Cache::forever($rank,$lobbies);*/
+        //$lobbies = cache($rank);
+
+        $lobbies = DB::table('rooms')->get();
+
+        return $lobbies;
     }
 
         static public function show($game)

@@ -28,7 +28,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/stats', 'StatsController@index');
     
         Route::get('/rooms', 'RoomController@index');
-        Route::get('/rooms/list/{type}', 'RoomController@all');
+        Route::get('/rooms/list/{rank}', 'RoomController@all');
         Route::get('/rooms/lobbi/{game_id}', 'RoomController@get');
         Route::get('/rooms/lobbi/{game_id}/place/{place_id}', 'RoomController@put');
         Route::get('/rooms/lobbi/{game_id}/start', 'RoomController@start');

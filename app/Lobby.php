@@ -11,6 +11,14 @@ class Lobby
     /*
         Ищем свободный файл
     */
+  static public function lobbyBody()
+    {
+        for ($i = 1; $i <= 10; $i++) {
+            $lobbies[$i] = ['type' => 0, 'bank' => 0, 'min_bet' => 0, 'max_bet' => 0, 'total' => 0];
+        }
+        return $lobbies;
+    }
+
   static public function checkDir()
     {
         $files = scandir(self::$dir);

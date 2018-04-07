@@ -29,10 +29,12 @@ class RoomController extends Controller
             ->with('players', $players);
     }
 
-    public function all()
+    public function all($rank)
     {
-        $allRooms = Room::checkDir();
-        return view('rooms.all', ['allRooms' => $allRooms]);
+        //$allRooms = Room::checkDir();
+        $lobbies = Room::lobbyList($rank);
+      /*  dd($lobbies);*/
+        return view('rooms.all', ['lobbies' => $lobbies]);
     }
 
     /*
@@ -42,7 +44,12 @@ class RoomController extends Controller
     public function get($game_id)
     {
 
-        $players = cache($game_id) ?: Room::newLobby();
+        /*$players = cache($game_id) ?: Room::newLobby();
+        for ($i=1; $i <= 10 ; $i++) { 
+            $players[$i] = 0;
+        }*/
+        $players = Room::lobbyPlayers();
+        dd($players);
          for ($i = 1; $i <= 5; $i++) {
             $radiant[$i] = $players[$i];
         }
@@ -58,7 +65,7 @@ class RoomController extends Controller
     */
     public function put($game_id,$place_id)
     {
-        $players = cache($game_id) ?: Room::newLobby();
+        $players = cache($game_id) ?: Room::lobbyPlayers();
         $steam_id = auth()->user()->player_id;
         if (in_array($steam_id, $players)) {
             $key = array_search($steam_id, $players);
