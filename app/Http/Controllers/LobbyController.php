@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Bet;
 use App\Room;
+
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use App\Lobby;
@@ -40,103 +42,78 @@ class LobbyController extends Controller
              статус лобби - идёт игра/набор/конец
     */
 
-    public function index()
+    public function index($game_id)
     {
-        $room = Room::all()->where('url', request()->getPathInfo())->toArray();
+//        Lobby::getPlayers($game_id);
+        $players = cache($game_id);
 
-        foreach ($room as $item){
-            $this->max = $item['max_bet'];
-            $this->rank = $item['room_rank'];
-            $this->bank = $item['bet'];
-            $this->min_bet = $item['min_bet'];
+        for ($i = 1; $i <= 5; $i++) {
+            $radiant[$i] = $players[$i];
+        }
+        for ($i = 6; $i <= 10; $i++) {
+            $dire[$i] = $players[$i];
         }
 
-        $players = session('players')? session('players') : 10;
-
-        session(['min_bet' => $this->min_bet, 'max_bet' => $this->max, 'bank' => $this->bank]);
-
-        $arrIDs = Lobby::places();
-
-        //Генерим новый файл, если их нет и записываем ид
-        if (empty($arrIDs)) {
-            $str = '';
-            for ($i = 1; $i <= $players; $i++) {
-                $str .= '0 ' . $i . ' ';
-            }
-        Storage::append(Lobby::newFile(), $str);
-        }
-        for ($i = 1; $i <= $players/2; $i++) {
-            $radiant[$i] = $arrIDs[$i];
-        }
-        for ($i = count($radiant)+1; $i <= $players; $i++) {
-            $dire[$i] = $arrIDs[$i];
-        }
-
-        return view('lobby.index', compact(['dire', 'radiant']));
+        return view('lobby.index', compact('game_id', 'radiant', 'dire'));
     }
 
-    public function get()
+    public function set($game_id, $place_id)
     {
-        $content = 'var id = [';
-        $arrIDs = Lobby::places();
-        for ($i = 1; $i < 6; $i++) {
-            $content .= "['$arrIDs[$i]'" . ',' . "'R'],";
-        }
-        for ($i = 6; $i < 11; $i++) {
-            $content .= "['$arrIDs[$i]'" . ',' . "'D'],";
-        }
-        $content .= '];module.exports.id = id;';
-        Storage::append('public\\players.js', $content);
-        Storage::move(
-            'public\\' . Lobby::checkDir(),
-            'public\\c' . Lobby::checkDir()
-        );
-        $str = '';
-        for ($i = 1; $i <= 10; $i++) {
-            $str .= "0 $i ";
-        }
-        Storage::append(Lobby::newFile(), $str);
+        $players = Cache::pull($game_id);
 
-        for ($i = 1; $i < 6; $i++) {
-            $radiant[$i] = $arrIDs[$i];
-        }
-        for ($i = 6; $i < 11; $i++) {
-            $dire[$i] = $arrIDs[$i];
-        }
-
-        //Выводит логи,
-        $bot_path = "cd "
-            . "js/node-dota2/examples"
-            . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
-//            . "&& node start.js >> /home/vagrant/code/auth/dota2-roulette/storage/app/public/log/dota2.log &";
-       // $bot_path = "ps -ef | grep node";
-        exec($bot_path, $out, $err);
-      //  dd($out);
-
-        return view('lobby.start', compact('dire', 'radiant', 'room_cash'));
-    }
-
-    public function team($id)
-    {
         $steam_id = auth()->user()->player_id;
-        $arrIDs = Room::places();
-        // если есть такой ид на его место записываем 0
-        if (in_array($steam_id, $arrIDs)) {
-            $key = array_search($steam_id, $arrIDs);
-            $arrIDs[$key] = 0;
-        }
-        // просто добавляем ид, проверка выше исключчает повторы
-        $arrIDs[$id] = $steam_id;
-        $str = '';
-        foreach ($arrIDs as $key => $value) {
-            $str .= $value . ' ' . $key . ' ';
+        $place = array_search($steam_id,array_column($players, 'uid'));
+        if ($place == 0 || $place) {
+            $players[$place+1]['uid'] = 0;
         }
 
-        $f = fopen(Lobby::$dir . Lobby::checkDir(), 'w+');
-        $f = fwrite($f, $str);
+        $players[$place_id]['uid'] = $steam_id;
 
-        return back();
+        Cache::forever($game_id,$players);
+
+        return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
     }
+
+//    public function get()
+//    {
+//        $content = 'var id = [';
+//        $arrIDs = Lobby::places();
+//        for ($i = 1; $i < 6; $i++) {
+//            $content .= "['$arrIDs[$i]'" . ',' . "'R'],";
+//        }
+//        for ($i = 6; $i < 11; $i++) {
+//            $content .= "['$arrIDs[$i]'" . ',' . "'D'],";
+//        }
+//        $content .= '];module.exports.id = id;';
+//        Storage::append('public\\players.js', $content);
+//        Storage::move(
+//            'public\\' . Lobby::checkDir(),
+//            'public\\c' . Lobby::checkDir()
+//        );
+//        $str = '';
+//        for ($i = 1; $i <= 10; $i++) {
+//            $str .= "0 $i ";
+//        }
+//        Storage::append(Lobby::newFile(), $str);
+//
+//        for ($i = 1; $i < 6; $i++) {
+//            $radiant[$i] = $arrIDs[$i];
+//        }
+//        for ($i = 6; $i < 11; $i++) {
+//            $dire[$i] = $arrIDs[$i];
+//        }
+//
+//        //Выводит логи,
+//        $bot_path = "cd "
+//            . "js/node-dota2/examples"
+//            . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
+////            . "&& node start.js >> /home/vagrant/code/auth/dota2-roulette/storage/app/public/log/dota2.log &";
+//       // $bot_path = "ps -ef | grep node";
+//        exec($bot_path, $out, $err);
+//      //  dd($out);
+//
+//        return view('lobby.start', compact('dire', 'radiant', 'room_cash'));
+//    }
 
     public function res()
     {

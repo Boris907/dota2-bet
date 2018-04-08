@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use Illuminate\Support\Facades\Cache;
 
 class Lobby
 {
@@ -60,6 +61,26 @@ class Lobby
         } else {
             ($arr = 0);
         }
+    }
+
+    static public function getPlayers($game_id)
+    {
+        $newbie = cache('newbie');
+
+        $lobby = $newbie->where('id', $game_id)->toArray();
+        $players = json_decode(array_shift($lobby)->players, true);
+
+        Cache::forever($game_id, $players);
+//        return $players;
+
+    }
+
+    static public function getLobby($game_id)
+    {
+        $newbie = cache('newbie');
+        $lobby = $newbie->where('id', $game_id)->toArray();
+
+        return $lobby;
     }
 }
 	

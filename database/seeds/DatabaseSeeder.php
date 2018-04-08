@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         	UserTableSeeder::class,
         	GameTableSeeder::class,
             ServiceTableSeeder::class,
-            RoomsTableSeeder::class
+//            RoomsTableSeeder::class
         	]);
     }
 }

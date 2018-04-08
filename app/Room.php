@@ -40,7 +40,7 @@ class Room extends Model
     }*/
     public static $dir ='../storage/app/public/';
     public static $fullPath;
-    protected $fillable = ['id','rank', 'bank', 'min_bet', 'max_bet', 'total'];
+    protected $fillable = ['id','rank', 'bank', 'min_bet', 'max_bet', 'players'];
     /*
         Ищем открытые комнаты
     */
@@ -74,26 +74,26 @@ class Room extends Model
         из кэша, если их там нет берём из БД
         и записываем в кэш
     */
-      static public function lobbyList($rank)
+    static public function lobbyList($rank)
     {
-/*        $today = date("YmdGis");   
-        //$fileName = $today. '_o';
-        for ($i = 1; $i <= 10; $i++) {
-            $lobbies[$today+$i] = ['rank' => $rank, 'bank' => 0, 'min_bet' => 0, 'max_bet' => 0, 'total' => 0];
-        DB::table('rooms')->insert(
-            ['id' =>$today+$i,
-            'rank' =>$lobbies[$today+$i]['rank'],
-            'bank' =>$lobbies[$today+$i]['bank'],
-            'min_bet' =>$lobbies[$today+$i]['min_bet'],
-            'max_bet' =>$lobbies[$today+$i]['max_bet'],
-            'total' =>$lobbies[$today+$i]['total'],
-        ]);
-        }*/
-        /*$lobbies = cache($rank) ?: Взять из БД и записать в кэш
-        Cache::forever($rank,$lobbies);*/
-        //$lobbies = cache($rank);
-
+//        $today = date("YmdGis");
+//        //$fileName = $today. '_o';
+//        $players = json_encode(self::lobbyPlayers());
+//        /*        $players = json_decode($players);*/
+//        for ($i = 1; $i <= 10; $i++) {
+//            $lobbies[$today+$i] = ['rank' => $rank, 'bank' => 0, 'min_bet' => 0, 'max_bet' => 0, 'players' => $players];
+//            DB::table('rooms')->insert(
+//                ['id' =>$today+$i,
+//                 'rank' =>$lobbies[$today+$i]['rank'],
+//                 'bank' =>$lobbies[$today+$i]['bank'],
+//                 'min_bet' =>$lobbies[$today+$i]['min_bet'],
+//                 'max_bet' =>$lobbies[$today+$i]['max_bet'],
+//                 'players' =>$lobbies[$today+$i]['players'],
+//                ]);
+//        }
+//        $lobbies = cache($rank);/*?: DB::table('rooms')->get();*/
         $lobbies = DB::table('rooms')->get();
+        Cache::forever($rank, $lobbies);
 
         return $lobbies;
     }

@@ -4,40 +4,54 @@ namespace App\Http\Controllers;
 
 use App\Lobby;
 use App\Room;
+
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 
 class BetsController extends Controller
 {
-    public $max;
-    public $min_bet;
+    public $max = 10;
+    public $min_bet = 4;
     public $rank;
     public $bank;
-    protected $bet;
+    private $bet;
 
     public function set($bet)
     {
-        $path = url()->previous();
-        $url = parse_url($path);
-        $room = Room::all()->where('url', $url['path'])->toArray();
+        $url      = parse_url(url()->previous());
+        $url      = explode('/', $url['path']);
+        $steam_id = auth()->user()->player_id;
+        $coins    = auth()->user()->coins;
 
-        foreach ($room as $item){
-            $this->max = $item['max_bet'];
-            $this->rank = $item['room_rank'];
-            $this->bank = $item['bet'];
-            $this->min_bet = $item['min_bet'];
+        //Получаем массив с игроками в лобби по id комнаты
+        $players = Cache::get($url[3]);
+        $place   = array_search($steam_id, array_column($players, 'uid'));
+
+        $old_bet = $players[$place + 1]['bet'];
+
+//        if ( $old_bet == 0) {
+//            $this->bet = $this->min_bet;
+//            $coins   -= $this->min_bet;
+//        }
+        $coins                      -= $bet;
+        $this->bet                  = $old_bet + $bet;
+        $players[$place + 1]['bet'] = $this->bet;
+
+        //Сумма всех ставок
+        for ($i = 1; $i <= count($players); $i++) {
+            $this->bank += $players[$i]['bet'];
         }
 
-        $coins = auth()->user()->coins;
-        $old_bet = request()->session()->get('bet');
+        Cache::forget($url[3]);
+        Cache::forever($url[3], $players);
 
-        if ( ! isset($old_bet)) {
-            $old_bet = $this->min_bet;
-            $coins   -= $this->min_bet;
+        $lobby = Lobby::getLobby($url[3]);
+        dd(cache('newbie')->where('id', $url[3])->toArray());
+        foreach ($lobby as $value) {
+            $value->bank = $this->bank;
+            $value->players = $players;
         }
-        $coins -= $bet;
-        $this->bet   = $old_bet + $bet;
-
         if (doubleval($this->bet) > $this->max) {
             session()->put(
                 'error',
@@ -57,16 +71,20 @@ class BetsController extends Controller
                                             будет значение с величинной всей ставки)
             */
             request()->user()->update(['coins' => $coins]);
-            session(['coins' => $coins, 'bet' => $this->bet, 'rank' => $this->rank, 'bank' => $this->bank]);
-            DB::table('rooms')->where('url', $url['path'])->update(['bet' => $this->bank + $bet]);
+//        session(['bet' => $this->bet, 'bank' => $this->bank, 'max_bet' => $this->max]);
+            DB::table('rooms')->where('id', $url[3])->update(
+                ['bank' => $this->bank]
+            );
             session()->put('message', 'Your bet increased successfully');
 
-            return response()->json([
-                "bank" => $this->bank + $bet,
-                "cash" => $coins,
-                "bet" => $this->bet,
-                "max_bet" => $this->max
-            ]);
+            return response()->json(
+                [
+                    "bank"    => $this->bank,
+                    "cash"    => $coins,
+                    "bet"     => $this->bet,
+                    "max_bet" => $this->max
+                ]
+            );
         }
     }
 

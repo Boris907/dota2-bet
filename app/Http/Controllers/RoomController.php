@@ -33,7 +33,7 @@ class RoomController extends Controller
     {
         //$allRooms = Room::checkDir();
         $lobbies = Room::lobbyList($rank);
-      /*  dd($lobbies);*/
+//        dd($lobbies);
         return view('rooms.all', ['lobbies' => $lobbies]);
     }
 
@@ -75,7 +75,7 @@ class RoomController extends Controller
 
         Cache::forever($game_id,$players);
 
-        return redirect()->action('RoomController@get',['game_id' => $game_id]);
+        return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
     }
 
     public function start($game_id)

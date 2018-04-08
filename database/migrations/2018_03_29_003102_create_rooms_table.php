@@ -14,12 +14,12 @@ class CreateRoomsTable extends Migration
     public function up()
     {
         Schema::create('rooms', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('room_rank');
+            $table->bigInteger('id');
+            $table->string('rank');
+            $table->double('bank')->default(0);
             $table->double('min_bet');
             $table->double('max_bet');
-            $table->double('bet')->default(0);
-            $table->string('url');
+            $table->text('players');
             $table->timestamps();
         });
     }

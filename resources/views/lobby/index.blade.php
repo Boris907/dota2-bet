@@ -30,11 +30,11 @@
                 Radiant
             </div>
             <ul class="list-group list-group-flush">
-                @foreach($radiant as $key => $id)
-                    @if($id == 0)
-                        <li class="list-group-item"><a href="/lobby/team/{{$key}}">Take place</a></li>
+                @foreach($radiant as $place_id => $playerID)
+                    @if($playerID['uid'] == 0)
+                        <li class="list-group-item"><a href="/rooms/lobby/{{$game_id}}/place/{{$place_id}}">Take place</a></li>
                     @else
-                        <li class="list-group-item">{{$id}}</li>
+                        <li class="list-group-item">{{$playerID['uid']}}</li>
                     @endif
                 @endforeach
             </ul>
@@ -44,16 +44,16 @@
                 Dire
             </div>
             <ul class="list-group list-group-flush">
-                @foreach($dire as $key => $id)
-                    @if($id == 0)
-                        <li class="list-group-item"><a href="/lobby/team/{{$key}}">Take place</a></li>
+                @foreach($dire as $place_id => $playerID)
+                    @if($playerID['uid'] == 0)
+                        <li class="list-group-item"><a href="/rooms/lobby/{{$game_id}}/place/{{$place_id}}">Take place</a></li>
                     @else
-                        <li class="list-group-item">{{$id}}</li>
+                        <li class="list-group-item">{{$playerID['uid']}}</li>
                     @endif
                 @endforeach
             </ul>
         </div>
-        <a class="btn btn-success" href="{{url('/lobby/'.md5(session()->get('min_bet')).'/start')}}">Start game</a>
+        <a class="btn btn-success" href="/rooms/lobbi/{{$game_id}}/start">Start game</a>
     </div>
     <div class="go"></div>
 

@@ -12,7 +12,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Newbei</div>
                 <div class="panel-body">
-                  <a href="rooms/list/newbei">Вход</a>
+                  <a href="rooms/list/newbie">Вход</a>
                 </div>
             </div>
         </div>
