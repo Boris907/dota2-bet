@@ -86,41 +86,7 @@
         </div>
     </div>
 </nav>
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center" id="exampleModalLabel">Increase your bet</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                @if(session()->get('bet'))
-                    <h4 class="min text-center">Your current bet: {{session()->get('bet')}}$</h4>
-                @else
-                    <h4 class="min text-center">Your current bet:{{session()->get('min_bet')}}$</h4>
-                @endif
-            </div>
-            <div class="modal-body">
-                <form action="#" method="post">
-                    <meta name="csrf-token" content="{{ csrf_token() }}">
-                    <div class="input-group col-md-12">
-                        <label style="padding:12px ">Increase bet for: </label>
-                        <button type="button" style="margin:5px" class="btn btn-primary bet_submit" value="1">1$
-                        </button>
-                        <button type="button" style="margin:5px" class="btn btn-primary bet_submit" value="2">2$
-                        </button>
-                        <button type="button" style="margin:5px" class="btn btn-primary bet_submit" value="5">5$
-                        </button>
-                        <button type="button" style="margin:5px" class="btn btn-primary bet_submit" value="10">10$
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+
 <!-- Modal -->
 <div class="modal fade" id="exampleStripe" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">

@@ -9,9 +9,26 @@ class Lobby
     public static $dir = '../storage/app/public/';
     public static $fullPath;
 
-    /*
-        Ищем свободный файл
-    */
+    static public function getPlayers($game_id)
+    {
+        if(Cache::has($game_id)){
+            $players = cache($game_id);  
+        }else{
+            $newbie = cache('newbie');
+            $players = json_decode($newbie[$game_id]['players'],true);
+            Cache::forever($game_id,$players);
+        }
+        return $players;
+    }
+
+    static public function getLobby($game_id)
+    {
+        $lobbies = cache('newbie');
+        $lobby = $lobbies[$game_id];
+
+        return $lobby;
+    }
+
   static public function lobbyBody()
     {
         for ($i = 1; $i <= 10; $i++) {
@@ -63,24 +80,5 @@ class Lobby
         }
     }
 
-    static public function getPlayers($game_id)
-    {
-        $newbie = cache('newbie');
-
-        $lobby = $newbie->where('id', $game_id)->toArray();
-        $players = json_decode(array_shift($lobby)->players, true);
-
-        Cache::forever($game_id, $players);
-//        return $players;
-
-    }
-
-    static public function getLobby($game_id)
-    {
-        $newbie = cache('newbie');
-        $lobby = $newbie->where('id', $game_id)->toArray();
-
-        return $lobby;
-    }
 }
 	

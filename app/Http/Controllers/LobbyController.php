@@ -2,6 +2,25 @@
 
 namespace App\Http\Controllers;
 
+    /*
+        Индексный метод - будет как метод создания лобби
+            без проверок (ну или назову его креате)
+
+        Все проверки вынести в отдельный метод шоув
+            (ну или индекс если индекс будет креате)
+
+        Если чувак создаёт лобби он выбирает колво игроков (100% кратное 2)
+        Ставки хз
+
+        Режимы кастомные
+        5х5, 1x1 я думаю этого хватит
+
+        Все лобби пробуем в БД вместо файликов
+            -лобби ид
+             или даер и радиант - я думаю лучше
+             или 10 чуваков - тоже норм
+             статус лобби - идёт игра/набор/конец
+    */
 use App\Bet;
 use App\Room;
 
@@ -22,31 +41,10 @@ class LobbyController extends Controller
     public $min_bet;
     public $rank;
     public $bank;
-    /*
-        Индексный метод - будет как метод создания лобби
-            без проверок (ну или назову его креате)
-
-        Все проверки вынести в отдельный метод шоув
-            (ну или индекс если индекс будет креате)
-
-        Если чувак создаёт лобби он выбирает колво игроков (100% кратное 2)
-        Ставки хз
-
-        Режимы кастомные
-        5х5, 1x1 я думаю этого хватит
-
-        Все лобби пробуем в БД вместо файликов
-            -лобби ид
-             или даер и радиант - я думаю лучше
-             или 10 чуваков - тоже норм
-             статус лобби - идёт игра/набор/конец
-    */
 
     public function index($game_id)
     {
-//        Lobby::getPlayers($game_id);
-        $players = cache($game_id);
-
+        $players =  Lobby::getPlayers($game_id);
         for ($i = 1; $i <= 5; $i++) {
             $radiant[$i] = $players[$i];
         }
@@ -54,12 +52,16 @@ class LobbyController extends Controller
             $dire[$i] = $players[$i];
         }
 
-        return view('lobby.index', compact('game_id', 'radiant', 'dire'));
+        $lobbies = cache('newbie');
+        $bank = $lobbies[$game_id]['bank'];
+
+        return view('lobby.index', compact('game_id', 'radiant', 'dire','bank'));
     }
 
     public function set($game_id, $place_id)
     {
         $players = Cache::pull($game_id);
+        //$players = cache($game_id);
 
         $steam_id = auth()->user()->player_id;
         $place = array_search($steam_id,array_column($players, 'uid'));
@@ -72,6 +74,29 @@ class LobbyController extends Controller
         Cache::forever($game_id,$players);
 
         return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
+    }
+
+        public function bet($game_id,$bet)
+    {
+        $steam_id = auth()->user()->player_id;
+        $coins    = auth()->user()->coins;
+
+        $lobbies = Cache::pull('newbie');
+        $bank = $lobbies[$game_id]['bank'] + $bet;
+        $lobbies[$game_id]['bank'] = $bank;
+        Cache::forever('newbie',$lobbies);
+
+        $coins -= $bet;
+        request()->user()->update(['coins' => $coins]);
+        //$players = Lobby::getPlayers($game_id);
+        $players = Cache::pull($game_id);
+        $place = array_search($steam_id,array_column($players, 'uid'));
+        //$players[$place+1]['bet'] = 0;
+        $players[$place+1]['bet'] += $bet;
+        $bet = $players[$place+1]['bet'];
+        Cache::forever($game_id,$players);
+        return response()->json(["bet" => $bet, "coins" => $coins, "bank" => $bank]);
+
     }
 
 //    public function get()

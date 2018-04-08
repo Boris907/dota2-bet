@@ -3,7 +3,8 @@ $(document).ready(function () {
         e.preventDefault();
         var bet = $(this).attr("value");
         //$('.increase').prop('checked', false);
-
+        var lobby_id = $('meta[name="lobby_id"]').attr('content');
+        //alert(test);
         $('#exampleModal').modal('hide');
 
         $.ajax({
@@ -11,15 +12,15 @@ $(document).ready(function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: "POST",
-            url:'/lobby/' +bet+ '/set',
+            url: lobby_id+"/bet/"+bet,
             data:{
                 bet: bet
             },
             success: function (response) {
-                document.getElementById('bet').innerHTML = "Your current bet:" + response.bet + "$";
-                document.getElementById('cash').innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>" + "D-coins:" + response.cash;
+                document.getElementById('bet').innerHTML = response.bet;
+                document.getElementById('max').innerHTML = response.coins;
+               document.getElementById('cash').innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>" + "D-coins:" + response.coins;
                 document.getElementById('bank').innerHTML = "Current bank in this room:" + response.bank + "$";
-                document.getElementById('max').innerHTML = "Max bet in this room:" + response.max_bet + "$";
             }
         });
     });

@@ -31,6 +31,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/rooms/list/{rank}', 'RoomController@all');
         Route::get('/rooms/lobby/{game_id}', 'LobbyController@index');
         Route::get('/rooms/lobby/{game_id}/place/{place_id}', 'LobbyController@set');
+        Route::post('/rooms/lobby/{game_id}/bet/{bet}', 'LobbyController@bet');
         Route::get('/rooms/lobby/{game_id}/start', 'RoomController@start');
     Route::group(['middleware' => ['lobby']], function () { 
     });
@@ -40,11 +41,11 @@ Route::group(['middleware' => ['web']], function () {
 //        Route::get('/lobby/{rank}', 'LobbyController@index');
     });
 
-    Route::group(['middleware' => ['place']], function () {
+/*    Route::group(['middleware' => ['place']], function () {
 //        Route::post('lobby/test', 'BetsController@calculate');
         Route::post('/lobby/{bet}/set', 'BetsController@set');
         Route::get('/lobby/{rank}/reset', 'BetsController@reset');
-    });
+    });*/
 });
 
 

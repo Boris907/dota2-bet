@@ -76,26 +76,49 @@ class Room extends Model
     */
     static public function lobbyList($rank)
     {
-//        $today = date("YmdGis");
-//        //$fileName = $today. '_o';
-//        $players = json_encode(self::lobbyPlayers());
-//        /*        $players = json_decode($players);*/
-//        for ($i = 1; $i <= 10; $i++) {
-//            $lobbies[$today+$i] = ['rank' => $rank, 'bank' => 0, 'min_bet' => 0, 'max_bet' => 0, 'players' => $players];
-//            DB::table('rooms')->insert(
-//                ['id' =>$today+$i,
-//                 'rank' =>$lobbies[$today+$i]['rank'],
-//                 'bank' =>$lobbies[$today+$i]['bank'],
-//                 'min_bet' =>$lobbies[$today+$i]['min_bet'],
-//                 'max_bet' =>$lobbies[$today+$i]['max_bet'],
-//                 'players' =>$lobbies[$today+$i]['players'],
-//                ]);
-//        }
-//        $lobbies = cache($rank);/*?: DB::table('rooms')->get();*/
+/*       $today = date("YmdGis");
+       //$fileName = $today. '_o';
+       $players = json_encode(self::lobbyPlayers());
+              // $players = json_decode($players);
+       for ($i = 1; $i <= 10; $i++) {
+           $lobbies[$today+$i] = ['rank' => $rank, 'bank' => 0, 'min_bet' => 0, 'max_bet' => 0, 'players' => $players];
+           DB::table('rooms')->insert(
+               ['id' =>$today+$i,
+                'rank' =>$lobbies[$today+$i]['rank'],
+                'bank' =>$lobbies[$today+$i]['bank'],
+                'min_bet' =>$lobbies[$today+$i]['min_bet'],
+                'max_bet' =>$lobbies[$today+$i]['max_bet'],
+                'players' =>$lobbies[$today+$i]['players'],
+               ]);
+        }*/
         $lobbies = DB::table('rooms')->get();
-        Cache::forever($rank, $lobbies);
-
-        return $lobbies;
+        //$lobby = $newbie->where('id', $game_id)->toArray();
+        foreach ($lobbies as $lobby) {
+            $data[$lobby->id] = [
+            'rank' =>$lobby->rank,
+            'bank' =>$lobby->bank,
+            'min_bet' =>$lobby->min_bet,
+            'max_bet' =>$lobby->max_bet,
+            'players' =>$lobby->players,
+            ];
+        }
+        //
+        if(Cache::has($rank)){
+            $data = cache($rank);  
+        }else{
+            $lobbies = DB::table('rooms')->get();
+            foreach ($lobbies as $lobby) {
+                $data[$lobby->id] = [
+                'rank' =>$lobby->rank,
+                'bank' =>$lobby->bank,
+                'min_bet' =>$lobby->min_bet,
+                'max_bet' =>$lobby->max_bet,
+                'players' =>$lobby->players,
+                ];
+            }  
+        Cache::forever($rank,$data);
+        }
+        return $data;
     }
 
         static public function show($game)

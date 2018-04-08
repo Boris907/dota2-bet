@@ -13,9 +13,11 @@
                 <div class="panel-heading">List</div>
                 <div class="panel-body">
                 <ul>
-                @foreach($lobbies as $room)
-                <li>Game №{{$room->id}} || Min Bet {{$room->min_bet}}||
-                        Max Bet {{$room->max_bet}} || Players {{count(json_decode($room->players, true))}}|| <a href="../lobby/{{$room->id}}">Enter</a></li>
+                @foreach($lobbies as $key => $room)
+                <li>Game №{{$key}} || Min Bet {{$room['min_bet']}}||
+                        Max Bet {{$room['max_bet']}} || Players {{count(json_decode($room['players'], true))}}||
+                        Bank {{$room['bank']}}
+                         <a href="../lobby/{{$key}}">Enter</a></li>
                 @endforeach
                 </ul>
                 </div>

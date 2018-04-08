@@ -20,7 +20,6 @@ class CreateRoomsTable extends Migration
             $table->double('min_bet');
             $table->double('max_bet');
             $table->text('players');
-            $table->timestamps();
         });
     }
 

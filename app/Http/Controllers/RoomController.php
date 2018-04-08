@@ -33,7 +33,6 @@ class RoomController extends Controller
     {
         //$allRooms = Room::checkDir();
         $lobbies = Room::lobbyList($rank);
-//        dd($lobbies);
         return view('rooms.all', ['lobbies' => $lobbies]);
     }
 
