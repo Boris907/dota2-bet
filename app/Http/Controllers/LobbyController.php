@@ -60,8 +60,8 @@ class LobbyController extends Controller
 
     public function set($game_id, $place_id)
     {
-        $players = Cache::pull($game_id);
-        //$players = cache($game_id);
+        //$players = Cache::pull($game_id);
+        $players = cache('123');
 
         $steam_id = auth()->user()->player_id;
         $place = array_search($steam_id,array_column($players, 'uid'));

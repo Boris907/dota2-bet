@@ -69,6 +69,50 @@ class Room extends Model
         return $players;
     }
 
+        /*
+            key передаём имя поля которого
+            хотим переписать
+            data значение которое хотим
+            записать
+        */
+    public static function set($game_id, $key, $data)
+    {
+        //$newbie = cache('newbie');
+        $newbie = Cache::pull('newbie');
+        $newbie[$game_id][$key] = $data;
+        Cache::forever('newbie',$newbie);  
+    }
+
+    public static function get($game_id, $key)
+    {
+        $newbie = cache('newbie');
+        dd($newbie);
+        return $newbie[$game_id][$key]; 
+    }
+
+
+
+    public static function create($chislo)
+    {
+        for ($i = 1; $i <= $chislo; $i++) {
+            $players[$i] = ['uid' => 0, 'bet' => 0, 'mmr' => 0, 'rank' => 0];
+        }
+
+        $id = date("YmdGis");
+
+        $data[$id] = [
+                'rank' =>'private',
+                'bank' =>0,
+                'min_bet' =>0,
+                'max_bet' =>0,
+                'players' =>json_encode($players),
+                ];
+
+        $game_id = strval(key($data) + 1);
+
+        Cache::forever('123',$data); 
+        //sreturn $data;
+    }
     /*
         Получаем все свободные лобби по rank,
         из кэша, если их там нет берём из БД
@@ -90,19 +134,10 @@ class Room extends Model
                 'max_bet' =>$lobbies[$today+$i]['max_bet'],
                 'players' =>$lobbies[$today+$i]['players'],
                ]);
-        }*/
-        $lobbies = DB::table('rooms')->get();
-        //$lobby = $newbie->where('id', $game_id)->toArray();
-        foreach ($lobbies as $lobby) {
-            $data[$lobby->id] = [
-            'rank' =>$lobby->rank,
-            'bank' =>$lobby->bank,
-            'min_bet' =>$lobby->min_bet,
-            'max_bet' =>$lobby->max_bet,
-            'players' =>$lobby->players,
-            ];
         }
-        //
+        $lobbies = DB::table('rooms')->get();
+        dd($lobbies);*/
+        //$lobby = $newbie->where('id', $game_id)->toArray();
         if(Cache::has($rank)){
             $data = cache($rank);  
         }else{

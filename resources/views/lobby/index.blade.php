@@ -5,8 +5,7 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 text-center">
                 <h3>You are in lobby</h3>
-
-                <h3>Your cash:<span id="max">{{session()->get('max_bet')}}</span>$</h3>
+                <h3>Your cash:<span id="max">{{auth()->user()->coins}}</span>$</h3>
                 <h3 id="bank">Current bank in this room:{{$bank}}$</h3>
                 <button id="change" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Increase
                     your bet

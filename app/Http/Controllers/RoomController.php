@@ -23,15 +23,30 @@ class RoomController extends Controller
         return view('rooms.create', compact(['id_player']));
     }
 
-    public function set($players)
+    public function set($chislo)
     {
-        return redirect()->action('LobbyController@index', ['min_bet' => 0])
-            ->with('players', $players);
+        Room::create($chislo);
+        
+/*        $lobby = cache('123');
+        $game_id = key($lobby);
+        dd($game_id);
+        
+        $players = json_decode($lobby[$game_id]['players'],true);
+        $players = array_chunk($players, 2, true);
+        
+        $radiant = $players[0];
+        $dire = $players[1];
+        
+        $bank = $lobby[$game_id]['bank'];*/
+
+      //  return view('lobby.index', compact('game_id', 'radiant', 'dire','bank'));
+
     }
 
     public function all($rank)
     {
         //$allRooms = Room::checkDir();
+        // Room::set('20180408195325','min_bet', 4);
         $lobbies = Room::lobbyList($rank);
         return view('rooms.all', ['lobbies' => $lobbies]);
     }
@@ -48,8 +63,8 @@ class RoomController extends Controller
             $players[$i] = 0;
         }*/
         $players = Room::lobbyPlayers();
-        dd($players);
-         for ($i = 1; $i <= 5; $i++) {
+        
+        for ($i = 1; $i <= 5; $i++) {
             $radiant[$i] = $players[$i];
         }
         for ($i = 6; $i <= 10; $i++) {
