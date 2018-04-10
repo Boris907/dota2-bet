@@ -12,11 +12,13 @@ class Lobby
     static public function getPlayers($game_id)
     {
         if(Cache::has($game_id)){
-            $players = cache($game_id);  
+            $lobby = cache($game_id);
+            $players = $lobby[$game_id]['players'];
+            $players = json_decode($players,true);
         }else{
-            $newbie = cache('newbie');
+/*            $newbie = cache('newbie');
             $players = json_decode($newbie[$game_id]['players'],true);
-            Cache::forever($game_id,$players);
+            Cache::forever($game_id,$players);*/
         }
         return $players;
     }

@@ -18,7 +18,7 @@ class LobbyBetMiddleware
     {   
         $arr = explode('/', $request->getPathInfo());
         $game_id = $arr[3];
-        $min_bet = Room::get($game_id,'min_bet');
+        $min_bet = 0;
 
         if (auth()->user()->coins < $min_bet) {
             abort('500', 'Not enough money');

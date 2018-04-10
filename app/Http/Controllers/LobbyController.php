@@ -45,14 +45,18 @@ class LobbyController extends Controller
     public function index($game_id)
     {
         $players =  Lobby::getPlayers($game_id);
-        for ($i = 1; $i <= 5; $i++) {
+       /* for ($i = 1; $i <= 5; $i++) {
             $radiant[$i] = $players[$i];
         }
         for ($i = 6; $i <= 10; $i++) {
             $dire[$i] = $players[$i];
-        }
+        }*/
 
-        $lobbies = cache('newbie');
+        $players = array_chunk($players, count($players)/2, true);
+        $radiant = $players[0];
+        $dire = $players[1];
+        $lobbies = cache($game_id);
+        //dd($lobbies);
         $bank = $lobbies[$game_id]['bank'];
 
         return view('lobby.index', compact('game_id', 'radiant', 'dire','bank'));
@@ -60,9 +64,8 @@ class LobbyController extends Controller
 
     public function set($game_id, $place_id)
     {
-        //$players = Cache::pull($game_id);
-        $players = cache('123');
-
+        $players = Lobby::getPlayers($game_id);
+        //$players = cache('123');
         $steam_id = auth()->user()->player_id;
         $place = array_search($steam_id,array_column($players, 'uid'));
         if ($place == 0 || $place) {
@@ -71,7 +74,9 @@ class LobbyController extends Controller
 
         $players[$place_id]['uid'] = $steam_id;
 
-        Cache::forever($game_id,$players);
+        $lobby = cache($game_id);
+        $lobby[$game_id]['players'] = json_encode($players);
+        Cache::forever($game_id,$lobby);
 
         return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
     }

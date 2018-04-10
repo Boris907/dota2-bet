@@ -83,12 +83,12 @@ class Room extends Model
         Cache::forever('newbie',$newbie);  
     }
 
-    public static function get($game_id, $key)
+/*    public static function get($game_id, $key)
     {
-        $newbie = cache('newbie');
-        dd($newbie);
+        $newbie = cache($game_id);
+
         return $newbie[$game_id][$key]; 
-    }
+    }*/
 
 
 
@@ -108,10 +108,10 @@ class Room extends Model
                 'players' =>json_encode($players),
                 ];
 
-        $game_id = strval(key($data) + 1);
+        $game_id = strval(key($data));
 
-        Cache::forever('123',$data); 
-        //sreturn $data;
+        Cache::forever($game_id,$data); 
+        return $data;
     }
     /*
         Получаем все свободные лобби по rank,

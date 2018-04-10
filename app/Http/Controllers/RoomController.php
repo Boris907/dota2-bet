@@ -24,23 +24,14 @@ class RoomController extends Controller
     }
 
     public function set($chislo)
-    {
-        Room::create($chislo);
-        
-/*        $lobby = cache('123');
-        $game_id = key($lobby);
-        dd($game_id);
-        
-        $players = json_decode($lobby[$game_id]['players'],true);
-        $players = array_chunk($players, 2, true);
-        
-        $radiant = $players[0];
-        $dire = $players[1];
-        
-        $bank = $lobby[$game_id]['bank'];*/
+    {   
+        //Cache::forget('2018041024358');
+        //dd(cache('2018041024358'));
+        $lobby = Room::create($chislo);
+        $game_id = strval(key($lobby));
 
-      //  return view('lobby.index', compact('game_id', 'radiant', 'dire','bank'));
-
+        Cache::forever($game_id,$lobby);
+        return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
     }
 
     public function all($rank)
