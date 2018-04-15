@@ -2,6 +2,7 @@
 
 namespace App;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class Lobby
 {
@@ -10,15 +11,26 @@ class Lobby
     public static $fullPath;
 
     static public function getPlayers($game_id)
-    {
+    {   
+        //Cache::flush();
         if(Cache::has($game_id)){
             $lobby = cache($game_id);
             $players = $lobby[$game_id]['players'];
             $players = json_decode($players,true);
         }else{
+            $lobby = DB::table('rooms')->get()->where('id', $game_id);
+            $data[$lobby[0]->id] = [
+                'rank' =>$lobby[0]->rank,
+                'bank' =>$lobby[0]->bank,
+                'min_bet' =>$lobby[0]->min_bet,
+                'max_bet' =>$lobby[0]->max_bet,
+                'players' =>$lobby[0]->players,
+                ];
+            $players = $lobby[0]->players;
+            $players = json_decode($players,true);
 /*            $newbie = cache('newbie');
-            $players = json_decode($newbie[$game_id]['players'],true);
-            Cache::forever($game_id,$players);*/
+            $players = json_decode($newbie[$game_id]['players'],true);*/
+            Cache::forever($game_id,$data);
         }
         return $players;
     }
