@@ -12,7 +12,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Newbei</div>
                 <div class="panel-body">
-                  <a href="rooms/list/newbie">Вход</a>
+                  <a href="/rooms/list/newbie">Вход</a>
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Ordinary</div>
                 <div class="panel-body">
-                    <a href="rooms/list/ordinary">Вход</a>
+                    <a href="/rooms/list/ordinary">Вход</a>
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Expert</div>
                 <div class="panel-body">
-                    <a href="rooms/list/expert">Вход</a>
+                    <a href="/rooms/list/expert">Вход</a>
                 </div>
             </div>
         </div>

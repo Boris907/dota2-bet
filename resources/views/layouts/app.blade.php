@@ -56,6 +56,9 @@
             <a class="navbar-brand" href="{{ url('new_room') }}">
                 Create Lobby
             </a>
+            <a class="navbar-brand" href="{{ url('exit') }}">
+                Exit
+            </a>
         </div>
 
         <div class="collapse navbar-collapse" id="app-navbar-collapse">

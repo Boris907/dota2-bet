@@ -10,6 +10,8 @@
                 <button id="change" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Increase
                     your bet
                 </button>
+                <button id="exit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">Exit
+                </button>
                 <a href="{{url('/lobby/'.request()->session()->get('min_bet').'/reset')}}" id="reset"
                    class="btn btn-primary">Reset</a>
             </div>
@@ -83,6 +85,29 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="exampleModalLabel2">If you leave, you will lose your minimal bet</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <div class="input-group col-md-12">
+                        <label style="padding:12px ">Leave? </label>
+                        <a href="/rooms/lobby/exit" style="margin:5px" class="btn btn-primary">Y
+                        </a>
+                        <button type="submit" style="margin:5px" class="btn btn-primary exit" value="no">N
+                        </button>
+                    </div>
             </div>
         </div>
     </div>

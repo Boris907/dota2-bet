@@ -7,10 +7,12 @@ Route::group(['middleware' => ['web']], function () {
     })->middleware('guest');
 
     Auth::routes();
+        
+    Route::group(['middleware' => ['auth']], function () {
+        //Route::group(['middleware' => ['place']], function () {
         Route::get('/new_room', 'RoomController@create');
         Route::get('/new_room/set/{chislo}', 'RoomController@set');
         Route::get('/personal', 'UserController@index');
-    Route::group(['middleware' => ['auth']], function () {
         Route::post('/personal', 'UserController@update');
         Route::get('/personal/rate', 'UserController@rate');
 
@@ -26,10 +28,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/checkout/webmoney', 'CheckoutController@getWebMoney');
 
         Route::get('/stats', 'StatsController@index');
-    
         Route::get('/rooms', 'RoomController@index');
         Route::get('/rooms/list/{rank}', 'RoomController@all');
+   // });
     Route::group(['middleware' => ['bet']], function () {
+        Route::get('/rooms/lobby/exit', 'RoomController@index');
         Route::get('/rooms/lobby/{game_id}', 'LobbyController@index');
     });
         Route::get('/rooms/lobby/{game_id}/place/{place_id}', 'LobbyController@set');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Lobby;
 use App\Room;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,33 @@ use Illuminate\Support\Facades\Cache;
 class RoomController extends Controller
 {
     public function index()
-    {
+    {   
+        $url_pr = url()->previous();
+        $url_pr = parse_url($url_pr);
+        $arr = explode('/', $url_pr['path']);
+        // dd($arr);
+        if(isset($arr[2]) && $arr[2] == 'lobby'){
+            $game_id = $arr[3];
+            $players = Lobby::getPlayers($game_id); // 
+
+            $steam_id = auth()->user()->player_id;
+
+            $place = array_search($steam_id, array_column($players, 'uid'));
+            if ($place == 0 || $place) {
+                $players[$place+1]['uid'] = 0;
+                $players[$place+1]['bet'] = 0;
+                $players[$place+1]['mmr'] = 0;
+                $players[$place+1]['rank'] = 0;
+            }
+
+            $lobby = cache($game_id);
+            //dd($lobby[$game_id]['players']);
+            //$lobby = cache($request->game_id);
+            $lobby[$game_id]['players'] = json_encode($players);
+
+            Cache::forever($game_id,$lobby);
+        }
+
         return view('rooms.index2');
     }
 
