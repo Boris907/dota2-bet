@@ -28,6 +28,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/checkout/webmoney', 'CheckoutController@getWebMoney');
 
         Route::get('/stats', 'StatsController@index');
+        Route::get('/stats', 'StatsController@index');
         Route::get('/rooms', 'RoomController@index');
         Route::get('/rooms/list/{rank}', 'RoomController@all');
    // });

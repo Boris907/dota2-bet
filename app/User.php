@@ -17,7 +17,8 @@ class User extends Authenticatable {
 		'password',
 		'player_id',
         'coins',
-        'rate'
+        'rate',
+        'morality'
 	];
 
 	protected $guarded = [

@@ -12,7 +12,7 @@ class Lobby
 
     static public function getPlayers($game_id)
     {   
-        //Cache::flush();
+//        Cache::flush();
         if(Cache::has($game_id)){
             $lobby = cache($game_id);
             $players = $lobby[$game_id]['players'];

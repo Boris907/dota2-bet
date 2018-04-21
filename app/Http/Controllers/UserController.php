@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Game;
 use App\Service;
+use App\Stat;
 use App\Steam;
 
 use App\Http\Requests;
@@ -36,8 +37,7 @@ class UserController extends Controller
         $player_id = auth()->user()->player_id;
         $player_id32 = Steam::toSteamID($player_id);
 
-        $obj = new StatsController;
-        $obj->getSteamTime();
+//        Stat::getSteamTime();
 
         $steam_data = file_get_contents(
             'https://api.opendota.com/api/players/' . $player_id32

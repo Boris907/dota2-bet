@@ -50,7 +50,7 @@
                 @endforeach
             </ul>
         </div>
-        <a class="btn btn-success" href="/rooms/lobbi/{{$game_id}}/start">Start game</a>
+        <a class="btn btn-success" href="/rooms/lobby/{{$game_id}}/start">Start game</a>
     </div>
     <div class="go"></div>
 <!-- Modal -->

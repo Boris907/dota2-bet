@@ -114,6 +114,7 @@ class RoomController extends Controller
     {
         $content = 'var id = [';
         $players = cache($game_id);
+
         for ($i = 1; $i < 6; $i++) {
             $content .= "['$players[$i]'" . ',' . "'R'],";
         }
@@ -121,7 +122,6 @@ class RoomController extends Controller
             $content .= "['$players[$i]'" . ',' . "'D'],";
         }
         $content .= '];module.exports.id = id;';
-        dd($content);
 
        //return redirect()->action('RoomController@get',['game_id' => $game_id]);
     }
