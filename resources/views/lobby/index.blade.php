@@ -102,7 +102,7 @@
             </div>
             <div class="modal-body">
                     <div class="input-group col-md-12">
-                        <label style="padding:12px ">Leave? </label>
+                        <label style="padding:12px ">Leave?</label>
                         <a href="/rooms/lobby/exit" style="margin:5px" class="btn btn-primary">Y
                         </a>
                         <button type="submit" style="margin:5px" class="btn btn-primary exit" value="no">N

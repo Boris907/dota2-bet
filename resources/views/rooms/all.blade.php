@@ -14,8 +14,8 @@
                 <div class="panel-body">
                 <ul>
                 @foreach($lobbies as $key => $room)
-                <li>Game №{{$key}} || Min Bet {{$room['min_bet']}}||
-                        Max Bet {{$room['max_bet']}} || Bank {{$room['bank']}}
+                <li>Game №{{key($room)}} || Min Bet {{$room[$key]['min_bet']}}||
+                        Max Bet {{$room[$key]['max_bet']}} || Bank {{$room[$key]['bank']}}
                          <a href="../lobby/{{$key}}">Enter</a></li>
                 @endforeach
                 </ul>

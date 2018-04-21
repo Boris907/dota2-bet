@@ -90,9 +90,7 @@ class Room extends Model
         return $newbie[$game_id][$key]; 
     }*/
 
-
-
-    public static function create($chislo)
+    public static function create($chislo,$rank)
     {
         for ($i = 1; $i <= $chislo; $i++) {
             $players[$i] = ['uid' => 0, 'bet' => 0, 'mmr' => 0, 'rank' => 0];
@@ -101,7 +99,7 @@ class Room extends Model
         $id = date("YmdGis");
 
         $data[$id] = [
-                'rank' =>'private',
+                'rank' =>$rank,
                 'bank' =>0,
                 'min_bet' =>0,
                 'max_bet' =>0,
@@ -110,7 +108,10 @@ class Room extends Model
 
         $game_id = strval(key($data));
 
-        Cache::forever($game_id,$data); 
+        $old = cache($rank);
+        $old[] = $game_id; 
+        Cache::forever($rank,$old); 
+        //Cache::forever($game_id, $data); 
         return $data;
     }
     /*
