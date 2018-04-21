@@ -18,15 +18,16 @@ class Lobby
             $players = $lobby[$game_id]['players'];
             $players = json_decode($players,true);
         }else{
-            $lobby = DB::table('rooms')->get()->where('id', $game_id);
-            $data[$lobby[0]->id] = [
-                'rank' =>$lobby[0]->rank,
-                'bank' =>$lobby[0]->bank,
-                'min_bet' =>$lobby[0]->min_bet,
-                'max_bet' =>$lobby[0]->max_bet,
-                'players' =>$lobby[0]->players,
+            // $lobby = DB::table('rooms')->get()->where('id', $game_id);
+            $lobby = Room::find($game_id);//->toArray();
+            $data[$lobby->id] = [
+                'rank' =>$lobby->rank,
+                'bank' =>$lobby->bank,
+                'min_bet' =>$lobby->min_bet,
+                'max_bet' =>$lobby->max_bet,
+                'players' =>$lobby->players,
                 ];
-            $players = $lobby[0]->players;
+            $players = $lobby->players;
             $players = json_decode($players,true);
 /*            $newbie = cache('newbie');
             $players = json_decode($newbie[$game_id]['players'],true);*/

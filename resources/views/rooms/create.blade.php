@@ -53,7 +53,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">5 x 5</div>
                 <div class="panel-body">
-                  <a href="new_room/set/10">Create</a>
+                  <a href="new_room/set/10/newbie">Create</a>
                 </div>
             </div>
         </div>

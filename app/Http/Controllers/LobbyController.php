@@ -44,13 +44,15 @@ class LobbyController extends Controller
 
     public function index($game_id)
     {
+        $lobby = cache($game_id);
+        //dd($lobby);
         $players =  Lobby::getPlayers($game_id);
-
         $players = array_chunk($players, count($players)/2, true);
+
         $radiant = $players[0];
         $dire = $players[1];
         $lobby = cache($game_id);
-        // dd($lobby);
+        //dd($lobby);
         $bank = $lobby[$game_id]['bank'];
         //$bank = $lobby[0]->bank;
         return view('lobby.index', compact('game_id', 'radiant', 'dire','bank'));
@@ -97,6 +99,34 @@ class LobbyController extends Controller
         //Cache::forever($game_id,$players);
         return response()->json(["bet" => $bet, "coins" => $coins, "bank" => $bank]);
 
+    }
+
+    public function exit()
+    {
+        $url_pr = url()->previous();
+        $url_pr = parse_url($url_pr);
+        $arr = explode('/', $url_pr['path']);
+        // dd($arr);
+        if(isset($arr[2]) && $arr[2] == 'lobby'){
+            $game_id = $arr[3];
+            $players = Lobby::getPlayers($game_id); // 
+
+            $steam_id = auth()->user()->player_id;
+
+            $place = array_search($steam_id, array_column($players, 'uid'));
+            if ($place == 0 || $place) {
+                $players[$place+1]['uid'] = 0;
+                $players[$place+1]['bet'] = 0;
+                $players[$place+1]['mmr'] = 0;
+                $players[$place+1]['rank'] = 0;
+            }
+            $lobby = cache($game_id);
+            $lobby[$game_id]['bank'] = 0;
+            $lobby[$game_id]['players'] = json_encode($players);
+
+            Cache::forever($game_id,$lobby);
+        }
+        return redirect()->action('RoomController@index');
     }
 
 //    public function get()
