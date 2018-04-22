@@ -64,8 +64,8 @@ class LobbyController extends Controller
         //$players = cache('123');
         $steam_id = auth()->user()->player_id;
         $place = array_search($steam_id,array_column($players, 'uid'));
-        if ($place == 0 || $place) {
-            $players[$place+1]['uid'] = 0;
+        if ($place === 0 || $place) {
+            return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
         }
 
         $players[$place_id]['uid'] = $steam_id;
@@ -80,25 +80,32 @@ class LobbyController extends Controller
         public function bet($game_id,$bet)
     {
         $steam_id = auth()->user()->player_id;
-        $coins    = auth()->user()->coins;
         $players = Lobby::getPlayers($game_id);
-
+        $coins    = auth()->user()->coins;
         $lobby = cache($game_id);
+        $place = array_search($steam_id,array_column($players, 'uid'));
+
+        if ($place === 0 || $place) {
+        //$players = Lobby::getPlayers($game_id);
+        //$players[$place+1]['bet'] = 0;
         $bank = $lobby[$game_id]['bank'] + $bet;
         $lobby[$game_id]['bank'] = $bank;
-
+        
         $coins -= $bet;
         request()->user()->update(['coins' => $coins]);
-        //$players = Lobby::getPlayers($game_id);
-        $place = array_search($steam_id,array_column($players, 'uid'));
-        //$players[$place+1]['bet'] = 0;
+        
         $players[$place+1]['bet'] += $bet;
         $bet = $players[$place+1]['bet'];
+
         $lobby[$game_id]['players'] = json_encode($players);
         Cache::forever($game_id,$lobby);
-        //Cache::forever($game_id,$players);
         return response()->json(["bet" => $bet, "coins" => $coins, "bank" => $bank]);
-
+    }else{
+        //return redirect()->action('LobbyController@index', ['game_id' => $game_id])->withErrors(['msg', 'The Message']);
+        return response()->json(['error' => 'Choose your team first'], 500); // Status code here
+        //return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
+        //return redirect()->action('LobbyController@index')->withErrors(['msg', 'The Message']);
+        }
     }
 
     public function exit()
@@ -128,47 +135,58 @@ class LobbyController extends Controller
         }
         return redirect()->action('RoomController@index');
     }
+        public function leave()
+    {
+        $url_pr = url()->previous();
+        $url_pr = parse_url($url_pr);
+        $arr = explode('/', $url_pr['path']);
+        $game_id = $arr[3];
+        $players = Lobby::getPlayers($game_id); // 
 
-//    public function get()
-//    {
-//        $content = 'var id = [';
-//        $arrIDs = Lobby::places();
-//        for ($i = 1; $i < 6; $i++) {
-//            $content .= "['$arrIDs[$i]'" . ',' . "'R'],";
-//        }
-//        for ($i = 6; $i < 11; $i++) {
-//            $content .= "['$arrIDs[$i]'" . ',' . "'D'],";
-//        }
-//        $content .= '];module.exports.id = id;';
-//        Storage::append('public\\players.js', $content);
-//        Storage::move(
-//            'public\\' . Lobby::checkDir(),
-//            'public\\c' . Lobby::checkDir()
-//        );
-//        $str = '';
-//        for ($i = 1; $i <= 10; $i++) {
-//            $str .= "0 $i ";
-//        }
-//        Storage::append(Lobby::newFile(), $str);
-//
-//        for ($i = 1; $i < 6; $i++) {
-//            $radiant[$i] = $arrIDs[$i];
-//        }
-//        for ($i = 6; $i < 11; $i++) {
-//            $dire[$i] = $arrIDs[$i];
-//        }
-//
-//        //Выводит логи,
-//        $bot_path = "cd "
-//            . "js/node-dota2/examples"
-//            . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
-////            . "&& node start.js >> /home/vagrant/code/auth/dota2-roulette/storage/app/public/log/dota2.log &";
-//       // $bot_path = "ps -ef | grep node";
-//        exec($bot_path, $out, $err);
-//      //  dd($out);
-//
-//        return view('lobby.start', compact('dire', 'radiant', 'room_cash'));
-//    }
+        $steam_id = auth()->user()->player_id;
+
+        $place = array_search($steam_id, array_column($players, 'uid'));
+        if ($place == 0 || $place) {
+            $players[$place+1]['uid'] = 0;
+            $players[$place+1]['bet'] = 0;
+            $players[$place+1]['mmr'] = 0;
+            $players[$place+1]['rank'] = 0;
+        }
+        
+        $lobby = cache($game_id);
+        $lobby[$game_id]['bank'] = 0;
+        $lobby[$game_id]['players'] = json_encode($players);
+
+        Cache::forever($game_id,$lobby);
+
+        return back();
+    }
+
+    public function start($game_id)
+    {
+        $content = 'var id = [';
+        $players = Lobby::getPlayers($game_id); // 
+        $players = array_chunk($players, count($players)/2, true);
+
+        $lobby = cache($game_id);
+        $bank = $lobby[$game_id]['bank'];
+
+        $radiant = $players[0];
+        foreach ($radiant as $key => $value) {
+            //$content .= "['$value['uid']'".","."'R'],";
+            $content .= '[\''.$value['uid'] . ',' . "'R'],";
+        }
+        $dire = $players[1];
+        foreach ($dire as $key => $value) {
+/*            $content .= $value['uid'];*/
+              $content .= '[\''.$value['uid'] . ',' . "'D'],";
+        }
+        $content .= '];module.expots.id = id;';
+        
+        return view('lobby.start', compact('game_id', 'radiant', 'dire','bank'));
+
+       //return redirect()->action('RoomController@get',['game_id' => $game_id]);
+    }
 
     public function res()
     {

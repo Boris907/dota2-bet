@@ -6,7 +6,6 @@ use App\Lobby;
 use App\Room;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,11 +23,14 @@ class RoomController extends Controller
         return view('rooms.create', compact(['id_player']));
     }
 
-    public function set($chislo,$rank)
+    public function set(Request $request)
     {   
+        $players = $request->get('players');
+        $rank = $request->get('rank');
+        // dd($players,$rank);
         //Cache::forget('2018041024358');
         //dd(cache('2018041024358'));
-        $lobby = Room::create($chislo,$rank);
+        $lobby = Room::create($players,$rank);
       $game_id = strval(key($lobby));
 
         Cache::forever($game_id,$lobby);

@@ -21,7 +21,12 @@ $(document).ready(function () {
                 document.getElementById('max').innerHTML = response.coins;
                document.getElementById('cash').innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>" + "D-coins:" + response.coins;
                 document.getElementById('bank').innerHTML = "Current bank in this room:" + response.bank + "$";
-            }
+            },
+            error: function(xhr) {
+        //var err = response.error;
+        alert(xhr.responseJSON.error);
+       // alert(xhr.textStatus);
+  }
         });
     });
     $('.exit').click(function (e) {
