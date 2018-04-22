@@ -18,12 +18,13 @@ class LobbyBetMiddleware
     {   
         $arr = explode('/', $request->getPathInfo());
         $game_id = $arr[3];
-        $min_bet = 0;
+        $lobby = cache($game_id);
+        $min_bet = $lobby[$game_id]['min_bet'];
 
         if (auth()->user()->coins < $min_bet) {
-            abort('500', 'Not enough money');
+            abort('404', 'Not enough money');
         }elseif(auth()->user()->player_id == 0){
-            abort('500', 'You must authorize at first');
+            abort('404', 'You must authorize at first');
         }
         return $next($request);
     }

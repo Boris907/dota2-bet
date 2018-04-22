@@ -2,6 +2,9 @@
 
 @section('content')
     <div class="container">
+    @if($errors->any())
+<h4>{{$errors->first()}}</h4>
+@endif
         <div class="row">
             <div class="col-md-10 col-md-offset-1 text-center">
                 <h3>You are in lobby</h3>
@@ -12,8 +15,8 @@
                 </button>
                 <button id="exit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">Exit
                 </button>
-                <a href="{{url('/lobby/'.request()->session()->get('min_bet').'/reset')}}" id="reset"
-                   class="btn btn-primary">Reset</a>
+                <a href="leave" id="leave"
+                   class="btn btn-primary">Leave the team</a>
             </div>
         </div>
     </div>
@@ -50,7 +53,7 @@
                 @endforeach
             </ul>
         </div>
-        <a class="btn btn-success" href="/rooms/lobbi/{{$game_id}}/start">Start game</a>
+        <a class="btn btn-success" href="/rooms/lobby/{{$game_id}}/start">Start game</a>
     </div>
     <div class="go"></div>
 <!-- Modal -->

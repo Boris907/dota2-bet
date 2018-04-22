@@ -33,6 +33,7 @@ class Lobby
             $players = json_decode($newbie[$game_id]['players'],true);*/
             Cache::forever($game_id,$data);
         }
+
         return $players;
     }
 

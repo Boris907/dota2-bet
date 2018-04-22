@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 text-center">
                 <h2>You have been invited in the game, good luck!</h2>
-                <h3>Current bank in this game = {{$room_cash->bet}}$</h3>
+                <h3>Current bank in this game {{$bank}}$</h3>
         </div>
     </div>
      <div class="container">
@@ -14,8 +14,12 @@
                 Radiant
             </div>
             <ul class="list-group list-group-flush">
-                @foreach($radiant as $key => $id)
-                   <li class="list-group-item">{{$id}}</li>
+                @foreach($radiant as $place_id => $playerID)
+                    @if($playerID['uid'] == 0)
+                        <li class="list-group-item"><a href="/rooms/lobby/{{$game_id}}/place/{{$place_id}}">Take place</a></li>
+                    @else
+                        <li class="list-group-item">{{$playerID['uid']}} | <span id="bet">{{$playerID['bet']}}</span>$</li>
+                    @endif
                 @endforeach
             </ul>
         </div>
@@ -24,8 +28,12 @@
                 Dire
             </div>
             <ul class="list-group list-group-flush">
-                @foreach($dire as $key => $id)
-                   <li class="list-group-item">{{$id}}</li>
+                @foreach($dire as $place_id => $playerID)
+                    @if($playerID['uid'] == 0)
+                        <li class="list-group-item"><a href="/rooms/lobby/{{$game_id}}/place/{{$place_id}}">Take place</a></li>
+                    @else
+                       <li class="list-group-item">{{$playerID['uid']}} | <span id="bet">{{$playerID['bet']}}</span>$</li>
+                    @endif
                 @endforeach
             </ul>
         </div>

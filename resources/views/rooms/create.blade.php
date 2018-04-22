@@ -2,61 +2,29 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1 text-center">
-            <h1>Your ID: {{Auth::user()->player_id}}</h1>
-            <h2>Choose the room where you want to play</h2>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">1 x 1</div>
-                <div class="panel-body">
-                  <a href="new_room/set/2">Create</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">2 x 2</div>
-                <div class="panel-body">
-                  <a href="new_room/set/4">Create</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">3 x 3</div>
-                <div class="panel-body">
-                  <a href="new_room/set/6">Create</a>
-                </div>
-            </div>
-        </div>
-    </div>
-        <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">4 x 4</div>
-                <div class="panel-body">
-                  <a href="new_room/set/8">Create</a>
-                </div>
-            </div>
-        </div>
-    </div>
-        <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">5 x 5</div>
-                <div class="panel-body">
-                  <a href="new_room/set/10/newbie">Create</a>
-                </div>
-            </div>
-        </div>
-    </div>
+<form action="/new_room/set" method="POST">
+{{csrf_field()}}
+  <div class="form-group">
+    <label for="players">Players</label>
+    <select name="players" class="form-control" id="players">
+      <option value="2">1x1</option>
+      <option value="4">2x2</option>
+      <option value="6">3x3</option>
+      <option value="8">4x4</option>
+      <option value="10" selected="selected">5x5</option>
+    </select>
+  </div>
+    <div class="form-group">
+    <label for="rank">Type</label>
+    <select name="rank" class="form-control" id="rank">
+      <option value="newbie">Newbie</option>
+      <option value="ordinary">Ordinary</option>
+      <option value="expert">Expert</option>
+      <option value="private">Private</option>
+    </select>
+  </div>
+   <button type="submit" class="btn btn-success">Create</button>
+</form>
+
 </div>
 @endsection
