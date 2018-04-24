@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Withdraw;
 use Auth;
 use League\Flysystem\Exception;
 use Stripe\Charge;
@@ -53,7 +54,7 @@ class CheckoutController extends Controller
         $extras = [];
 
         $response = $payment->test()->create($extras);
-        dd($response);
+//        dd($response);
 
     }
 
@@ -92,6 +93,13 @@ class CheckoutController extends Controller
     public function getWebMoney()
     {
         return view('checkout.webmoney');
+    }
+
+    public function withdraw()
+    {
+        Withdraw::create(request()->all());
+
+        return back()->with('message', 'Your request in process!');
     }
 
 }

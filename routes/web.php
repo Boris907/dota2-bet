@@ -27,6 +27,10 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/checkout/g2a', 'CheckoutController@getG2A');
         Route::post('/checkout/g2a', 'CheckoutController@postG2A');
         Route::get('/checkout/webmoney', 'CheckoutController@getWebMoney');
+        Route::get('/checkout/withdraw', function (){
+           return view('checkout.withdraw');
+        });
+        Route::post('/checkout/withdraw', 'CheckoutController@withdraw');
 
         Route::get('/stats', 'StatsController@index');
         Route::get('/stats', 'StatsController@index');

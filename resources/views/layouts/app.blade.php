@@ -73,7 +73,8 @@
                     <li><a href="{{ url('/login') }}">Login</a></li>
                     <li><a href="{{ url('/register') }}">Register</a></li>
                 @else
-                    <li><a href="#" id="cash" data-toggle="modal" data-target="#exampleStripe"><span class="glyphicon glyphicon-plus"></span> D-coins: {{Auth::user()->coins}}</a></li>
+                    <li><a href="#" id="cash" data-toggle="modal" data-target="#exampleStripe"><span class="glyphicon glyphicon-plus"></span> Wallet: {{Auth::user()->coins}}</a></li>
+                    <li><a href="{{'/checkout/withdraw'}}" id="cash-back"><span class="glyphicon glyphicon-arrow-down"></span>Withdrawal money</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                             {{ Auth::user()->name }} <span class="caret"></span>
@@ -103,7 +104,7 @@
             </div>
             <div class="modal-body">
                 <div class="col-md-offset-2">
-                    <a href="{{ url('/checkout/stripe') }}" onclick="refresh()"><img src="{{'/images.png'}}"
+                    <a href="{{ url('/checkout/stripe') }}" onclick="refresh()"><img src="{{'/visa.jpg'}}"
                                                                                      width="120px;" alt=""></a>
                     <a href="{{ url('/checkout/g2a') }}" onclick="refresh()"><img src="{{'/2303.png'}}" width="120px;"
                                                                                   alt=""></a>
