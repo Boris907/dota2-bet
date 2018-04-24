@@ -17,27 +17,27 @@ class UserController extends Controller
     public function index()
     {
         $user_info = auth()->user();
+
         $services  = Service::all();
         $games     = Game::all()->where('service_id', 1);
 
         return view('personal.index', compact('user_info', 'services', 'games'));
     }
 
-    public function update()
-    {
-        $player_id = request()->input('player_id');
+    public function get($id){
 
-        request()->user()->update(['player_id' => $player_id,]);
+        $user_info = User::find($id);
 
-        return redirect('/personal');
+        $services  = Service::all();
+        $games     = Game::all()->where('service_id', 1);
+
+        return view('personal.index', compact('user_info', 'services', 'games'));
     }
 
     public function rate()
     {
         $player_id = auth()->user()->player_id;
         $player_id32 = Steam::toSteamID($player_id);
-
-//        Stat::getSteamTime();
 
         $steam_data = file_get_contents(
             'https://api.opendota.com/api/players/' . $player_id32
@@ -52,9 +52,19 @@ class UserController extends Controller
                 ['rate' => $arr['mmr_estimate']['estimate']]
             );
         } else {
-            return redirect('/personal');
+            return redirect('/profile/' . auth()->user()->id);
         }
 
-        return redirect('/personal');
+        return redirect('/profile/' . auth()->user()->id);
+    }
+
+    public function report()
+    {
+        $user = User::find(request()->id);
+
+        $user->morality = $user->morality - request()->value;
+        $user->save();
+
+        return response('User account has been reported!', '200');
     }
 }

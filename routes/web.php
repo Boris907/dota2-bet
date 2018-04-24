@@ -12,9 +12,10 @@ Route::group(['middleware' => ['web']], function () {
         //Route::group(['middleware' => ['place']], function () {
         Route::get('/new_room', 'RoomController@create');
         Route::post('/new_room/set', 'RoomController@set');
-        Route::get('/personal', 'UserController@index');
-        Route::post('/personal', 'UserController@update');
-        Route::get('/personal/rate', 'UserController@rate');
+        Route::get('/profile', 'UserController@index')->name('profile');
+        Route::get('/profile/{id}', 'UserController@get')->name('profile.get');
+        Route::post('/profile/{id}/report', 'UserController@report')->name('profile.report');
+        Route::post('/profile/update', 'UserController@rate')->name('profile.update');
 
         Route::get('auth/steam', 'SteamAuthController@redirectToSteam')->name('auth.steam');
         Route::get('auth/steam/handle', 'SteamAuthController@handle')->name('auth.steam.handle');

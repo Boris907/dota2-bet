@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
     @if($errors->any())
-<h4>{{$errors->first()}}</h4>
+    <h4>{{$errors->first()}}</h4>
 @endif
         <div class="row">
             <div class="col-md-10 col-md-offset-1 text-center">

@@ -34,4 +34,27 @@ $(document).ready(function () {
 
         $('#exampleModal2').modal('hide');
     });
+
+    $('.report-submit').click(function (e) {
+        e.preventDefault();
+
+        var value = $('input[type="radio"]:checked').attr('value');
+        var id = window.location.pathname.split('/')[2];
+
+        $('#exampleModal3').modal('hide');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "POST",
+            url: '/profile/'+ id +'/report',
+            data: {
+                value:value
+            },
+            success: function (response) {
+                alert(response);
+            }
+        });
+    });
 });

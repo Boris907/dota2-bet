@@ -10,37 +10,39 @@ use Illuminate\Support\Facades\DB;
 class Room extends Model
 {
     //protected $fillable = ['room_rank', 'min_bet', 'max_bet', 'bet', 'url'];
-/*
-    public static function desc()
-    {
-        return static::selectRaw('*')
-            ->orderBy('min_bet','desc')
-            ->get()
-            ->toArray();
-    }
+    /*
+        public static function desc()
+        {
+            return static::selectRaw('*')
+                ->orderBy('min_bet','desc')
+                ->get()
+                ->toArray();
+        }
 
-    public static function asc()
-    {
-        return static::selectRaw('*')
-            ->orderBy('min_bet','asc')
-            ->get()
-            ->toArray();
-    }
+        public static function asc()
+        {
+            return static::selectRaw('*')
+                ->orderBy('min_bet','asc')
+                ->get()
+                ->toArray();
+        }
 
-    public static function unsetBet()
-    {
-        $min_bet = request()->session()->get('min_bet');
-        $bet = request()->session()->pull('bet');
-        $user_coins = auth()->user()->coins;
-        $coins = $user_coins + $bet - $min_bet;
+        public static function unsetBet()
+        {
+            $min_bet = request()->session()->get('min_bet');
+            $bet = request()->session()->pull('bet');
+            $user_coins = auth()->user()->coins;
+            $coins = $user_coins + $bet - $min_bet;
 
-        request()->user()->update([
-            'coins' =>$coins
-        ]);
-    }*/
-    public static $dir ='../storage/app/public/';
+            request()->user()->update([
+                'coins' =>$coins
+            ]);
+        }*/
+    public static $dir = '../storage/app/public/';
     public static $fullPath;
-    protected $fillable = ['id','rank', 'bank', 'min_bet', 'max_bet', 'players'];
+    protected $fillable
+        = ['id', 'rank', 'bank', 'min_bet', 'max_bet', 'players'];
+
     /*
         Ищем открытые комнаты
     */
@@ -48,8 +50,8 @@ class Room extends Model
     {
         $files = array_diff(scandir(self::$dir), array('..', '.'));
         $files = array_values($files);
-        $list = preg_grep('/^[0-9]+_o/', $files);
-        
+        $list  = preg_grep('/^[0-9]+_o/', $files);
+
         return $list;
     }
 
@@ -66,31 +68,32 @@ class Room extends Model
         }
 
         /*Storage::append('/public/'.$fileName, $str);*/
+
         return $players;
     }
 
-        /*
-            key передаём имя поля которого
-            хотим переписать
-            data значение которое хотим
-            записать
-        */
+    /*
+        key передаём имя поля которого
+        хотим переписать
+        data значение которое хотим
+        записать
+    */
     public static function set($game_id, $key, $data)
     {
         //$newbie = cache('newbie');
-        $newbie = Cache::pull('newbie');
+        $newbie                 = Cache::pull('newbie');
         $newbie[$game_id][$key] = $data;
-        Cache::forever('newbie',$newbie);  
+        Cache::forever('newbie', $newbie);
     }
 
-/*    public static function get($game_id, $key)
-    {
-        $newbie = cache($game_id);
+    /*    public static function get($game_id, $key)
+        {
+            $newbie = cache($game_id);
 
-        return $newbie[$game_id][$key]; 
-    }*/
+            return $newbie[$game_id][$key];
+        }*/
 
-    public static function create($value,$rank)
+    public static function create($value, $rank)
     {
         for ($i = 1; $i <= $value; $i++) {
             $players[$i] = ['uid' => 0, 'bet' => 0, 'mmr' => 0, 'rank' => 0];
@@ -98,35 +101,37 @@ class Room extends Model
 
         $id = date("YmdGis");
         switch ($rank) {
-    case 'newbie':
-        $min_bet = 1;
-        $max_bet = 5;
-        break;
-    case 'ordinary':
-        $min_bet = 2;
-        $max_bet = 10;
-        break;
-    case 'expert':
-        $min_bet = 4;
-        $max_bet = 20;
-        break;
-}
+            case 'newbie':
+                $min_bet = 1;
+                $max_bet = 5;
+                break;
+            case 'ordinary':
+                $min_bet = 2;
+                $max_bet = 10;
+                break;
+            case 'expert':
+                $min_bet = 4;
+                $max_bet = 20;
+                break;
+        }
         $data[$id] = [
-                'rank' =>$rank,
-                'bank' =>0,
-                'min_bet' =>$min_bet,
-                'max_bet' =>$max_bet,
-                'players' =>json_encode($players),
-                ];
+            'rank'    => $rank,
+            'bank'    => 0,
+            'min_bet' => $min_bet,
+            'max_bet' => $max_bet,
+            'players' => json_encode($players),
+        ];
 
         $game_id = strval(key($data));
 
-        $old = cache($rank);
-        $old[] = $game_id; 
-        Cache::forever($rank,$old); 
+        $old   = cache($rank);
+        $old[] = $game_id;
+        Cache::forever($rank, $old);
+
         //Cache::forever($game_id, $data); 
         return $data;
     }
+
     /*
         Получаем все свободные лобби по rank,
         из кэша, если их там нет берём из БД
@@ -134,46 +139,47 @@ class Room extends Model
     */
     static public function lobbyList($rank)
     {
-/*       $today = date("YmdGis");
-       //$fileName = $today. '_o';
-       $players = json_encode(self::lobbyPlayers());
-              // $players = json_decode($players);
-       for ($i = 1; $i <= 10; $i++) {
-           $lobbies[$today+$i] = ['rank' => $rank, 'bank' => 0, 'min_bet' => 0, 'max_bet' => 0, 'players' => $players];
-           DB::table('rooms')->insert(
-               ['id' =>$today+$i,
-                'rank' =>$lobbies[$today+$i]['rank'],
-                'bank' =>$lobbies[$today+$i]['bank'],
-                'min_bet' =>$lobbies[$today+$i]['min_bet'],
-                'max_bet' =>$lobbies[$today+$i]['max_bet'],
-                'players' =>$lobbies[$today+$i]['players'],
-               ]);
-        }
-        $lobbies = DB::table('rooms')->get();
-        dd($lobbies);*/
+        /*       $today = date("YmdGis");
+               //$fileName = $today. '_o';
+               $players = json_encode(self::lobbyPlayers());
+                      // $players = json_decode($players);
+               for ($i = 1; $i <= 10; $i++) {
+                   $lobbies[$today+$i] = ['rank' => $rank, 'bank' => 0, 'min_bet' => 0, 'max_bet' => 0, 'players' => $players];
+                   DB::table('rooms')->insert(
+                       ['id' =>$today+$i,
+                        'rank' =>$lobbies[$today+$i]['rank'],
+                        'bank' =>$lobbies[$today+$i]['bank'],
+                        'min_bet' =>$lobbies[$today+$i]['min_bet'],
+                        'max_bet' =>$lobbies[$today+$i]['max_bet'],
+                        'players' =>$lobbies[$today+$i]['players'],
+                       ]);
+                }
+                $lobbies = DB::table('rooms')->get();
+                dd($lobbies);*/
         //$lobby = $newbie->where('id', $game_id)->toArray();
-        if(Cache::has($rank)){
-            $data = cache($rank);  
-        }else{
+        if (Cache::has($rank)) {
+            $data = cache($rank);
+        } else {
             $lobbies = DB::table('rooms')->get();
             foreach ($lobbies as $lobby) {
                 $data[$lobby->id] = [
-                'rank' =>$lobby->rank,
-                'bank' =>$lobby->bank,
-                'min_bet' =>$lobby->min_bet,
-                'max_bet' =>$lobby->max_bet,
-                'players' =>$lobby->players,
+                    'rank'    => $lobby->rank,
+                    'bank'    => $lobby->bank,
+                    'min_bet' => $lobby->min_bet,
+                    'max_bet' => $lobby->max_bet,
+                    'players' => $lobby->players,
                 ];
-            }  
-        Cache::forever($rank,$data);
+            }
+            Cache::forever($rank, $data);
         }
+
         return $data;
     }
 
-        static public function show($game)
+    static public function show($game)
     {
-       if (self::checkDir() != null) {
-            $str = file_get_contents(self::$dir.$game);
+        if (self::checkDir() != null) {
+            $str = file_get_contents(self::$dir . $game);
             $str = str_replace("\n", "", $str);
             $arr = explode(' ', $str);
             array_pop($arr);
@@ -186,5 +192,4 @@ class Room extends Model
             ($arr = 0);
         }
     }
-
 }
