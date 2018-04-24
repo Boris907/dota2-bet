@@ -26,7 +26,11 @@ class UserController extends Controller
 
     public function get($id){
 
-        $user_info = User::find($id);
+        if (strlen($id) > 10){
+            $user_info = User::where('player_id', $id)->first();
+        }else {
+            $user_info = User::find($id);
+        }
 
         $services  = Service::all();
         $games     = Game::all()->where('service_id', 1);
