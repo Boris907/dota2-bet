@@ -164,11 +164,22 @@ class LobbyController extends Controller
 
     public function start($game_id)
     {
+        $lobby = cache($game_id);
+        // dd($lobby[$game_id]['players']);
+
+        DB::table('rooms')->insert(
+            ['id' =>key($lobby),
+            'rank' =>$lobby[$game_id]['rank'],
+            'bank' =>$lobby[$game_id]['bank'],
+            'min_bet' =>$lobby[$game_id]['min_bet'],
+            'max_bet' =>$lobby[$game_id]['max_bet'],
+            'players' =>$lobby[$game_id]['players'],
+        ]);
+        
         $content = 'var id = [';
         $players = Lobby::getPlayers($game_id); // 
         $players = array_chunk($players, count($players)/2, true);
 
-        $lobby = cache($game_id);
         $bank = $lobby[$game_id]['bank'];
 
         $radiant = $players[0];

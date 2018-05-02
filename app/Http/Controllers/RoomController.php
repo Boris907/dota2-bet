@@ -15,6 +15,7 @@ class RoomController extends Controller
 {
     public function index()
     {   
+        //Cache::flush();
         return view('rooms.index2');
     }
 
