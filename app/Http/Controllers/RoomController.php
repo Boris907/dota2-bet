@@ -15,7 +15,7 @@ class RoomController extends Controller
 {
     public function index()
     {   
-        //Cache::flush();
+//        Cache::flush();
         return view('rooms.index2');
     }
 
@@ -44,7 +44,11 @@ class RoomController extends Controller
         // Room::set('20180408195325','min_bet', 4);
         //$lobbies = Room::lobbyList($rank);
         $ids = cache($rank);
-        $lobbies = Cache::many($ids);
+        if ($ids == null){
+            $lobbies = array();
+        } else {
+            $lobbies = Cache::many($ids);
+        }
 
         return view('rooms.all', ['lobbies' => $lobbies]);
     }

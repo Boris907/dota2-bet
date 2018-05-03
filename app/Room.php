@@ -102,16 +102,16 @@ class Room extends Model
         $id = date("YmdGis");
         switch ($rank) {
             case 'newbie':
-                $min_bet = 1;
-                $max_bet = 5;
-                break;
-            case 'ordinary':
                 $min_bet = 2;
                 $max_bet = 10;
                 break;
-            case 'expert':
+            case 'ordinary':
                 $min_bet = 4;
                 $max_bet = 20;
+                break;
+            case 'expert':
+                $min_bet = 10;
+                $max_bet = 50;
                 break;
         }
         $data[$id] = [

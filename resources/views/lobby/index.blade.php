@@ -48,7 +48,7 @@
                     @if($playerID['uid'] == 0)
                         <li class="list-group-item"><a href="/rooms/lobby/{{$game_id}}/place/{{$place_id}}">Take place</a></li>
                     @else
-                       <li class="list-group-item">{{$playerID['uid']}} | <span id="bet">{{$playerID['bet']}}</span>$</li>
+                       <li class="list-group-item"><a href="/profile/{{$playerID['uid']}}">{{$playerID['uid']}}</a> | <span id="bet">{{$playerID['bet']}}</span>$</li>
                     @endif
                 @endforeach
             </ul>
@@ -66,11 +66,6 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                @if(session()->get('bet'))
-                    <h4 class="min text-center">Your current bet: {{session()->get('bet')}}$</h4>
-                @else
-                    <h4 class="min text-center">Your current bet:{{session()->get('min_bet')}}$</h4>
-                @endif
             </div>
             <div class="modal-body">
                 <form action="#" method="post">

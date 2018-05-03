@@ -2,9 +2,7 @@ $(document).ready(function () {
     $('.bet_submit').click(function (e) {
         e.preventDefault();
         var bet = $(this).attr("value");
-        //$('.increase').prop('checked', false);
         var lobby_id = $('meta[name="lobby_id"]').attr('content');
-        //alert(test);
         $('#exampleModal').modal('hide');
 
         $.ajax({
@@ -19,7 +17,7 @@ $(document).ready(function () {
             success: function (response) {
                 document.getElementById('bet').innerHTML = response.bet;
                 document.getElementById('max').innerHTML = response.coins;
-               document.getElementById('cash').innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>" + "D-coins:" + response.coins;
+               document.getElementById('cash').innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>" + " Wallet:" + response.coins;
                 document.getElementById('bank').innerHTML = "Current bank in this room:" + response.bank + "$";
             },
             error: function(xhr) {

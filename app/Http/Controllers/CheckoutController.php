@@ -8,11 +8,6 @@ use League\Flysystem\Exception;
 use Stripe\Charge;
 use Stripe\Stripe;
 use G2APay\G2APay;
-use baibaratsky\WebMoney;
-use baibaratsky\WebMoney\Api\X\X9\Request;
-use baibaratsky\WebMoney\Api\X\X9\Response;
-use baibaratsky\WebMoney\Request\Requester\CurlRequester;
-use baibaratsky\WebMoney\Signer;
 
 class CheckoutController extends Controller
 {

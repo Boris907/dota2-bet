@@ -21,14 +21,8 @@ namespace App\Http\Controllers;
              или 10 чуваков - тоже норм
              статус лобби - идёт игра/набор/конец
     */
-use App\Bet;
-use App\Room;
 
 use Illuminate\Support\Facades\DB;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Auth;
@@ -83,7 +77,7 @@ class LobbyController extends Controller
         $players = Lobby::getPlayers($game_id);
         $coins    = auth()->user()->coins;
         $lobby = cache($game_id);
-        $place = array_search($steam_id,array_column($players, 'uid'));
+        $place = array_search($steam_id, array_column($players, 'uid'));
 
         if ($place === 0 || $place) {
         //$players = Lobby::getPlayers($game_id);
@@ -168,12 +162,12 @@ class LobbyController extends Controller
         // dd($lobby[$game_id]['players']);
 
         DB::table('rooms')->insert(
-            ['id' =>key($lobby),
-            'rank' =>$lobby[$game_id]['rank'],
-            'bank' =>$lobby[$game_id]['bank'],
-            'min_bet' =>$lobby[$game_id]['min_bet'],
-            'max_bet' =>$lobby[$game_id]['max_bet'],
-            'players' =>$lobby[$game_id]['players'],
+            ['id' => key($lobby),
+            'rank' => $lobby[$game_id]['rank'],
+            'bank' => $lobby[$game_id]['bank'],
+            'min_bet' => $lobby[$game_id]['min_bet'],
+            'max_bet' => $lobby[$game_id]['max_bet'],
+            'players' => $lobby[$game_id]['players'],
         ]);
         
         $content = 'var id = [';

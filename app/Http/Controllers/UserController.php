@@ -8,7 +8,6 @@ use App\Stat;
 use App\Steam;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\User;
 use Auth;
 
@@ -28,7 +27,7 @@ class UserController extends Controller
 
         if (strlen($id) > 10){
             $user_info = User::where('player_id', $id)->first();
-        }else {
+        } else {
             $user_info = User::find($id);
         }
 
@@ -43,10 +42,12 @@ class UserController extends Controller
         $player_id = auth()->user()->player_id;
         $player_id32 = Steam::toSteamID($player_id);
 
+        Stat::getSteamTime();
+
         $steam_data = file_get_contents(
             'https://api.opendota.com/api/players/' . $player_id32
         );
-        $arr        = json_decode($steam_data, 1);
+        $arr = json_decode($steam_data, 1);
         if ($arr['solo_competitive_rank'] !== null) {
             request()->user()->update(
                 ['rate' => $arr['solo_competitive_rank']]
@@ -67,7 +68,7 @@ class UserController extends Controller
 
         if (strlen(request()->id) > 10){
             $user = User::where('player_id', request()->id)->first();
-        }else {
+        } else {
             $user = User::find(request()->id);
         }
 
