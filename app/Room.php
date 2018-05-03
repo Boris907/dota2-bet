@@ -44,18 +44,6 @@ class Room extends Model
         = ['id', 'rank', 'bank', 'min_bet', 'max_bet', 'players'];
 
     /*
-        Ищем открытые комнаты
-    */
-    static public function checkDir()
-    {
-        $files = array_diff(scandir(self::$dir), array('..', '.'));
-        $files = array_values($files);
-        $list  = preg_grep('/^[0-9]+_o/', $files);
-
-        return $list;
-    }
-
-    /*
         Создание игры
     */
     static public function lobbyPlayers()

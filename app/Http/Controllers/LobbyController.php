@@ -55,8 +55,8 @@ class LobbyController extends Controller
     public function set($game_id, $place_id)
     {
         $players = Lobby::getPlayers($game_id);
-        //$players = cache('123');
         $steam_id = auth()->user()->player_id;
+
         $place = array_search($steam_id,array_column($players, 'uid'));
         if ($place === 0 || $place) {
             return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
@@ -65,6 +65,15 @@ class LobbyController extends Controller
         $players[$place_id]['uid'] = $steam_id;
 
         $lobby = cache($game_id);
+        $lobby[$game_id]['players'] = json_encode($players);
+        
+        $coins    = auth()->user()->coins;
+        $lobby[$game_id]['bank'] += $lobby[$game_id]['min_bet'];
+        
+        $coins -= $lobby[$game_id]['min_bet'];
+        request()->user()->update(['coins' => $coins]);
+
+        $players[$place_id]['bet'] += $lobby[$game_id]['min_bet'];
         $lobby[$game_id]['players'] = json_encode($players);
         Cache::forever($game_id,$lobby);
 
@@ -159,7 +168,6 @@ class LobbyController extends Controller
     public function start($game_id)
     {
         $lobby = cache($game_id);
-        // dd($lobby[$game_id]['players']);
 
         DB::table('rooms')->insert(
             ['id' => key($lobby),
@@ -187,7 +195,10 @@ class LobbyController extends Controller
               $content .= '[\''.$value['uid'] . ',' . "'D'],";
         }
         $content .= '];module.expots.id = id;';
-        
+
+        $allRooms = cache($lobby[$game_id]['rank']);
+        $game = array_search($game_id, $allRooms);
+        //Cache::forget($game_id);
         return view('lobby.start', compact('game_id', 'radiant', 'dire','bank'));
 
        //return redirect()->action('RoomController@get',['game_id' => $game_id]);
