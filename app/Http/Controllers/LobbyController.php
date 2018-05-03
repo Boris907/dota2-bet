@@ -198,7 +198,9 @@ class LobbyController extends Controller
 
         $allRooms = cache($lobby[$game_id]['rank']);
         $game = array_search($game_id, $allRooms);
-        //Cache::forget($game_id);
+        unset($allRooms[$game]);
+        Cache::forever($lobby[$game_id]['rank'], $allRooms);
+        Cache::forget($game_id);
         return view('lobby.start', compact('game_id', 'radiant', 'dire','bank'));
 
        //return redirect()->action('RoomController@get',['game_id' => $game_id]);
