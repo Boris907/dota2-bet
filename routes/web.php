@@ -33,7 +33,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('/checkout/withdraw', 'CheckoutController@withdraw');
 
         Route::get('/stats', 'StatsController@index');
-        Route::get('/stats', 'StatsController@index');
         Route::get('/rooms', 'RoomController@index');
         Route::get('/rooms/list/{rank}', 'RoomController@all');
    // });

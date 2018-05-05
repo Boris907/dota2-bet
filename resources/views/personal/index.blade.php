@@ -35,7 +35,7 @@
                         <div class="col-md-8">
 
                             <!-- New Form -->
-                            <form action="{{ url('personal') }}" method="POST" class="form-horizontal">
+                            <form action="{{ url('profile') }}" method="POST" class="form-horizontal">
                                 {{ csrf_field() }}
                                 <div class="form-group col-md-8">
                                     <label for="service">Select service:</label>

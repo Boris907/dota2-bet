@@ -37,7 +37,7 @@ class CheckoutController extends Controller
         $quantity = 1; // Must be integer
         $id = 1; // Your items' identifier
         $price = 9.95; // Must be float
-        $url = 'http://gameproject.app/personal';
+        $url = 'http://gameproject.app/profile';
 
         $extra = '';
         $type = '';
