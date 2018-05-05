@@ -28,10 +28,12 @@ class RoomController extends Controller
     {   
         $players = $request->get('players');
         $rank = $request->get('rank');
+        $min_bet = $request->get('min_bet');
+        $max_bet = $request->get('max_bet');
         // dd($players,$rank);
         //Cache::forget('2018041024358');
         //dd(cache('2018041024358'));
-        $lobby = Room::create($players,$rank);
+        $lobby = Room::create($players,$rank, $min_bet, $max_bet);
       $game_id = strval(key($lobby));
 
         Cache::forever($game_id,$lobby);

@@ -81,27 +81,14 @@ class Room extends Model
             return $newbie[$game_id][$key];
         }*/
 
-    public static function create($value, $rank)
+    public static function create($value, $rank, $min_bet, $max_bet)
     {
         for ($i = 1; $i <= $value; $i++) {
             $players[$i] = ['uid' => 0, 'bet' => 0, 'mmr' => 0, 'rank' => 0];
         }
 
         $id = date("YmdGis");
-        switch ($rank) {
-            case 'newbie':
-                $min_bet = 2;
-                $max_bet = 10;
-                break;
-            case 'ordinary':
-                $min_bet = 4;
-                $max_bet = 20;
-                break;
-            case 'expert':
-                $min_bet = 10;
-                $max_bet = 50;
-                break;
-        }
+
         $data[$id] = [
             'rank'    => $rank,
             'bank'    => 0,
