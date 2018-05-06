@@ -51,7 +51,24 @@ class RoomController extends Controller
         } else {
             $lobbies = Cache::many($ids);
         }
-
+        foreach ($lobbies as $key => $lobby) {
+            $players = json_decode($lobby[$key]['players'],true);
+            $playersCount = 0;
+            foreach ($players as $value) {
+                if($value['uid'] != 0){
+                    $playersCount++;
+                }
+            }
+            $lobby[$key]['count'] = $playersCount;
+            //array_push($lobbies,$lobby);
+            $lobbies[$key] = $lobby;
+            # code...
+        }
+        array_multisort($lobbies);
+/*        foreach($lobbies as $room){
+        dd($room[key($room)]['min_bet']);
+        var_dump($room);
+        }*/
         return view('rooms.all', ['lobbies' => $lobbies]);
     }
 
