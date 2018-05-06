@@ -14,7 +14,7 @@
                     <div class="card-title pricing-card-title pull-right">
                         <small class="text-muted">Min bet / </small>$4</div></div>
                 <div class="panel-body">
-                  <a href="/rooms/list/newbie" class="btn btn-success">Enter</a>
+                  <a href="/rooms/list/newbie" class="btn btn-primary">Enter</a>
                 </div>
             </div>
         </div>
@@ -35,7 +35,7 @@
                 <div class="panel-heading">Expert <div class="card-title pricing-card-title pull-right">
                         <small class="text-muted">Min bet / </small>$25</div></div>
                 <div class="panel-body">
-                    <a href="/rooms/list/expert" class="btn btn-danger">Enter</a>
+                    <a href="/rooms/list/expert" class="btn btn-primary">Enter</a>
                 </div>
             </div>
         </div>

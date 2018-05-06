@@ -37,8 +37,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/rooms/list/{rank}', 'RoomController@all');
    // });
     Route::group(['middleware' => ['bet']], function () {
-        Route::get('/rooms/lobby/exit', 'LobbyController@exit');
-        Route::get('/rooms/lobby/leave', 'LobbyController@leave');
+        Route::get('/rooms/lobby/exit', 'LobbyController@leave');
+//        Route::get('/rooms/lobby/leave', 'LobbyController@leave');
         Route::get('/rooms/lobby/{game_id}', 'LobbyController@index');
     });
         Route::get('/rooms/lobby/{game_id}/place/{place_id}', 'LobbyController@set');

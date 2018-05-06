@@ -80,7 +80,7 @@ class LobbyController extends Controller
         return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
     }
 
-        public function bet($game_id,$bet)
+        public function bet($game_id, $bet)
     {
         $steam_id = auth()->user()->player_id;
         $players = Lobby::getPlayers($game_id);
@@ -101,9 +101,9 @@ class LobbyController extends Controller
         $bet = $players[$place+1]['bet'];
 
         $lobby[$game_id]['players'] = json_encode($players);
-        Cache::forever($game_id,$lobby);
+        Cache::forever($game_id, $lobby);
         return response()->json(["bet" => $bet, "coins" => $coins, "bank" => $bank]);
-    }else{
+    } else {
         //return redirect()->action('LobbyController@index', ['game_id' => $game_id])->withErrors(['msg', 'The Message']);
         return response()->json(['error' => 'Choose your team first'], 500); // Status code here
         //return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
@@ -111,7 +111,7 @@ class LobbyController extends Controller
         }
     }
 
-    public function exit()
+    public function leave()
     {
         $url_pr = url()->previous();
         $url_pr = parse_url($url_pr);
@@ -120,50 +120,54 @@ class LobbyController extends Controller
         if(isset($arr[2]) && $arr[2] == 'lobby'){
             $game_id = $arr[3];
             $players = Lobby::getPlayers($game_id); // 
+            $lobby = cache($game_id);
 
             $steam_id = auth()->user()->player_id;
+            $coins = auth()->user()->coins;
 
             $place = array_search($steam_id, array_column($players, 'uid'));
             if ($place == 0 || $place) {
+                $lobby[$game_id]['bank'] = $lobby[$game_id]['bank'] - ($players[$place+1]['bet'] - $lobby[$game_id]['min_bet']);
+                request()->user()->update(['coins' => $coins + ($players[$place+1]['bet'] - $lobby[$game_id]['min_bet'])]);
                 $players[$place+1]['uid'] = 0;
                 $players[$place+1]['bet'] = 0;
                 $players[$place+1]['mmr'] = 0;
                 $players[$place+1]['rank'] = 0;
             }
-            $lobby = cache($game_id);
-            $lobby[$game_id]['bank'] = 0;
+//            $lobby[$game_id]['bank'] = 0;
             $lobby[$game_id]['players'] = json_encode($players);
 
             Cache::forever($game_id,$lobby);
         }
         return redirect()->action('RoomController@index');
     }
-        public function leave()
-    {
-        $url_pr = url()->previous();
-        $url_pr = parse_url($url_pr);
-        $arr = explode('/', $url_pr['path']);
-        $game_id = $arr[3];
-        $players = Lobby::getPlayers($game_id); // 
 
-        $steam_id = auth()->user()->player_id;
-
-        $place = array_search($steam_id, array_column($players, 'uid'));
-        if ($place == 0 || $place) {
-            $players[$place+1]['uid'] = 0;
-            $players[$place+1]['bet'] = 0;
-            $players[$place+1]['mmr'] = 0;
-            $players[$place+1]['rank'] = 0;
-        }
-        
-        $lobby = cache($game_id);
-        $lobby[$game_id]['bank'] = 0;
-        $lobby[$game_id]['players'] = json_encode($players);
-
-        Cache::forever($game_id,$lobby);
-
-        return back();
-    }
+//    public function leave()
+//    {
+//        $url_pr = url()->previous();
+//        $url_pr = parse_url($url_pr);
+//        $arr = explode('/', $url_pr['path']);
+//        $game_id = $arr[3];
+//        $players = Lobby::getPlayers($game_id); //
+//        $lobby = cache($game_id);
+//        $steam_id = auth()->user()->player_id;
+////        $coins = auth()->user()->coins;
+//
+//        $place = array_search($steam_id, array_column($players, 'uid'));
+//
+//        if ($place == 0 || $place) {
+//            $players[$place+1]['uid'] = 0;
+//            $players[$place+1]['bet'] = 0;
+//            $players[$place+1]['mmr'] = 0;
+//            $players[$place+1]['rank'] = 0;
+//        }
+//
+//        $lobby[$game_id]['players'] = json_encode($players);
+//
+//        Cache::forever($game_id,$lobby);
+//
+//        return back();
+//    }
 
     public function start($game_id)
     {

@@ -34,7 +34,7 @@ class RoomController extends Controller
         //Cache::forget('2018041024358');
         //dd(cache('2018041024358'));
         $lobby = Room::create($players,$rank, $min_bet, $max_bet);
-      $game_id = strval(key($lobby));
+        $game_id = strval(key($lobby));
 
         Cache::forever($game_id,$lobby);
         return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
@@ -64,7 +64,7 @@ class RoomController extends Controller
             $lobbies[$key] = $lobby;
             # code...
         }
-        array_multisort($lobbies);
+       array_multisort($lobbies);
 /*        foreach($lobbies as $room){
         dd($room[key($room)]['min_bet']);
         var_dump($room);

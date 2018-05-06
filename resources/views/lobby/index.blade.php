@@ -15,8 +15,8 @@
                 </button>
                 <button id="exit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">Exit
                 </button>
-                <a href="leave" id="leave"
-                   class="btn btn-primary">Leave the team</a>
+                {{--<a href="leave" id="leave"--}}
+                   {{--class="btn btn-primary">Leave the team</a>--}}
             </div>
         </div>
     </div>
