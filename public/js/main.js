@@ -3,6 +3,7 @@ $(document).ready(function () {
         e.preventDefault();
         var bet = $(this).attr("value");
         var lobby_id = $('meta[name="lobby_id"]').attr('content');
+        var user_id = $('meta[name="user_id"]').attr('content');
         $('#exampleModal').modal('hide');
 
         $.ajax({
@@ -15,7 +16,7 @@ $(document).ready(function () {
                 bet: bet
             },
             success: function (response) {
-                document.getElementById('bet').innerHTML = response.bet;
+                document.getElementById('bet_'+user_id).innerHTML = response.bet;
                 document.getElementById('max').innerHTML = response.coins;
                document.getElementById('cash').innerHTML = "<span class=\"glyphicon glyphicon-plus\"></span>" + " Wallet:" + response.coins;
                 document.getElementById('bank').innerHTML = "Current bank in this room:" + response.bank + "$";
