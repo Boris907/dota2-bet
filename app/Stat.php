@@ -10,7 +10,6 @@ class Stat extends Model
 {
     protected $fillable = [
             'user_id',
-            'game_id',
             'total_games',
             'win_games',
             'lose_games',
@@ -38,5 +37,10 @@ class Stat extends Model
         DB::table('users')->where('player_id', $player_id)->update(
             ['steam_time' => $time]
         );
+    }
+
+    public static function updateStat($player_id)
+    {
+
     }
 }

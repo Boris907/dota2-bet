@@ -22,6 +22,7 @@ namespace App\Http\Controllers;
              статус лобби - идёт игра/набор/конец
     */
 
+use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
@@ -216,21 +217,21 @@ class LobbyController extends Controller
         $content .= "['$game_id']];module.exports.id = id;";
         // dd($content);
         Storage::append('players.js', $content);
-// dd($content);
+        // dd($content);
         $allRooms = cache($lobby[$game_id]['rank']);
         $game = array_search($game_id, $allRooms);
 
-        // unset($allRooms[$game]);
+         unset($allRooms[$game]);
 
-        // Cache::forever($lobby[$game_id]['rank'], $allRooms);
-        // Cache::forget($game_id);
+         Cache::forever($lobby[$game_id]['rank'], $allRooms);
+         Cache::forget($game_id);
 
-/*$bot_path = "cd "
+        /*$bot_path = "cd "
            . "js/node-dota2/examples"
            // . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
            . "&& node start.js >> /home/vagrant/dota2roulette/storage/app/public/log/dota2.log &";
-      // $bot_path = "ps -ef | grep node";
-// dd($bot_path);           
+        // $bot_path = "ps -ef | grep node";
+        // dd($bot_path);
        exec($bot_path, $out, $err);*/
 
         return view('lobby.start', compact('game_id', 'radiant', 'dire','bank'));
@@ -238,10 +239,40 @@ class LobbyController extends Controller
 
     public function res($game_id)
     {
-        DB::table('rooms')
-            ->where('id', $game_id)
-            ->update(['winners' => 3]);
-         
+        DB::table('rooms')->where('id', $game_id)->update(['winners' => 3]);
+
+        $room = Room::find($game_id);
+        $winners = $room->winners;
+        $bank = $room->bank;
+        $players = json_decode($room->players, true);
+
+        if ($winners == 3) {
+           for ($i=1; $i < 6; $i++) {
+               DB::table('users')
+                   ->where('player_id', $players[$i]['uid'])
+                   ->update([
+                   'coins'
+                   => (request()->user()->where('player_id', $players[$i]['uid'])->value('coins') + $bank / 5)]);
+           }
+        } elseif ($winners == 2) {
+            for ($i=6; $i < 11; $i++) {
+                DB::table('users')
+                    ->where('player_id', $players[$i]['uid'])
+                    ->update([
+                    'coins'
+                    => (request()->user()->where('player_id', $players[$i]['uid'])->value('coins') + $bank / 5)]);
+            }
+        } elseif ($winners == 1) {
+            for ($i=1; $i < 6; $i++) {
+                DB::table('users')
+                    ->where('player_id', $players[$i]['uid'])
+                    ->update([
+                    'coins'
+                    => (request()->user()->where('player_id', $players[$i]['uid'])->value('coins') + $bank / count($players))]);
+            }
+        }
+
+        dd($players);
         dd($game_id);
         $lines = file('/home/vagrant/dota2roulette/public/js/node-dota2/examples/'.$game_id.'end');
         //$fs = fopen("/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595586138574", 'r+');

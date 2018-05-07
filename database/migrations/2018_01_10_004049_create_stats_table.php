@@ -15,16 +15,14 @@ class CreateStatsTable extends Migration
     {
         Schema::create('stats', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
-            $table->integer('game_id')->unsigned();
             $table->integer('total_games');
             $table->integer('win_games');
             $table->integer('lose_games');
             $table->double('bet_lose');
             $table->double('bet_win');
 
-            $table->primary(['user_id', 'game_id']);
+            $table->primary(['user_id']);
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('game_id')->references('id')->on('games');
         });
     }
 
