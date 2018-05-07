@@ -27,6 +27,6 @@ class User extends Authenticatable {
 
 	public function stats()
     {
-        return $this->belongsTo(Stat::class);
+        return $this->belongsTo('App\Stat', 'user_id');
     }
 }

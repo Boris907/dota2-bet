@@ -17,9 +17,9 @@ class Stat extends Model
             'bet_win'
         ];
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo('User', 'user_id');
     }
 
     public static function getSteamTime()

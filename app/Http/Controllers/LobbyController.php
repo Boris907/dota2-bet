@@ -22,6 +22,7 @@ namespace App\Http\Controllers;
              статус лобби - идёт игра/набор/конец
     */
 
+use App\Stat;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
