@@ -31,7 +31,7 @@ class RoomController extends Controller
         //Cache::forget('2018041024358');
         //dd(cache('2018041024358'));
         $lobby = Room::create($players,$rank, $min_bet, $max_bet);
-        $game_id = strval(key($lobby));
+      $game_id = strval(key($lobby));
 
         Cache::forever($game_id,$lobby);
         return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
@@ -39,33 +39,35 @@ class RoomController extends Controller
 
     public function all($rank)
     {
-        //$allRooms = Room::checkDir();
-        // Room::set('20180408195325','min_bet', 4);
-        //$lobbies = Room::lobbyList($rank);
+       //Cache::flush();
+
         $ids = cache($rank);
         if ($ids == null){
             $lobbies = array();
         } else {
             $lobbies = Cache::many($ids);
-        }
-        foreach ($lobbies as $key => $lobby) {
-            $players = json_decode($lobby[$key]['players'],true);
-            $playersCount = 0;
-            foreach ($players as $value) {
+            foreach ($lobbies as $key => $lobby) {
+              $players = json_decode($lobby[$key]['players'],true);
+              $playersCount = 0;
+              foreach ($players as $value) {
                 if($value['uid'] != 0){
-                    $playersCount++;
+                  $playersCount++;
                 }
             }
             $lobby[$key]['count'] = $playersCount;
-            //array_push($lobbies,$lobby);
+
             $lobbies[$key] = $lobby;
-            # code...
-        }
-       array_multisort($lobbies);
-/*        foreach($lobbies as $room){
-        dd($room[key($room)]['min_bet']);
-        var_dump($room);
-        }*/
+
+            }
+          }
+            usort($lobbies, function ($a, $b){
+            if ($a[key($a)]['count'] == $b[key($b)]['count']) {
+              return 0;
+            }
+            return ($a[key($a)]['count'] > $b[key($b)]['count']) ? -1 : 1;
+            });
+       // dd($lobbies);
+
         return view('rooms.all', ['lobbies' => $lobbies]);
     }
 
