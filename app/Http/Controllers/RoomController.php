@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Lobby;
 use App\Room;
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\Controller;
 use Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 class RoomController extends Controller

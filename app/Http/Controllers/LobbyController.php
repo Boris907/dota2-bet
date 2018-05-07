@@ -39,17 +39,14 @@ class LobbyController extends Controller
     public function index($game_id)
     {
         $lobby = cache($game_id);
-        //dd($lobby);
         $players =  Lobby::getPlayers($game_id);
         $players = array_chunk($players, count($players)/2, true);
 
         $radiant = $players[0];
         $dire = $players[1];
         $lobby = cache($game_id);
-        //dd($lobby);
         $bank = $lobby[$game_id]['bank'];
-        //$bank = $lobby[0]->bank;
-        return view('lobby.index', compact('game_id', 'radiant', 'dire','bank'));
+        return view('lobby.index', compact('game_id', 'radiant', 'dire', 'bank'));
     }
 
     public function set($game_id, $place_id)
@@ -89,8 +86,6 @@ class LobbyController extends Controller
         $place = array_search($steam_id, array_column($players, 'uid'));
 
         if ($place === 0 || $place) {
-        //$players = Lobby::getPlayers($game_id);
-        //$players[$place+1]['bet'] = 0;
         $bank = $lobby[$game_id]['bank'] + $bet;
         $lobby[$game_id]['bank'] = $bank;
         
@@ -104,10 +99,7 @@ class LobbyController extends Controller
         Cache::forever($game_id, $lobby);
         return response()->json(["bet" => $bet, "coins" => $coins, "bank" => $bank]);
     } else {
-        //return redirect()->action('LobbyController@index', ['game_id' => $game_id])->withErrors(['msg', 'The Message']);
         return response()->json(['error' => 'Choose your team first'], 500); // Status code here
-        //return redirect()->action('LobbyController@index', ['game_id' => $game_id]);
-        //return redirect()->action('LobbyController@index')->withErrors(['msg', 'The Message']);
         }
     }
 
@@ -116,7 +108,7 @@ class LobbyController extends Controller
         $url_pr = url()->previous();
         $url_pr = parse_url($url_pr);
         $arr = explode('/', $url_pr['path']);
-        // dd($arr);
+
         if(isset($arr[2]) && $arr[2] == 'lobby'){
             $game_id = $arr[3];
             $players = Lobby::getPlayers($game_id); // 
@@ -134,7 +126,6 @@ class LobbyController extends Controller
                 $players[$place+1]['mmr'] = 0;
                 $players[$place+1]['rank'] = 0;
             }
-//            $lobby[$game_id]['bank'] = 0;
             $lobby[$game_id]['players'] = json_encode($players);
 
             Cache::forever($game_id,$lobby);
@@ -169,6 +160,22 @@ class LobbyController extends Controller
 //        return back();
 //    }
 
+    public function setId($game_id)
+    {
+//        Cache::forget('status_'.$game_id);
+
+        $lobby = cache('status_'.$game_id);
+        $lobby[] += request()->place_id;
+        $players = array($game_id => $lobby);
+        if (count($players[$game_id]) < 10) {
+            Cache::forever('status_' . $game_id, $lobby);
+
+            return back();
+        } elseif (count($players[$game_id]) == 10) {
+            return redirect()->action('LobbyController@start', ['game_id' => $game_id]);
+        }
+    }
+
     public function start($game_id)
     {
         $lobby = cache($game_id);
@@ -190,24 +197,23 @@ class LobbyController extends Controller
 
         $radiant = $players[0];
         foreach ($radiant as $key => $value) {
-            //$content .= "['$value['uid']'".","."'R'],";
             $content .= '[\''.$value['uid'] . ',' . "'R'],";
         }
         $dire = $players[1];
         foreach ($dire as $key => $value) {
-/*            $content .= $value['uid'];*/
               $content .= '[\''.$value['uid'] . ',' . "'D'],";
         }
         $content .= '];module.expots.id = id;';
 
         $allRooms = cache($lobby[$game_id]['rank']);
         $game = array_search($game_id, $allRooms);
+
         unset($allRooms[$game]);
+
         Cache::forever($lobby[$game_id]['rank'], $allRooms);
         Cache::forget($game_id);
-        return view('lobby.start', compact('game_id', 'radiant', 'dire','bank'));
 
-       //return redirect()->action('RoomController@get',['game_id' => $game_id]);
+        return view('lobby.start', compact('game_id', 'radiant', 'dire','bank'));
     }
 
     public function res()
