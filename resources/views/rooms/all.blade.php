@@ -15,7 +15,7 @@
                 <ul>
                 @foreach($lobbies as $room)
                 <li>Game №{{key($room)}} || Min Bet {{$room[key($room)]['min_bet']}}||
-                        Max Bet {{$room[key($room)]['max_bet']}} || Bank {{$room[key($room)]['bank']}}
+                        Max Bet {{$room[key($room)]['max_bet']}} || Bank {{$room[key($room)]['bank']}} || Players {{$room[key($room)]['count']}}
                          <a href="../lobby/{{key($room)}}">Enter</a></li>
                 @endforeach
                 </ul>

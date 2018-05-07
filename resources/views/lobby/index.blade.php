@@ -40,7 +40,7 @@
                                 <a href="/rooms/lobby/{{$game_id}}/place/{{$place_id}}/set" class="btn btn-success place" id="button_{{ $place_id }}">Ready</a>
                             @endif
                             <a href="/profile/{{ $playerID['uid'] }}">{{ $playerID['uid'] }}</a> |
-                            <span id="bet">{{ $playerID['bet'] }}</span>$
+                            <span id="bet_{{$playerID['uid']}}">{{ $playerID['bet'] }}</span>$
                         </li>
                     @endif
                 @endforeach
@@ -61,7 +61,7 @@
                                 <a href="/rooms/lobby/{{$game_id}}/place/{{$place_id}}/set" class="btn btn-success place" id="button_{{ $place_id }}">Ready</a>
                             @endif
                             <a href="/profile/{{$playerID['uid']}}">{{$playerID['uid']}}</a> |
-                            <span id="bet">{{$playerID['bet']}}</span>$
+                            <span id="bet_{{$playerID['uid']}}">{{$playerID['bet']}}</span>$
                         </li>
                     @endif
                 @endforeach
@@ -86,6 +86,7 @@
                     <form action="#" method="post">
                         <meta name="csrf-token" content="{{ csrf_token() }}">
                         <meta name="lobby_id" content="{{$game_id}}">
+                        <meta name="user_id" content="{{auth()->user()->player_id}}">
                         <div class="input-group col-md-12">
                             <label style="padding:12px ">Increase bet for: </label>
                             <button type="button" style="margin:5px" class="btn btn-primary bet_submit" value="1">1$

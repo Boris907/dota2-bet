@@ -162,16 +162,18 @@ class LobbyController extends Controller
 
     public function setId($game_id)
     {
-//        Cache::forget('status_'.$game_id);
+       // Cache::forget('status_'.$game_id);
 
+// Cache::forget('status_'.$game_id);
         $lobby = cache('status_'.$game_id);
         $lobby[] += request()->place_id;
+       // dd($lobby);
         $players = array($game_id => $lobby);
         if (count($players[$game_id]) < 10) {
             Cache::forever('status_' . $game_id, $lobby);
 
             return back();
-        } elseif (count($players[$game_id]) == 10) {
+        } elseif (count($players[$game_id]) == 2) {
             return redirect()->action('LobbyController@start', ['game_id' => $game_id]);
         }
     }
