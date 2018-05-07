@@ -167,12 +167,13 @@ class LobbyController extends Controller
         $lobby = cache('status_'.$game_id);
         $lobby[] += request()->place_id;
         $players = array($game_id => $lobby);
-        if (count($players[$game_id]) < 10) {
+        if (count($players[$game_id]) >= 2) {
+            Cache::forget('status_'.$game_id);
+            return redirect()->action('LobbyController@start', ['game_id' => $game_id]);
+        } else {
             Cache::forever('status_' . $game_id, $lobby);
 
             return back();
-        } elseif (count($players[$game_id]) == 10) {
-            return redirect()->action('LobbyController@start', ['game_id' => $game_id]);
         }
     }
 

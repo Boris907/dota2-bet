@@ -68,7 +68,7 @@
             </ul>
         </div>
 
-        <a href="/rooms/lobby/{{$game_id}}/start" class="btn btn-success not-active" id="start-game">Start game</a>
+        {{--<a href="/rooms/lobby/{{$game_id}}/start" class="btn btn-success not-active" id="start-game">Start game</a>--}}
     </div>
     <div class="go"></div>
     <!-- Modal -->
