@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use App\Lobby;
+use App\Room;
 
 class LobbyController extends Controller
 {
@@ -167,11 +168,13 @@ class LobbyController extends Controller
         $lobby = cache('status_'.$game_id);
         $lobby[] += request()->place_id;
         $players = array($game_id => $lobby);
-        if (count($players[$game_id]) >= 2) {
+        if (count($players[$game_id]) >= 1) {
+            // dd(cache('status_'.$game_id));
             Cache::forget('status_'.$game_id);
             return redirect()->action('LobbyController@start', ['game_id' => $game_id]);
         } else {
             Cache::forever('status_' . $game_id, $lobby);
+            // dd(cache('status_'.$game_id));
 
             return back();
         }
@@ -181,6 +184,12 @@ class LobbyController extends Controller
     {
         $lobby = cache($game_id);
 
+        /*$room = DB::table('rooms')
+                     ->select('id')
+                     ->where('id', 5)
+                     ->get();*/
+        $room = Room::find($game_id);             
+        if(!isset($room)){        
         DB::table('rooms')->insert(
             ['id' => key($lobby),
             'rank' => $lobby[$game_id]['rank'],
@@ -189,7 +198,7 @@ class LobbyController extends Controller
             'max_bet' => $lobby[$game_id]['max_bet'],
             'players' => $lobby[$game_id]['players'],
         ]);
-        
+        }
         $content = 'var id = [';
         $players = Lobby::getPlayers($game_id); // 
         $players = array_chunk($players, count($players)/2, true);
@@ -198,30 +207,43 @@ class LobbyController extends Controller
 
         $radiant = $players[0];
         foreach ($radiant as $key => $value) {
-            $content .= '[\''.$value['uid'] . ',' . "'R'],";
+            $content .= '[\''.$value['uid'] . '\',' . "'R'],";
         }
         $dire = $players[1];
         foreach ($dire as $key => $value) {
-              $content .= '[\''.$value['uid'] . ',' . "'D'],";
+              $content .= '[\''.$value['uid'] . '\',' . "'D'],";
         }
-        $content .= '];module.expots.id = id;';
-
+        $content .= "['$game_id']];module.exports.id = id;";
+        // dd($content);
+        Storage::append('players.js', $content);
+// dd($content);
         $allRooms = cache($lobby[$game_id]['rank']);
         $game = array_search($game_id, $allRooms);
 
-        unset($allRooms[$game]);
+        // unset($allRooms[$game]);
 
-        Cache::forever($lobby[$game_id]['rank'], $allRooms);
-        Cache::forget($game_id);
+        // Cache::forever($lobby[$game_id]['rank'], $allRooms);
+        // Cache::forget($game_id);
+
+/*$bot_path = "cd "
+           . "js/node-dota2/examples"
+           // . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
+           . "&& node start.js >> /home/vagrant/dota2roulette/storage/app/public/log/dota2.log &";
+      // $bot_path = "ps -ef | grep node";
+// dd($bot_path);           
+       exec($bot_path, $out, $err);*/
 
         return view('lobby.start', compact('game_id', 'radiant', 'dire','bank'));
     }
 
-    public function res()
+    public function res($game_id)
     {
-//        $lines = file('/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595590304912');
-        $lines = file('/home/vagrant/code/auth/public/js/node-dota2/examples/match1.end');
+        DB::table('rooms')
+            ->where('id', $game_id)
+            ->update(['winners' => 3]);
+         
+        dd($game_id);
+        $lines = file('/home/vagrant/dota2roulette/public/js/node-dota2/examples/'.$game_id.'end');
         //$fs = fopen("/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595586138574", 'r+');
-        dd($lines);
     }
 }
