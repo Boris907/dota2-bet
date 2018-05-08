@@ -9,17 +9,19 @@ use Illuminate\Database\Eloquent\Model;
 class Stat extends Model
 {
     protected $fillable = [
-            'user_id',
+    'user_id',
             'total_games',
             'win_games',
             'lose_games',
             'bet_lose',
             'bet_win'
         ];
+        protected $primaryKey = 'user_id';
+        public $timestamps = false;
 
     public function users()
     {
-        return $this->belongsTo('User', 'user_id');
+        return $this->belongsTo('App\User', 'player_id');
     }
 
     public static function getSteamTime()

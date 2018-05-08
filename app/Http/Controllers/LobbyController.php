@@ -245,9 +245,25 @@ class LobbyController extends Controller
         $room = Room::find($game_id);
         $winners = $room->winners;
         $bank = $room->bank;
+        // dd($bank);
         $players = json_decode($room->players, true);
+        $players = array_chunk($players, count($players)/2, true);
 
-        if ($winners == 3) {
+        $radiant = $players[0];
+        $dire = $players[1];
+       // dd($radiant,$dire);
+
+        if($winners == 3){
+            foreach ($radiant as $key => $player) {
+                if($player['uid'] != 0){
+                    $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
+                    DB::table('stats')->where('user_id', $player['uid'])->
+                    update(['total_games' => DB::raw('total_games + 1'), 'win_games' => DB::raw('win_games + 1')]);
+                }
+                dd($userStat);
+            }
+        }
+/*        if ($winners == 3) {
            for ($i=1; $i < 6; $i++) {
                DB::table('users')
                    ->where('player_id', $players[$i]['uid'])
@@ -271,11 +287,9 @@ class LobbyController extends Controller
                     'coins'
                     => (request()->user()->where('player_id', $players[$i]['uid'])->value('coins') + $bank / count($players))]);
             }
-        }
+        }*/
 
-        dd($players);
-        dd($game_id);
-        $lines = file('/home/vagrant/dota2roulette/public/js/node-dota2/examples/'.$game_id.'end');
+        //$lines = file('/home/vagrant/dota2roulette/public/js/node-dota2/examples/'.$game_id.'end');
         //$fs = fopen("/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595586138574", 'r+');
     }
 }
