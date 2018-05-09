@@ -248,16 +248,23 @@ class LobbyController extends Controller
 
     public function res($game_id)
     {
+        /*
+            Полуучем результат игры из файла
+            от бота по ид комнаты.
+            Записываем результат в БД.
+        */
         $result = Lobby::checkDir($game_id);
         $str = file_get_contents($result);
         $arr = explode(' ', $str);
-        //dd($arr[2]);
+        //dd($arr);
         DB::table('rooms')->where('id', $game_id)->update(['winners' => $arr[2]]);
-
+        /*
+            Получаем пользователей из БД
+            для расспределения выиграша
+        */
         $room = Room::find($game_id);
         $winners = $room->winners;
         $bank = $room->bank;
-        // dd($bank);
         $players = json_decode($room->players, true);
         $players = array_chunk($players, count($players)/2, true);
 
@@ -271,6 +278,8 @@ class LobbyController extends Controller
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                     DB::table('stats')->where('user_id', $player['uid'])->
                     update(['total_games' => DB::raw('total_games + 1'), 'win_games' => DB::raw('win_games + 1')]);
+                    DB::table('users')->where('player_id', $player['uid'])->
+                    update(['coins'=> (request()->user()->where('player_id', $player['uid'])->value('coins') + $bank / 5)]);
                 }
             }
             foreach ($dire as $key => $player) {
@@ -286,7 +295,7 @@ class LobbyController extends Controller
             foreach ($radiant as $key => $player) {
                 if($player['uid'] != 0){
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
-                    DB::table('stats')->where('user_id', $player['uid'])->
+                DB::table('stats')->where('user_id', $player['uid'])->
                     update(['total_games' => DB::raw('total_games + 1'), 'lose_games' => DB::raw('lose_games + 1')]);
                 }
             }
@@ -295,6 +304,8 @@ class LobbyController extends Controller
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                     DB::table('stats')->where('user_id', $player['uid'])->
                     update(['total_games' => DB::raw('total_games + 1'), 'win_games' => DB::raw('win_games + 1')]);
+                    DB::table('users')->where('player_id', $player['uid'])->
+                    update(['coins'=> (request()->user()->where('player_id', $player['uid'])->value('coins') + $bank / 5)]);
                 }
             }
         }
