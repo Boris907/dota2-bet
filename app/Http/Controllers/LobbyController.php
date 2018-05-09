@@ -42,9 +42,17 @@ class LobbyController extends Controller
     public function index($game_id)
     {
         $lobby = cache($game_id);
+        
         $players =  Lobby::getPlayers($game_id);
         $players = array_chunk($players, count($players)/2, true);
-
+        // $users = User::all('player_id')->toArray();
+        
+        // for ($i=1; $i < 11; $i++) { 
+        //     $players[$i]['uid'] = $users[$i-1]['player_id'];
+        // }
+        // $lobby[$game_id]['players'] = json_encode($players);
+        // Cache::forever($game_id,$lobby[$game_id]);
+        // dd(cache($game_id));
         $radiant = $players[0];
         $dire = $players[1];
         $lobby = cache($game_id);
@@ -260,15 +268,14 @@ class LobbyController extends Controller
                     DB::table('stats')->where('user_id', $player['uid'])->
                     update(['total_games' => DB::raw('total_games + 1'), 'win_games' => DB::raw('win_games + 1')]);
                 }
-                dd($userStat);
             }
             foreach ($dire as $key => $player) {
                 if($player['uid'] != 0){
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                     DB::table('stats')->where('user_id', $player['uid'])->
-                    update(['total_games' => DB::raw('total_games - 1'), 'win_games' => DB::raw('win_games - 1')]);
+                    update(['total_games' => DB::raw('total_games + 1'), 'lose_games' => DB::raw('lose_games + 1')]);
                 }
-                dd($userStat);
+
             }
         }
         if($winners == 3){
@@ -276,9 +283,8 @@ class LobbyController extends Controller
                 if($player['uid'] != 0){
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                     DB::table('stats')->where('user_id', $player['uid'])->
-                    update(['total_games' => DB::raw('total_games - 1'), 'win_games' => DB::raw('win_games - 1')]);
+                    update(['total_games' => DB::raw('total_games + 1'), 'lose_games' => DB::raw('lose_games + 1')]);
                 }
-                dd($userStat);
             }
             foreach ($dire as $key => $player) {
                 if($player['uid'] != 0){
@@ -286,9 +292,9 @@ class LobbyController extends Controller
                     DB::table('stats')->where('user_id', $player['uid'])->
                     update(['total_games' => DB::raw('total_games + 1'), 'win_games' => DB::raw('win_games + 1')]);
                 }
-                dd($userStat);
             }
         }
+        dd();
 /*        if ($winners == 3) {
            for ($i=1; $i < 6; $i++) {
                DB::table('users')

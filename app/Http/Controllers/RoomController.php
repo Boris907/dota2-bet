@@ -39,7 +39,7 @@ class RoomController extends Controller
 
     public function all($rank)
     {
-       //Cache::flush();
+       // Cache::flush();
 
         $ids = cache($rank);
         if ($ids == null){
