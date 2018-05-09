@@ -248,7 +248,11 @@ class LobbyController extends Controller
 
     public function res($game_id)
     {
-        DB::table('rooms')->where('id', $game_id)->update(['winners' => 3]);
+        $result = Lobby::checkDir($game_id);
+        $str = file_get_contents($result);
+        $arr = explode(' ', $str);
+        //dd($arr[2]);
+        DB::table('rooms')->where('id', $game_id)->update(['winners' => $arr[2]]);
 
         $room = Room::find($game_id);
         $winners = $room->winners;

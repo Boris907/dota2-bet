@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 class Lobby
 {
     // объявление свойства
-    public static $dir = '../storage/app/public/';
+    public static $dir = '../public/js/node-dota2/examples/';
     public static $fullPath;
 
     static public function getPlayers($game_id)
@@ -53,16 +53,14 @@ class Lobby
         return $lobbies;
     }
 
-  static public function checkDir()
+  static public function checkDir($game_id)
     {
         $files = scandir(self::$dir);
         foreach ($files as $file) {
-            $check = preg_match('/^game_[0-9]+.mo/', $file);
+            $check = preg_match("/$game_id.end/", $file);
             if ($check == 1) {
                 $fileName       = $file;
-                self::$fullPath = self::$dir . $fileName;
-
-                return $fileName;
+                return self::$dir.$fileName;
             }
         }
     }
