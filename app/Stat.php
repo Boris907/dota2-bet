@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Stat extends Model
 {
     protected $fillable = [
-    'user_id',
+            'user_id',
             'total_games',
             'win_games',
             'lose_games',
@@ -31,18 +31,12 @@ class Stat extends Model
         $steam_time_request = file_get_contents(
             'https://steamcommunity.com/profiles/' . $player_id
         );
-
         $document = phpQuery::newDocument($steam_time_request);
         $test     = $document->find(".game_name:contains('Dota 2')")->parent();
         $time     = pq($test)->find('.game_info_details')->text();
 
         DB::table('users')->where('player_id', $player_id)->update(
-            ['steam_time' => $time]
+            ['steam_time' => trim($time)]
         );
-    }
-
-    public static function updateStat($player_id)
-    {
-
     }
 }

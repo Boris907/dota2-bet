@@ -16,7 +16,7 @@
                         @if(!empty($user_info->rate))
                             <br>Your average MMR in Dota2: {{$user_info->rate}}
                         @endif
-                        @if(!empty($user_info->rate))
+                        @if(!empty($user_info->steam_time))
                             <br>Current time in the Dota2: {{$user_info->steam_time}} hours
                         @endif
                         <br>Yout current morality on dota2-roulette: {{$user_info->morality}}
