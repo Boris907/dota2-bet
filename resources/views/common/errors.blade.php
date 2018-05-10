@@ -6,9 +6,7 @@
         <br><br>
 
         <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
+        <li>{{ $errors }}</li>
         </ul>
     </div>
 @endif

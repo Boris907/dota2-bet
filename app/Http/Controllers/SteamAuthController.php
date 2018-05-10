@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Invisnik\LaravelSteamAuth\SteamAuth;
 use App\User;
 use Auth;
+use PHPUnit\Framework\Exception;
 
 class SteamAuthController extends Controller
 {
@@ -52,17 +53,14 @@ class SteamAuthController extends Controller
     {
         if ($this->steam->validate()) {
             $info = $this->steam->getUserInfo();
-
-            if ( ! is_null($info)) {
-                 $request->user()->update([
-            'player_id' => $info->steamID64,
-            ]
-            );
-
-                return redirect($this->redirectURL); // redirect to site
+            try {
+                $request->user()->update(['player_id' => $info->steamID64]);
+                } catch (\Exception $e) {
+                return redirect($this->redirectURL)->with('errors', 'User with this player_id already registered');
             }
-        }
 
+            return redirect($this->redirectURL); // redirect to site
+        }
         return $this->redirectToSteam();
     }
 //
