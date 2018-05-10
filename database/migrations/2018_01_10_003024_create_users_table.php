@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('player_id', 100)->default(0);
+            $table->string('player_id', 100)->unique()->nullable();
             $table->double('coins')->default(0);
             $table->string('rate')->default(0);
             $table->string('steam_time')->default(0);

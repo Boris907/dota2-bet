@@ -294,33 +294,6 @@ class LobbyController extends Controller
                 }
             }
         }
-        dd();
-/*        if ($winners == 3) {
-           for ($i=1; $i < 6; $i++) {
-               DB::table('users')
-                   ->where('player_id', $players[$i]['uid'])
-                   ->update([
-                   'coins'
-                   => (request()->user()->where('player_id', $players[$i]['uid'])->value('coins') + $bank / 5)]);
-           }
-        } elseif ($winners == 2) {
-            for ($i=6; $i < 11; $i++) {
-                DB::table('users')
-                    ->where('player_id', $players[$i]['uid'])
-                    ->update([
-                    'coins'
-                    => (request()->user()->where('player_id', $players[$i]['uid'])->value('coins') + $bank / 5)]);
-            }
-        } elseif ($winners == 1) {
-            for ($i=1; $i < 6; $i++) {
-                DB::table('users')
-                    ->where('player_id', $players[$i]['uid'])
-                    ->update([
-                    'coins'
-                    => (request()->user()->where('player_id', $players[$i]['uid'])->value('coins') + $bank / count($players))]);
-            }
-        }*/
-
         //$lines = file('/home/vagrant/dota2roulette/public/js/node-dota2/examples/'.$game_id.'end');
         //$fs = fopen("/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595586138574", 'r+');
     }
