@@ -15,6 +15,8 @@
                 </button>
                 <button id="exit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">Exit
                 </button>
+                <a href="/rooms/lobby/{{$game_id}}/all" style="margin:5px" class="btn btn-primary">Fill lobby
+                </a>
             </div>
         </div>
     </div>
@@ -118,7 +120,7 @@
                 <div class="modal-body">
                     <div class="input-group col-md-12">
                         <label style="padding:12px ">Leave?</label>
-                        <a href="{{ url("/rooms/lobby/exit") }}" style="margin:5px" class="btn btn-primary">Y
+                        <a href="/rooms/lobby/exit" style="margin:5px" class="btn btn-primary">Y
                         </a>
                         <button type="submit" style="margin:5px" class="btn btn-primary exit" value="no">N
                         </button>
