@@ -37,23 +37,7 @@ class Lobby
         return $players;
     }
 
-    static public function getLobby($game_id)
-    {
-        $lobbies = cache('newbie');
-        $lobby = $lobbies[$game_id];
-
-        return $lobby;
-    }
-
-  static public function lobbyBody()
-    {
-        for ($i = 1; $i <= 10; $i++) {
-            $lobbies[$i] = ['type' => 0, 'bank' => 0, 'min_bet' => 0, 'max_bet' => 0, 'total' => 0];
-        }
-        return $lobbies;
-    }
-
-  static public function checkDir($game_id)
+    static public function checkDir($game_id)
     {
         $files = scandir(self::$dir);
         foreach ($files as $file) {
@@ -64,35 +48,5 @@ class Lobby
             }
         }
     }
-
-    /*
-        Генерируем индекс для названия файла
-    */
-    static public function newFile()
-    {
-        $today = date("Ymdgia");
-        $gameName = "game_".$today;
-        $fileName = $gameName. 'o.txt';
-
-        return "/public/".$fileName;
-    }
-
-    static public function places()
-    {
-        if (self::checkDir() != null) {
-            $str = file_get_contents(self::$fullPath);
-            $str = str_replace("\n", "", $str);
-            $arr = explode(' ', $str);
-            array_pop($arr);
-            for ($i = 0; $i < count($arr); $i += 2) {
-                $playersID[$arr[$i + 1]] = $arr[$i];
-            }
-
-            return $playersID;
-        } else {
-            ($arr = 0);
-        }
-    }
-
 }
 	

@@ -55,6 +55,11 @@ return [
             'visibility' => 'public',
         ],
 
+        'bot' => [
+            'driver' => 'local',
+            'root' => 'js/node-dota2/examples',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_KEY'),

@@ -144,6 +144,20 @@ class LobbyController extends Controller
         return redirect()->action('RoomController@index');
     }
 
+    public function all($game_id){
+        $lobby = cache($game_id);
+        $users = User::all('player_id')->toArray();
+        $players = Lobby::getPlayers($game_id);
+        for ($i=1; $i < 11; $i++) { 
+            $players[$i]['uid'] = $users[$i-1]['player_id'];
+            $players[$i]['bet'] = 2;
+        }
+        $lobby[$game_id]['players'] = json_encode($players);
+        $lobby[$game_id]['bank'] = 20;
+        Cache::forever($game_id,$lobby);
+        return back();
+        
+    }
 //    public function leave()
 //    {
 //        $url_pr = url()->previous();
@@ -225,8 +239,8 @@ class LobbyController extends Controller
         }
         $content .= "['$game_id']];module.exports.id = id;";
         // dd($content);
-        Storage::append('players.js', $content);
-        // dd($content);
+        Storage::disk('bot')->put('players.js', $content);
+        //dd($content);
         $allRooms = cache($lobby[$game_id]['rank']);
         $game = array_search($game_id, $allRooms);
 
@@ -248,6 +262,7 @@ class LobbyController extends Controller
 
     public function res($game_id)
     {
+        
         /*
             Полуучем результат игры из файла
             от бота по ид комнаты.
@@ -258,6 +273,8 @@ class LobbyController extends Controller
         $arr = explode(' ', $str);
         //dd($arr);
         DB::table('rooms')->where('id', $game_id)->update(['winners' => $arr[2]]);
+        //сохраняем отдельно файлик с ид пользователей
+        Storage::disk('bot')->move('players.js', 'game/'.$game_id.'players.js');
         /*
             Получаем пользователей из БД
             для расспределения выиграша
@@ -265,6 +282,7 @@ class LobbyController extends Controller
         $room = Room::find($game_id);
         $winners = $room->winners;
         $bank = $room->bank;
+        $userCash = $bank/5;
         $players = json_decode($room->players, true);
         $players = array_chunk($players, count($players)/2, true);
 
@@ -277,16 +295,18 @@ class LobbyController extends Controller
                 if($player['uid'] != 0){
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                     DB::table('stats')->where('user_id', $player['uid'])->
-                    update(['total_games' => DB::raw('total_games + 1'), 'win_games' => DB::raw('win_games + 1')]);
+                        update(['total_games' => DB::raw('total_games + 1'), 'win_games' => DB::raw('win_games + 1'),
+                       'bet_win' => DB::raw("bet_win + $userCash")]);
                     DB::table('users')->where('player_id', $player['uid'])->
-                    update(['coins'=> (request()->user()->where('player_id', $player['uid'])->value('coins') + $bank / 5)]);
+                    update(['coins'=> (request()->user()->where('player_id', $player['uid'])->value('coins') + $userCash)]);
                 }
             }
             foreach ($dire as $key => $player) {
                 if($player['uid'] != 0){
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                     DB::table('stats')->where('user_id', $player['uid'])->
-                    update(['total_games' => DB::raw('total_games + 1'), 'lose_games' => DB::raw('lose_games + 1')]);
+                    update(['total_games' => DB::raw('total_games + 1'), 'lose_games' => DB::raw('lose_games + 1'),
+                        'bet_lose' => DB::raw("bet_lose + $userCash")]);
                 }
 
             }
@@ -296,16 +316,18 @@ class LobbyController extends Controller
                 if($player['uid'] != 0){
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                 DB::table('stats')->where('user_id', $player['uid'])->
-                    update(['total_games' => DB::raw('total_games + 1'), 'lose_games' => DB::raw('lose_games + 1')]);
+                    update(['total_games' => DB::raw('total_games + 1'), 'lose_games' => DB::raw('lose_games + 1'),
+                        'bet_lose' => DB::raw("bet_lose + $userCash")]);
                 }
             }
             foreach ($dire as $key => $player) {
                 if($player['uid'] != 0){
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                     DB::table('stats')->where('user_id', $player['uid'])->
-                    update(['total_games' => DB::raw('total_games + 1'), 'win_games' => DB::raw('win_games + 1')]);
+                        update(['total_games' => DB::raw('total_games + 1'), 'win_games' => DB::raw('win_games + 1'),
+                       'bet_win' => DB::raw("bet_win + $userCash")]);
                     DB::table('users')->where('player_id', $player['uid'])->
-                    update(['coins'=> (request()->user()->where('player_id', $player['uid'])->value('coins') + $bank / 5)]);
+                    update(['coins'=> (request()->user()->where('player_id', $player['uid'])->value('coins') + $userCash)]);
                 }
             }
         }
