@@ -1,50 +1,63 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Routes File
-|--------------------------------------------------------------------------
-|
-| Here is where you will register all of the routes in an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| This route group applies the "web" middleware group to every route
-| it contains. The "web" middleware group is defined in your HTTP
-| kernel and includes session state, CSRF protection, and more.
-|
-*/
 Route::group(['middleware' => ['web']], function () {
 
     Route::get('/', function () {
         return view('layouts.welcome');
     })->middleware('guest');
 
-	Route::get('/personal', 'UserController@index');
-    Route::post('/personal', 'UserController@update');
-
-    Route::get('/rooms', 'RoomController@index');
     Auth::routes();
+        
+    Route::group(['middleware' => ['auth']], function () {
+        //Route::group(['middleware' => ['place']], function () {
+        Route::get('/new_room', 'RoomController@create');
+        Route::post('/new_room/set', 'RoomController@set');
+        Route::get('/profile', 'UserController@index')->name('profile');
+        Route::get('/profile/{id}', 'UserController@get')->name('profile.get');
+        Route::post('/profile/{id}/report', 'UserController@report')->name('profile.report');
+        Route::post('/profile/update', 'UserController@rate')->name('profile.update');
 
-    Route::get('auth/steam', 'SteamAuthController@redirectToSteam')->name('auth.steam');
-    Route::get('auth/steam/handle', 'SteamAuthController@handle')->name('auth.steam.handle');
+        Route::get('auth/steam', 'SteamAuthController@redirectToSteam')->name('auth.steam');
+        Route::get('auth/steam/handle', 'SteamAuthController@handle')->name('auth.steam.handle');
 
-    Route::get('logout', 'Auth\LoginController@logout')->name('logout');
-	
-	Route::get('/lobby', 'LobbyController@index');
-	Route::get('/lobby/1', 'RoomController@get');
-//	Route::get('/lobby/{id}', 'LobbyController@index')->where('id', '[0-9]+');
+        Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+
+        Route::get('/checkout/stripe', 'CheckoutController@getStripe');
+        Route::post('/checkout/stripe', 'CheckoutController@postStripe');
+        Route::get('/checkout/g2a', 'CheckoutController@getG2A');
+        Route::post('/checkout/g2a', 'CheckoutController@postG2A');
+        Route::get('/checkout/webmoney', 'CheckoutController@getWebMonLoey');
+        Route::get('/checkout/withdraw', function (){
+           return view('checkout.withdraw');
+        });
+        Route::post('/checkout/withdraw', 'CheckoutController@withdraw');
+
+        Route::get('/stats', 'StatsController@index');
+        Route::get('/rooms', 'RoomController@index');
+        Route::get('/rooms/list/{rank}', 'RoomController@all');
+   // });
+    Route::group(['middleware' => ['bet']], function () {
+        Route::get('/rooms/lobby/exit', 'LobbyController@leave');
+        Route::get('/rooms/lobby/{game_id}', 'LobbyController@index');
+        Route::get('/rooms/lobby/{game_id}/get', 'LobbyController@getIds');
+        Route::get('/rooms/lobby/{game_id}/all', 'LobbyController@all');
+    });
+        Route::get('/rooms/lobby/{game_id}/place/{place_id}', 'LobbyController@set');
+        Route::get('/rooms/lobby/{game_id}/place/{place_id}/set', 'LobbyController@setId');
+        Route::post('/rooms/lobby/{game_id}/bet/{bet}', 'LobbyController@bet');
+        Route::get('/rooms/lobby/{game_id}/start', 'LobbyController@start');
+        Route::get('rooms/lobby/{game_id}/results', 'LobbyController@res');
+    Route::group(['middleware' => ['lobby']], function () { 
+    });
+    
+    });
+//        Route::get('/lobby/{rank}', 'LobbyController@index');
+
+/*    Route::group(['middleware' => ['place']], function () {
+//        Route::post('lobby/test', 'BetsController@calculate');
+        Route::post('/lobby/{bet}/set', 'BetsController@set');
+        Route::get('/lobby/{rank}/reset', 'BetsController@reset');
+    });*/
 });
-
-/*Route::get('user/{id}', function ($id) {
-    //
-})->where('id', '[0-9]+');*/
 
 

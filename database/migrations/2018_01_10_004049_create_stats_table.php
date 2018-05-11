@@ -14,18 +14,17 @@ class CreateStatsTable extends Migration
     public function up()
     {
         Schema::create('stats', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned();
-            $table->integer('game_id')->unsigned();
-            $table->integer('total_games');
-            $table->integer('win_games');
-            $table->integer('lose_games');
-            $table->integer('bet_lose');
-            $table->integer('bet_win');
-            $table->integer('all_coins');
+            $table->string('user_id', 100);
+            $table->integer('total_games')->default(0);
+            $table->integer('win_games')->default(0);
+            $table->integer('lose_games')->default(0);
+            $table->double('bet_lose')->default(0);
+            $table->double('bet_win')->default(0);
 
-            $table->primary(['user_id', 'game_id']);
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('game_id')->references('id')->on('games');
+        });
+        Schema::table('stats', function (Blueprint $table) {
+//            $table->primary(['user_id']);
+            $table->foreign('user_id')->references('player_id')->on('users');
         });
     }
 

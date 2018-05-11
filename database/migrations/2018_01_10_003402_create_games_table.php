@@ -16,6 +16,9 @@ class CreateGamesTable extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->unique();
+            $table->integer('service_id');
+
+//            $table->foreign('service_id')->references('id')->on('services');
         });
     }
 

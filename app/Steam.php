@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Steam extends Model
 {
-
-
-
     public static function toSteamID($id)
     {
         if (is_numeric($id) && strlen($id) >= 16) {
@@ -21,5 +18,12 @@ class Steam extends Model
         $y = bcmod($id, '2');
 
         return $z;
+    }
+
+    public static function win($id)
+    {
+        $last_match = file_get_contents('https://api.opendota.com/api/matches/'.$id);
+
+        return $last_match;
     }
 }

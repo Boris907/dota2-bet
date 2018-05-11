@@ -8,18 +8,16 @@ use App\User;
 class Game extends Model
 {
 
-	public $timestamps = false;
-	protected $fillable = [
-	'title',
-	];
+    public $timestamps = false;
+    protected $fillable
+        = [
+            'title',
+            'service_id',
+        ];
 
-	 public function services()
-  {
-    return $this->hasOne(Service::class);
-  }
+    public function stats()
+    {
+        return $this->hasOne(Service::class);
+    }
 
-	public function user()
-  {
-    return $this->belongsTo(User::class);
-  }
 }

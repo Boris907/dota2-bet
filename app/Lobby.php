@@ -1,46 +1,52 @@
 <?php
 
 namespace App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class Lobby
 {
-     // объявление свойства
-	private static $dir = '/home/vagrant/Code/Game/dota2-roulette/storage/app/public/';
-	public static $fullPath;
+    // объявление свойства
+    public static $dir = '../public/js/node-dota2/examples/';
+    public static $fullPath;
 
-    /*
-        Ищем свободный файл
-    */
-	static public function checkDir() 
-	{        
-		$files = scandir(self::$dir);
-		foreach ($files as $file) 
-		{
-			$check = preg_match('/^[0-9]+o/', $file);
-			if($check == 1)
-			{
-				$fileName = $file;
-				self::$fullPath = self::$dir.$fileName;
-				return $fileName;
-			}
-		} 	
-	}
-	/*
-		Генерируем индекс для названия файла
-	*/
-	static public function newFile()
-	{
-		$num = random_int(1000, 9999);
-        $fileName = $num.'o.txt';
-		return 'public\\'.$fileName;
-	}
-	/*
-		Все ид из файла
-	*/
-	static public function allID()
-	{
-		$str = file_get_contents(Lobby::$fullPath);
-        $arr = explode(' ', $str);
-        return $arr;
-	}
+    static public function getPlayers($game_id)
+    {   
+//        Cache::flush();
+        if(Cache::has($game_id)){
+            $lobby = cache($game_id);
+            $players = $lobby[$game_id]['players'];
+            $players = json_decode($players,true);
+        }else{
+            // $lobby = DB::table('rooms')->get()->where('id', $game_id);
+            $lobby = Room::find($game_id);//->toArray();
+            $data[$lobby->id] = [
+                'rank' =>$lobby->rank,
+                'bank' =>$lobby->bank,
+                'min_bet' =>$lobby->min_bet,
+                'max_bet' =>$lobby->max_bet,
+                'players' =>$lobby->players,
+                ];
+            $players = $lobby->players;
+            $players = json_decode($players,true);
+/*            $newbie = cache('newbie');
+            $players = json_decode($newbie[$game_id]['players'],true);*/
+            Cache::forever($game_id,$data);
+        }
+
+        return $players;
+    }
+
+    static public function checkDir($game_id)
+    {
+        $files = scandir(self::$dir);
+        foreach ($files as $file) {
+            $check = preg_match("/$game_id.end/", $file);
+            if ($check == 1) {
+                $fileName       = $file;
+                return self::$dir.$fileName;
+            }
+        }
+    }
 }
+	
