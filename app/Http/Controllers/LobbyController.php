@@ -252,23 +252,25 @@ class LobbyController extends Controller
         }
         $content .= "['$game_id']];module.exports.id = id;";
         // dd($content);
-        Storage::disk('bot')->put('players.js', $content);
+        Storage::disk('bot')->makeDirectory("games/$game_id");
+        // Storage::disk('bot')->put("$game_id/$game_id.log", $game_id);
+        Storage::disk('bot')->put("/players.js", $content);
         //dd($content);
         $allRooms = cache($lobby[$game_id]['rank']);
         $game = array_search($game_id, $allRooms);
 
          unset($allRooms[$game]);
 
-         Cache::forever($lobby[$game_id]['rank'], $allRooms);
+        //Cache::forever($lobby[$game_id]['rank'], $allRooms);
 //         Cache::forget($game_id);
 
-        /*$bot_path = "cd "
+        $bot_path = "cd "
            . "js/node-dota2/examples"
-           // . "&& node start.js >> /home/vagrant/code/auth/storage/app/public/log/dota2.log &";
-           . "&& node start.js >> /home/vagrant/dota2roulette/storage/app/public/log/dota2.log &";
+           . "&& node start.js >> /home/vagrant/code/auth/public/js/node-dota2/examples/games/$game_id/$game_id.log &";
+           //. "&& node start.js >> /home/vagrant/dota2roulette/public/js/node-dota2/examples/games/$game_id/$game_id.log &";
         // $bot_path = "ps -ef | grep node";
         // dd($bot_path);
-       exec($bot_path, $out, $err);*/
+       exec($bot_path, $out, $err);
 
         return view('lobby.start', compact('game_id', 'radiant', 'dire','bank'));
     }
