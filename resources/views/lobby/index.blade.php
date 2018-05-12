@@ -135,8 +135,11 @@
        window.onload =  function () {
            $('.place').on('click', function () {
                var id = $('.place').attr('id');
-               document.getElementById(id).innerHTML = "Ready!";
-               document.getElementById(id).setAttribute("disabled", "true");
+               var ready = document.getElementById(id);
+               ready.innerHTML = "Ready!";
+               ready.setAttribute("color:", "green");
+               ready.setAttribute("class", "non-click");
+
 
                var link = document.getElementById(id).getAttribute("href");
                var room_id = link.split('/')[3];
