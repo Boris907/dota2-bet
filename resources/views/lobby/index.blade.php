@@ -12,8 +12,8 @@
                 <h3 id="bank">Current bank in this room:{{$bank}}$</h3>
                 <button id="exit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">Exit
                 </button>
-                {{--<a href="/rooms/lobby/{{$game_id}}/all" style="margin:5px" class="btn btn-primary">Fill lobby--}}
-                {{--</a>--}}
+                <a href="/rooms/lobby/{{$game_id}}/all" style="margin:5px" class="btn btn-primary">Fill lobby
+                </a>
                 <br>
                 <br>
                 <button id="change" class="btn btn-primary text-center" data-toggle="modal" style="visibility: hidden;"  data-target="#exampleModal">Increase
@@ -150,6 +150,7 @@
                     url: room_id + '/place/' + place + '/set'
                });
            });
+
            var timerId = setTimeout(function tick() {
                $.get(window.location.pathname + '/get', function (response) {
                    console.log(response.length);
