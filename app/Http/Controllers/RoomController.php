@@ -39,7 +39,7 @@ class RoomController extends Controller
 
     public function all($rank)
     {
-       // Cache::flush();
+     // Cache::flush();
 
         $ids = cache($rank);
         if ($ids == null){
@@ -47,6 +47,7 @@ class RoomController extends Controller
         } else {
             $lobbies = Cache::many($ids);
             foreach ($lobbies as $key => $lobby) {
+              // dd($lobbies);
               $players = json_decode($lobby[$key]['players'],true);
               $playersCount = 0;
               foreach ($players as $value) {

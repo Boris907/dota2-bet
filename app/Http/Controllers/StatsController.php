@@ -18,8 +18,7 @@ class StatsController extends Controller
         $player_id32 = Steam::toSteamID($this->player_id);
 
         $user_info  = auth()->user();
-        $user_stats = Stat::all()->where('user_id', auth()->user()->id)->toArray(
-        );
+        $user_stats = Stat::find($this->player_id);
 
         $recent_games = file_get_contents(
             "https://api.opendota.com/api/players/$player_id32/recentMatches"

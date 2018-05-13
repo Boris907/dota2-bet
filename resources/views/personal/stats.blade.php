@@ -18,16 +18,13 @@
                             </tr>
                             </thead>
                             <tbody>
-
-                                @foreach($user_stats as $value)
                                 <tr>
-                                    <td>{{$value['total_games']}}</td>
-                                    <td>{{$value['win_games']}}</td>
-                                    <td>{{$value['lose_games']}}</td>
-                                    <td>{{$value['bet_win']}}</td>
-                                    <td>{{$value['bet_lose']}}</td>
+                                    <td>{{$user_stats->total_games}}</td>
+                                    <td>{{$user_stats->win_games}}</td>
+                                    <td>{{$user_stats->lose_games}}</td>
+                                    <td>{{$user_stats->bet_win}}</td>
+                                    <td>{{$user_stats->bet_lose}}</td>
                                 </tr>
-                            @endforeach
                             </tbody>
                         </table>
                     </div>

@@ -16,6 +16,9 @@
 
 }
 
+#start-game{
+    visibility: hidden;
+}
 .place.active{
     border-color: #2FAA4C;
     background: #2ED053;

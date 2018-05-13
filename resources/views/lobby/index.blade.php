@@ -71,8 +71,8 @@
                 @endforeach
             </ul>
         </div>
-
-        {{--<a href="/rooms/lobby/{{$game_id}}/start" class="btn btn-success not-active" id="start-game">Start game</a>--}}
+    
+        <a href="/rooms/lobby/{{$game_id}}/start" class="btn btn-success" id="start-game">Start game</a>
     </div>
     <div class="go"></div>
     <!-- Modal -->
@@ -154,7 +154,7 @@
            var timerId = setTimeout(function tick() {
                $.get(window.location.pathname + '/get', function (response) {
                    console.log(response.length);
-                   if (response.length >= 1) {
+                   if (response.length >= 2) {
                        clearTimeout(timerId);
                        document.getElementById('change').setAttribute("style", "visibility: visible");
                        setTimeout(function () {
