@@ -38,6 +38,8 @@ class LobbyController extends Controller
     public $min_bet;
     public $rank;
     public $bank;
+    public static $radiant_bets;
+    public static $dire_bets;
 
     public function index($game_id)
     {
@@ -287,31 +289,40 @@ class LobbyController extends Controller
         //dd($arr);
         DB::table('rooms')->where('id', $game_id)->update(['winners' => $arr[2]]);
         //сохраняем отдельно файлик с ид пользователей
-        Storage::disk('bot')->move('players.js', 'game/'.$game_id.'players.js');
+//        Storage::disk('bot')->move('players.js', 'game/'.$game_id.'players.js');
         /*
             Получаем пользователей из БД
             для расспределения выиграша
         */
         $room = Room::find($game_id);
         $winners = $room->winners;
-        $bank = $room->bank;
-        $userCash = $bank/5;
+//        $bank = $room->bank;
+//        $commission = $room->bank - $bank;
+
         $players = json_decode($room->players, true);
         $players = array_chunk($players, count($players)/2, true);
 
         $radiant = $players[0];
         $dire = $players[1];
-       // dd($radiant,$dire);
+
+        foreach ($radiant as $key => $value) {
+            self::$radiant_bets += $value['bet'];
+        }
+
+        foreach ($dire as $key => $value) {
+            self::$dire_bets += $value['bet'];
+        }
 
         if($winners == 2){
             foreach ($radiant as $key => $player) {
                 if($player['uid'] != 0){
+                    $award = (round($player['bet'] / self::$radiant_bets, 2)) * self::$dire_bets;
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                     DB::table('stats')->where('user_id', $player['uid'])->
                         update(['total_games' => DB::raw('total_games + 1'), 'win_games' => DB::raw('win_games + 1'),
-                       'bet_win' => DB::raw("bet_win + $userCash")]);
+                       'bet_win' => DB::raw("bet_win + $award")]);
                     DB::table('users')->where('player_id', $player['uid'])->
-                    update(['coins'=> (request()->user()->where('player_id', $player['uid'])->value('coins') + $userCash)]);
+                    update(['coins'=> (request()->user()->where('player_id', $player['uid'])->value('coins') + ($player['bet']) + $award)]);
                 }
             }
             foreach ($dire as $key => $player) {
@@ -319,7 +330,7 @@ class LobbyController extends Controller
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                     DB::table('stats')->where('user_id', $player['uid'])->
                     update(['total_games' => DB::raw('total_games + 1'), 'lose_games' => DB::raw('lose_games + 1'),
-                        'bet_lose' => DB::raw("bet_lose + $userCash")]);
+                        'bet_lose' => DB::raw("bet_lose +" . $player['bet'])]);
                 }
 
             }
@@ -330,17 +341,18 @@ class LobbyController extends Controller
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                 DB::table('stats')->where('user_id', $player['uid'])->
                     update(['total_games' => DB::raw('total_games + 1'), 'lose_games' => DB::raw('lose_games + 1'),
-                        'bet_lose' => DB::raw("bet_lose + $userCash")]);
+                        'bet_lose' => DB::raw("bet_lose +" .$player['bet'])]);
                 }
             }
             foreach ($dire as $key => $player) {
                 if($player['uid'] != 0){
+                    $award = (round($player['bet'] / self::$dire_bets, 2)) * self::$radiant_bets;
                     $userStat = Stat::find($player['uid'])?:Stat::create(['user_id' => $player['uid']]);
                     DB::table('stats')->where('user_id', $player['uid'])->
                         update(['total_games' => DB::raw('total_games + 1'), 'win_games' => DB::raw('win_games + 1'),
-                       'bet_win' => DB::raw("bet_win + $userCash")]);
+                       'bet_win' => DB::raw("bet_win + $award")]);
                     DB::table('users')->where('player_id', $player['uid'])->
-                    update(['coins'=> (request()->user()->where('player_id', $player['uid'])->value('coins') + $userCash)]);
+                    update(['coins'=> (request()->user()->where('player_id', $player['uid'])->value('coins') + ($player['bet'] + $award))]);
                 }
             }
         }
