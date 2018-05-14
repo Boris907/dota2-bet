@@ -1,5 +1,5 @@
 /vendor
 .idea
-.env
 /node_modules
 /js/node-dota2
+h --force origin master
