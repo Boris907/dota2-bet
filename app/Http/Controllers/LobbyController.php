@@ -274,7 +274,7 @@ class LobbyController extends Controller
             . "&& node start.js >> /home/vagrant/code/auth/public/js/node-dota2/examples/bot1/games/$game_id/$game_id.log &";
            //. "&& node start.js >> /home/vagrant/dota2roulette/public/js/node-dota2/examples/games/$game_id/$game_id.log &";
             // $bot_path = "ps -ef | grep node";
-            exec($bot_path, $out, $err);
+//            exec($bot_path, $out, $err);
         }
             return view('lobby.start', compact('game_id', 'radiant', 'dire','bank'));
 
