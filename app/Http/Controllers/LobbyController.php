@@ -274,7 +274,7 @@ class LobbyController extends Controller
             . "&& node start.js >> /home/vagrant/code/auth/public/js/node-dota2/examples/bot1/games/$game_id/$game_id.log &";
            //. "&& node start.js >> /home/vagrant/dota2roulette/public/js/node-dota2/examples/games/$game_id/$game_id.log &";
             // $bot_path = "ps -ef | grep node";
-//            exec($bot_path, $out, $err);
+          //  exec($bot_path, $out, $err);
         }
             return view('lobby.start', compact('game_id', 'radiant', 'dire','bank'));
 
@@ -288,11 +288,25 @@ class LobbyController extends Controller
             от бота по ид комнаты.
             Записываем результат в БД.
         */
+            //$game_id ='20180513141046';
         $result = Lobby::checkDir($game_id);
-        $str = file_get_contents($result);
-        $arr = explode(' ', $str);
+        //$str = file_get_contents($result);
+        $str = file($result, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        // $arr = explode(' ', $str);
+/*        for ($i=0; $i < count($arr); $i++) { 
+            $log[current($arr)] = next($arr);
+        }*/
+        foreach ($str as $key => $value) {
+            $arr = explode(' ', $value);
+            if(current($arr) == "match_outcome"){
+                $log[current($arr)] = next($arr);
+                break;
+            }else
+            $log['match_outcome'] = 1;
+        }
+        //dd($log['match_outcome']);
         //dd($arr);
-        DB::table('rooms')->where('id', $game_id)->update(['winners' => $arr[2]]);
+        DB::table('rooms')->where('id', $game_id)->update(['winners' => $log['match_outcome']]);
         //сохраняем отдельно файлик с ид пользователей
 //        Storage::disk('bot')->move('players.js', 'game/'.$game_id.'players.js');
         /*

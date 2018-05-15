@@ -154,7 +154,7 @@
            var timerId = setTimeout(function tick() {
                $.get(window.location.pathname + '/get', function (response) {
                    console.log(response.length);
-                   if (response.length >= 2) {
+                   if (response.length >= 1) {
                        clearTimeout(timerId);
                        document.getElementById('change').setAttribute("style", "visibility: visible");
                        setTimeout(function () {
