@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Stat;
 use Illuminate\Http\Request;
 use Invisnik\LaravelSteamAuth\SteamAuth;
 use App\User;
@@ -58,9 +59,12 @@ class SteamAuthController extends Controller
 //                   'player_id' => $info->steamID64
 //                ]);
                 $request->user()->update(['player_id' => $info->steamID64]);
-                $request->user()->stats()->insert([
+                Stat::updateOrCreate([
                     'user_id' => $info->steamID64
                 ]);
+//                $request->user()->stats()->insert([
+//                    'user_id' => $info->steamID64
+//                ]);
                 } catch (\Exception $e) {
                 return redirect($this->redirectURL)->with('errors', 'User with this player_id already registered');
             }
