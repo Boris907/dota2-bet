@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Stat;
 use App\Steam;
 
+use App\User;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -19,6 +20,8 @@ class StatsController extends Controller
 
         $user_info  = auth()->user();
         $user_stats = Stat::find($this->player_id);
+//        $user = User::all();
+//        dd($user_stats);
 
         $recent_games = file_get_contents(
             "https://api.opendota.com/api/players/$player_id32/recentMatches"

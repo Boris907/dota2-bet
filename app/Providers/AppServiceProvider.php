@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Room;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,10 +15,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer('rooms.index', function($view){
-            $view->with('desc', Room::desc());
-            $view->with('asc', Room::asc());
-        });
+//        view()->composer('rooms.index', function($view){
+//            $view->with('desc', Room::desc());
+//            $view->with('asc', Room::asc());
+//        });
+        Schema::defaultStringLength(191);
     }
 
     /**

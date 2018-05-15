@@ -23,8 +23,8 @@ class CreateStatsTable extends Migration
 
         });
         Schema::table('stats', function (Blueprint $table) {
-//            $table->primary(['user_id']);
-            $table->foreign('user_id')->references('player_id')->on('users');
+            $table->primary(['user_id']);
+            $table->foreign('user_id')->references('player_id')->on('users')->onUpdate('cascade');
         });
     }
 

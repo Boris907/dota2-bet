@@ -1,3 +1,4 @@
 vendor
 .idea
+h --force origin master
 node_modules

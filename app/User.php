@@ -27,6 +27,6 @@ class User extends Authenticatable {
 
 	public function stats()
     {
-        return $this->hasOne('App\Stat', 'player_id');
+        return $this->hasOne('App\Stat', 'user_id');
     }
 }

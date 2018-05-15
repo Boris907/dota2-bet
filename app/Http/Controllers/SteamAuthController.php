@@ -54,7 +54,13 @@ class SteamAuthController extends Controller
         if ($this->steam->validate()) {
             $info = $this->steam->getUserInfo();
             try {
+//                $request->user()->update([
+//                   'player_id' => $info->steamID64
+//                ]);
                 $request->user()->update(['player_id' => $info->steamID64]);
+                $request->user()->stats()->insert([
+                    'user_id' => $info->steamID64
+                ]);
                 } catch (\Exception $e) {
                 return redirect($this->redirectURL)->with('errors', 'User with this player_id already registered');
             }
