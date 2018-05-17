@@ -65,7 +65,6 @@ class UserController extends Controller
 
     public function report()
     {
-
         if (strlen(request()->id) > 10){
             $user = User::where('player_id', request()->id)->first();
         } else {

@@ -15,10 +15,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-//        view()->composer('rooms.index', function($view){
-//            $view->with('desc', Room::desc());
-//            $view->with('asc', Room::asc());
-//        });
         Schema::defaultStringLength(191);
     }
 

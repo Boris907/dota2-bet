@@ -21,9 +21,7 @@ class User extends Authenticatable {
         'morality'
 	];
 
-	protected $guarded = [
-		'password',
-	];
+	protected $guarded = ['password'];
 
 	public function stats()
     {
