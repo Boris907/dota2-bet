@@ -103,7 +103,7 @@ Dota2.Dota2Client = function Dota2Client(steamClient, debug, debugMore) {
     this.Logger = new (winston.Logger)({
         transports: [
             new (winston.transports.Console)({
-                'timestamp': () => moment().format("d MMMM HH:mm:ss"), 
+                'timestamp': () => moment().format("dd MMMM HH:mm:ss"), 
                 'formatter': options => options.timestamp() + " - " + (options.message ? options.message : "")
             })
         ]
