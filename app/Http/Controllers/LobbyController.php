@@ -244,7 +244,7 @@ class LobbyController extends Controller
             }
             $content .= "['$game_id']];module.exports.id = id;";
 
-            exec(mkdir("bot1/games/$game_id"));
+            exec(mkdir("/app/public/js/node-dota2/examples/bot1/games/$game_id"));
 //            Storage::disk('bot')->makeDirectory("bot1/games/$game_id");
             // Storage::disk('bot')->put("$game_id/$game_id.log", $game_id);
             Storage::disk('bot')->put("bot1/players.js", $content);
