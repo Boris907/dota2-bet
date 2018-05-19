@@ -244,9 +244,9 @@ class LobbyController extends Controller
             }
             $content .= "['$game_id']];module.exports.id = id;";
 
-            Storage::disk('bot')->makeDirectory("/app/public/js/node-dota2/examples/bot1/games/$game_id");
+            Storage::disk('bot')->makeDirectory("bot1/games/$game_id");
             // Storage::disk('bot')->put("$game_id/$game_id.log", $game_id);
-            Storage::disk('bot')->put("/app/public/js/node-dota2/examples/bot1/players.js", $content);
+            Storage::disk('bot')->put("bot1/players.js", $content);
 
             $allRooms = cache($rank);
 
