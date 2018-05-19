@@ -243,18 +243,16 @@ class LobbyController extends Controller
                   $content .= '[\''.$value['uid'] . '\',' . "'D'],";
             }
             $content .= "['$game_id']];module.exports.id = id;";
-            // dd($content);
-            Storage::disk('bot')->makeDirectory("bot1/games/$game_id");
+
+            Storage::disk('bot')->makeDirectory("/app/public/js/node-dota2/examples/bot1/games/$game_id");
             // Storage::disk('bot')->put("$game_id/$game_id.log", $game_id);
-            Storage::disk('bot')->put("bot1/players.js", $content);
-            // dd($rank);
+            Storage::disk('bot')->put("/app/public/js/node-dota2/examples/bot1/players.js", $content);
+
             $allRooms = cache($rank);
 
             $game = array_search($game_id, $allRooms);
 
-            if($game){
-                unset($allRooms[$game]);
-            }
+            if($game){unset($allRooms[$game]);}
 
             Cache::forever($lobby[$game_id]['rank'], $allRooms);
 
@@ -271,7 +269,7 @@ class LobbyController extends Controller
 
             $bot_path = "cd "
             . "js/node-dota2/examples/bot1"
-            . "&& node start.js >> /home/vagrant/code/auth/public/js/node-dota2/examples/bot1/games/$game_id/$game_id.log &";
+            . "&& node start.js >> /app/public/js/node-dota2/examples/bot1/games/$game_id/$game_id.log &";
            //. "&& node start.js >> /home/vagrant/dota2roulette/public/js/node-dota2/examples/games/$game_id/$game_id.log &";
             // $bot_path = "ps -ef | grep node";
           //  exec($bot_path, $out, $err);
@@ -375,8 +373,6 @@ class LobbyController extends Controller
                 }
             }
         }
-        return redirect()->action('RoomController@index');
-        //$lines = file('/home/vagrant/dota2roulette/public/js/node-dota2/examples/'.$game_id.'end');
-        //$fs = fopen("/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595586138574", 'r+');
+        return view('lobby.result', compact('winners'));
     }
 }

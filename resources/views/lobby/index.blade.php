@@ -153,7 +153,6 @@
 
            var timerId = setTimeout(function tick() {
                $.get(window.location.pathname + '/get', function (response) {
-                   console.log(response.length);
                    if (response.length >= 1) {
                        clearTimeout(timerId);
                        document.getElementById('change').setAttribute("style", "visibility: visible");
@@ -161,8 +160,8 @@
                            document.getElementById('change').setAttribute("style", "visibility: hidden");
                            setTimeout(function () {
                                window.location.href = window.location.pathname + '/start';
-                           }, 1000);
-                       }, 1000);
+                           }, 10000);
+                       }, 10000);
                    }
                });
                timerId = setTimeout(tick, 500);
