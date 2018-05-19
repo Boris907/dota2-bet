@@ -57,7 +57,7 @@ return [
 
         'bot' => [
             'driver' => 'local',
-            'root' => '/app/public/js/node-dota2/examples',
+            'root' => 'js/node-dota2/examples',
         ],
 
         's3' => [

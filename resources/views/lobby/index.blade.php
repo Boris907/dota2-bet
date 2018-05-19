@@ -160,8 +160,8 @@
                            document.getElementById('change').setAttribute("style", "visibility: hidden");
                            setTimeout(function () {
                                window.location.href = window.location.pathname + '/start';
-                           }, 10000);
-                       }, 10000);
+                           }, 3000);
+                       }, 3000);
                    }
                });
                timerId = setTimeout(tick, 500);
