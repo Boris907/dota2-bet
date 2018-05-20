@@ -143,7 +143,7 @@ for (var [key, value] of store.entries()) {
             }*/
             var creatingLobby = 1;
             var leavingLobby = 0;
-            var destroyLobby = 0;
+            var destroyLobby = 1;
             var lobbyChannel = "";
                 var lobby = null;
         
@@ -178,12 +178,6 @@ for (var [key, value] of store.entries()) {
         util.log("Inviting user ID: "+ key + " Team: " + value);
         }
             }, 1000);
-         /*   console.log(JSON.stringify(Dota2.AccountID));*/
-            // INVITE TO LOBBY
-/*            var players = [
-                //['76561198185788815','D'],
-               // ['76561198105183102','R'],
-            ];*/
 
             // util.log();
            
@@ -200,9 +194,10 @@ for (var [key, value] of store.entries()) {
     DOTA_GC_TEAM_NOTEAM = 5;
 }*/
 Dota2.on("practiceLobbyResponse", function(data) {
-     Dota2.joinPracticeLobbyTeam(2,4);
+    Dota2.joinPracticeLobbyTeam(2,4);
 });
-    Dota2.on("practiceLobbyUpdate", function(lobby_data) {
+
+Dota2.on("practiceLobbyUpdate", function(lobby_data) {
     if(lobby == null){
         Dota2.joinChat('Lobby_' + lobby_data.lobby_id, 3);
     }
@@ -212,33 +207,34 @@ Dota2.on("practiceLobbyResponse", function(data) {
         if(store.has(steam_id)){
             if(store.get(steam_id) == 'R'){
                 setTimeout(function(){
-                    Dota2.sendMessage(joiner_name+", please enter Radiance Team ", lobbyChannel);
-                   }, 1000);
-                }
-                if(store.get(steam_id) == 'D'){
-                    setTimeout(function(){
-                    Dota2.sendMessage(joiner_name+", please enter Dire Team ", lobbyChannel);
-                    }, 1000);
-                }
+                Dota2.sendMessage(joiner_name+", please enter Radiance Team ", lobbyChannel);
+                }, 1000);
             }
+            if(store.get(steam_id) == 'D'){
+                setTimeout(function(){
+                Dota2.sendMessage(joiner_name+", please enter Dire Team ", lobbyChannel);
+                }, 1000);
+            }
+        }
     });
     lobby = lobby_data;
     lobbyChannel = "Lobby_"+lobby.lobby_id;
     
-    // util.log(lobby_data);
-    //lobby.match_outcome = 3;
+    lobby.match_outcome = 3;
     //lobby.lobby_id = 1;
 
-   /* if(lobby.match_outcome == 3)
+    if(lobby.match_outcome == 3)
     {
-        //fs.writeFileSync("games/"+players.id[10]+"/"+players.id[10]+ ".end", "match_outcome = "+ lobby.match_outcome);
-        fs.writeFileSync("games/"+players.id[10]+"/"+players.id[10]+ ".end", "match_outcome = "+ lobby.match_outcome);
-        util.log("match_outcome = "+lobby.match_outcome);
-        util.log(players.id[10]);
-        //util.log("match_outcome = "+lobby.lobby_id);
-        process.exit(1);
+        var result;
+                for (var i in lobby) {
+                    if (lobby.hasOwnProperty(i) ) {
+                        result += i + " " + JSON.stringify(lobby[i]) + "\n";
+                    }
+                util.log(lobby_data);
+                fs.writeFileSync("games/"+players.id[10]+"/"+players.id[10]+ ".end", result);
+                
     }
-    util.log("lobby game state = "+lobby.game_state);*/
+    util.log("lobby game state = "+lobby.game_state);
     //lobby.game_state = 6;
         // util.log(lobby);
     // if(lobby.game_state == 6){
@@ -254,7 +250,7 @@ Dota2.on("practiceLobbyResponse", function(data) {
                     // }
                     fs.writeFileSync("games/"+players.id[10]+"/"+players.id[10]+ ".end", result);
                 }
-            // }
+             }
 
     });
               //chatMessage" (channel, sender_name, message, chatData)
@@ -269,7 +265,7 @@ Dota2.on("practiceLobbyResponse", function(data) {
 
             var i = 0;
             Dota2.on("chatMessage", function(channel, sender_name, message, chatData) {
-            channel = lobbyChannel;
+                channel = lobbyChannel;
                 if (message == 'ok'){
                     i++;   
                 }
