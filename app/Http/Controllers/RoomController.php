@@ -66,7 +66,7 @@ class RoomController extends Controller
             });
        // dd($lobbies);
 
-        return view('rooms.all', ['lobbies' => $lobbies]);
+        return view('rooms.all', ['lobbies' => $lobbies, 'rank' => $rank]);
     }
 
     /*
