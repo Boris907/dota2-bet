@@ -377,8 +377,6 @@ class LobbyController extends Controller
                 }
             }
         }
-        return redirect()->action('RoomController@index');
-        //$lines = file('/home/vagrant/dota2roulette/public/js/node-dota2/examples/'.$game_id.'end');
-        //$fs = fopen("/home/vagrant/code/auth/public/js/node-dota2/examples/match.end25510595586138574", 'r+');
+        return view('lobby.result');
     }
 }

@@ -1,6 +1,32 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-@section('content')
+    <title>Start</title>
+
+    <!-- FontsS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet'
+          type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
+
+    <!-- Styles -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Lato';
+        }
+
+        .fa-btn {
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body style="margin-top: 100px;">
     <div class="container">
         @if($errors->any())
             <h4>{{$errors->first()}}</h4>
@@ -131,6 +157,7 @@
             </div>
         </div>
     </div>
+</body>
     <script>
        window.onload =  function () {
            $('.place').on('click', function () {
@@ -160,12 +187,16 @@
                            document.getElementById('change').setAttribute("style", "visibility: hidden");
                            setTimeout(function () {
                                window.location.href = window.location.pathname + '/start';
-                           }, 3000);
-                       }, 3000);
+                           }, 10000);
+                       }, 10000);
                    }
                });
                timerId = setTimeout(tick, 500);
            }, 500);
         };
     </script>
-@endsection
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript" src="{{ url('/js/checkout.js') }}"></script>
