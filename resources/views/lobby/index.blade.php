@@ -158,43 +158,43 @@
         </div>
     </div>
 </body>
-    <script>
-       window.onload =  function () {
-           $('.place').on('click', function () {
-               var id = $('.place').attr('id');
-               var ready = document.getElementById(id);
-               ready.innerHTML = "Ready!";
-               ready.setAttribute("color:", "green");
-               ready.setAttribute("class", "non-click");
+<script>
+   window.onload =  function () {
+       $('.place').on('click', function () {
+           var id = $('.place').attr('id');
+           var ready = document.getElementById(id);
+           ready.innerHTML = "Ready!";
+           ready.setAttribute("color:", "green");
+           ready.setAttribute("class", "non-click");
 
 
-               var link = document.getElementById(id).getAttribute("href");
-               var room_id = link.split('/')[3];
-               var place = link.split('/')[5];
+           var link = document.getElementById(id).getAttribute("href");
+           var room_id = link.split('/')[3];
+           var place = link.split('/')[5];
 
-               $.ajax({
-                    type: "GET",
-                    url: room_id + '/place/' + place + '/set'
-               });
+           $.ajax({
+                type: "GET",
+                url: room_id + '/place/' + place + '/set'
            });
+       });
 
-           var timerId = setTimeout(function tick() {
-               $.get(window.location.pathname + '/get', function (response) {
-                   if (response.length >= 1) {
-                       clearTimeout(timerId);
-                       document.getElementById('change').setAttribute("style", "visibility: visible");
+       var timerId = setTimeout(function tick() {
+           $.get(window.location.pathname + '/get', function (response) {
+               if (response.length >= 10) {
+                   clearTimeout(timerId);
+                   document.getElementById('change').setAttribute("style", "visibility: visible");
+                   setTimeout(function () {
+                       document.getElementById('change').setAttribute("style", "visibility: hidden");
                        setTimeout(function () {
-                           document.getElementById('change').setAttribute("style", "visibility: hidden");
-                           setTimeout(function () {
-                               window.location.href = window.location.pathname + '/start';
-                           }, 10000);
+                           window.location.href = window.location.pathname + '/start';
                        }, 10000);
-                   }
-               });
-               timerId = setTimeout(tick, 500);
-           }, 500);
-        };
-    </script>
+                   }, 10000);
+               }
+           });
+           timerId = setTimeout(tick, 500);
+       }, 500);
+    };
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
